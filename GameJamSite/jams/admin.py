@@ -1,3 +1,4 @@
 from django.contrib import admin
+from jams.models import GameJams
 
-# Register your models here.
+admin.site.register(GameJams)
