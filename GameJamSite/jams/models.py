@@ -8,3 +8,6 @@ class GameJams (models.Model):
     jam_slug = models.SlugField(
         max_length=255, db_index=True, unique=True, verbose_name="URL"
     )
+
+class Event(models.Model):
+    pass
