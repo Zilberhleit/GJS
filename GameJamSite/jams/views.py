@@ -1,15 +1,28 @@
 from django.http import HttpResponse, HttpRequest, HttpResponseNotFound
 from django.shortcuts import render
 import uuid
+from django.views.generic import ListView, DetailView
+from jams.models import GameJams
 
 
-def jam_list_views(request: HttpRequest) -> HttpResponse:
-    return render(request, 'pages/jams_pages/jams.html')
+# objects.all()
+# objects.filter()
+# objects.get() / import get_object_or_404()
 
 
-def jam_event_view(request: HttpRequest, jam_num: uuid) -> HttpResponse:
-    return render(request, 'pages/jams_pages/event.html')
+class GameJamsLists(ListView):
+    template_name = 'pages/jams_pages/jams.html'
+    context_object_name = "jams_list"
+    queryset = GameJams.objects.all()
 
 
-def page_not_found(request: HttpRequest, exception) -> HttpResponseNotFound:
+class GameJamDetail(DetailView):
+    model = GameJams
+    template_name = 'pages/jams_pages/gamejam_detail.html'
+    context_object_name = "gamejam_detail"
+    def get_object(self, queryset=None):
+        return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
+
+
+def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:
     return HttpResponseNotFound(render(request, "pages/errors/404.html"))

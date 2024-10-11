@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.jam_list_views, name='jams'),
-    path('event/<uuid:jam_num>', views.jam_event_view, name='event')
+    path('', views.GameJamsLists.as_view(), name='jams_list'),
+    path('<uuid:uuid>/', views.GameJamDetail.as_view(), name='gamejam_detail')
 ]

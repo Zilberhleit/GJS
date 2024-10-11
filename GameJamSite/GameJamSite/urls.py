@@ -5,6 +5,7 @@ from jams import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('jams/', include('jams.urls')),
+
 ]
 
-handler404 = views.page_not_found
+handler404 = views.handler404

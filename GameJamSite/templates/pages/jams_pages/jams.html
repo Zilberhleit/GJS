@@ -2,4 +2,10 @@
 
 {% block content %}
 <!--Блок списка джемов-->
+<div class="container-jams">
+    {% for jam in jams_list %}
+        <div class="container-sm">{{jam.title}} and {{jam.uuid}}</div>
+        <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">Перейти!</a>
+    {% endfor %}
+</div>
 {% endblock %}
