@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 :root {
     --main-background: #E4E0E1;
     --head-foot: #D6C0B3;
@@ -5,3 +7,40 @@
     --head-text: #493628;
 }
 
+/* Изменение тэгов */
+body {
+    background-color: var(--main-background);
+}
+
+header, footer {
+    background-color: var(--head-foot);
+    position: sticky;
+}
+
+footer {
+    bottom: 0;
+}
+
+/* Классы */
+
+.block-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: gray;
+    padding: 3%;
+    margin: 2%;
+    left: -8%;
+}
+
+.a-button {
+    padding: 3px;
+    text-decoration: none;
+    background-color: var(--button);
+}
+
+.text-container {}
+
+.image-container {}
