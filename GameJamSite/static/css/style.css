@@ -5,6 +5,7 @@
     --head-foot: #D6C0B3;
     --button: #AB886D;
     --head-text: #493628;
+    --container-color: gray;
 }
 
 /* Изменение тэгов */
@@ -21,6 +22,14 @@ footer {
     bottom: 0;
 }
 
+img {
+    position: relative;
+    width: 20%;
+    height: 20%;
+    top: 0;
+    right: 0;
+}
+
 /* Классы */
 
 .block-container {
@@ -28,19 +37,23 @@ footer {
     height: 100%;
     position: relative;
     display: flex;
-    flex-direction: column;
-    background-color: gray;
+    justify-content: space-between;
+    background-color: var(--container-color);
     padding: 3%;
     margin: 2%;
     left: -8%;
 }
 
 .a-button {
+    position: relative;
     padding: 3px;
     text-decoration: none;
+    text-align: center;
     background-color: var(--button);
 }
 
-.text-container {}
-
-.image-container {}
+.text-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
