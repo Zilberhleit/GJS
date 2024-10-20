@@ -1,17 +1,30 @@
 {% extends 'base.html' %}
 
+{% block headercontent %}
+<div class="container-title">
+    <h1>{{gamejam_detail.title}}</h1>
+</div>
+{% endblock %}
 {% block content %}
 <!--Вывод страницы джема-->
-<div>
-    <div class="container">
-        {{gamejam_detail.title}}
-        {{gamejam_detail.date_start}}
-        {{gamejam_detail.date_end}}
+<div class="jam-container">
+    <br>
+    {{gamejam_detail.date_start}}
+    {{gamejam_detail.date_end}}
+    <br>
+    {% if gamejam_detail.users is None %}
+        {{gamejam_detail.users}}
+    {% endif %}
+    <br>
+    {% if gamejam_detail.status == 'FN' %}
         {{gamejam_detail.theme}}
         {{gamejam_detail.winner}}
-        {% if gamejam_detail.users is None %}
-            {{gamejam_detail.users}}
-        {% endif %}
-    </div>
+    {% endif %}
+    {% if gamejam_detail.status == 'OG' %}
+        {{gamejam_detail.theme}}
+    {% endif %}
+    {% if gamejam_detail.status == 'PR' %}
+        <a href="" class="a-button">Выбрать тему</a>
+    {% endif %}
 </div>
 {% endblock %}

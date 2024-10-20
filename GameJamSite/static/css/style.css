@@ -31,7 +31,7 @@ img {
 }
 
 /* Классы */
-
+/* Классы для jams.html */
 .block-container {
     width: 100%;
     height: 100%;
@@ -57,3 +57,12 @@ img {
     display: flex;
     flex-direction: column;
 }
+
+/* Классы для gamejam_detail */
+.container-title {
+    color: var(--head-text);
+    background-color: var(--head-foot);
+    padding: 1%;
+}
+
+/* Классы для user_profile */
