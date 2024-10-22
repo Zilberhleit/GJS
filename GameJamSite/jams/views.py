@@ -5,11 +5,6 @@ from django.views.generic import ListView, DetailView
 from jams.models import GameJams
 
 
-# objects.all()
-# objects.filter()
-# objects.get() / import get_object_or_404()
-
-
 class GameJamsLists(ListView):
     template_name = 'pages/jams_pages/jams.html'
     context_object_name = "jams_list"

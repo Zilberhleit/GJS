@@ -11,7 +11,8 @@ urlpatterns = [
     path('jams/', include('jams.urls')),
     path('login/', users_view.LoginUser.as_view(), name='login'),
     #path('logout/', name='logout'),
-    path('register/', users_view.RegisterUser.as_view(), name='regist')
+    path('register/', users_view.RegisterUser.as_view(), name='regist'),
+    path('user/', include('users.urls'))
 ]
 
 handler404 = views.handler404

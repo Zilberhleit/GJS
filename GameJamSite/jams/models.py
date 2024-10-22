@@ -21,7 +21,7 @@ class GameJams(models.Model):
                                    blank=True)
 
 
-class UploadFiles(models.Model):
+class UploadFile(models.Model):
     file = models.FileField(upload_to="zip_uploads/")
     uploaded_time = models.DateTimeField(auto_now_add=True)
 

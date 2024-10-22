@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django import forms
+from django.forms import ModelForm
+from jams.models import UploadFile
 
 
 class RegisterUserForm(UserCreationForm):
@@ -17,9 +19,13 @@ class RegisterUserForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
 
-
-
 class LoginUserForm(AuthenticationForm):
     class Meta:
         model = get_user_model()
         fields = ('username', 'password')
+
+
+class UploadGameForm(ModelForm):
+    class Meta:
+        model = UploadFile
+        fields = ['file',]
