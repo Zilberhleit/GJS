@@ -4,6 +4,8 @@ from django.views.generic import CreateView
 from users.forms import LoginUserForm, RegisterUserForm
 from django.views.generic import ListView, DetailView
 
+from users.models import User, UploadFile
+
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm

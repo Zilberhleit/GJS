@@ -24,6 +24,7 @@ class GameJams(models.Model):
 class UploadFile(models.Model):
     file = models.FileField(upload_to="zip_uploads/")
     uploaded_time = models.DateTimeField(auto_now_add=True)
+    jam_uuid = models.ForeignKey(GameJams, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.file.name

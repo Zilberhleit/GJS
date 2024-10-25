@@ -28,4 +28,4 @@ class LoginUserForm(AuthenticationForm):
 class UploadGameForm(ModelForm):
     class Meta:
         model = UploadFile
-        fields = ['file',]
+        fields = ['file','jam_uuid']

@@ -3,5 +3,5 @@ from users import views
 
 urlpatterns = [
     path('', views.Profile.as_view(), name='profile_detail'),
-    path('', views.GameList.as_view(), name='game_list')
+    path('gamelist/', views.GameList.as_view(), name='game_list')
 ]

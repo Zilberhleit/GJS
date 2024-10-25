@@ -8,10 +8,11 @@
 {% block content %}
 <!--Вывод страницы джема-->
 <div class="jam-container">
-    <br>
-    {{gamejam_detail.date_start}}
-    {{gamejam_detail.date_end}}
-    <br>
+    <div class="container-date">
+        {{gamejam_detail.date_start}}
+        <br>
+        {{gamejam_detail.date_end}}
+    </div>
     {% if gamejam_detail.users is None %}
         {{gamejam_detail.users}}
     {% endif %}
@@ -22,10 +23,10 @@
     {% endif %}
     {% if gamejam_detail.status == 'OG' %}
         {{gamejam_detail.theme}}
-        <form method="post">
+        <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.media }}
-            {{ form.as_p }}
+            <input type="file" name="game">
+            <input type="hidden" name="jam_uuid" value="{{gamejam_detail.uuid}}">
             <button type="submit" class="btn btn-secondary">Отправить</button>
         </form>
     {% endif %}
