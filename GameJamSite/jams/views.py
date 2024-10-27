@@ -1,5 +1,7 @@
+import datetime
+
 from django.http import HttpResponse, HttpRequest, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, FormView, CreateView
 from jams.models import GameJams, UploadFile
@@ -26,16 +28,22 @@ class GameJamDetail(DetailView):
         return context
 
 #Нужно найти способ передать в класс uuid, чтобы его записало в модель UploadFile
-class GameJamUpload(CreateView):
-    fields = ['file', 'jam_uuid']
-    form_class = UploadGameForm
-    model = UploadFile
+# class GameJamUpload(CreateView):
+#     fields = ['file', 'jam_uuid']
+#     form_class = UploadGameForm
+#     model = UploadFile
 
 def game_jam_upload(request, uuid):
     if request.method == "POST":
-        instance = GameJamUpload.objects.create(file=file, jam_uuid=uuid)
-
-        instance.save()
+        if "game" in request.FILES:
+            game_file = request.FILES["game"]
+            game_extension = '.zip'
+            if game_extension in game_file.name:
+                instance = UploadFile.objects.create(file=game_file, jam_uuid=get_object_or_404(GameJams, uuid=uuid))
+                instance.full_clean()
+                instance.save()
+                return render(request, 'jams_list')
+        return HttpResponseNotFound(render(request, "pages/errors/404.html"))
 
 
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:
