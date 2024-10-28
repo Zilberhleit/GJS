@@ -12,7 +12,7 @@ urlpatterns = [
     path('login/', users_view.LoginUser.as_view(), name='login'),
     #path('logout/', name='logout'),
     path('register/', users_view.RegisterUser.as_view(), name='regist'),
-    #path('', include('users.urls'))
+    #path('profile/', include('users.urls'))
 ]
 
 handler404 = views.handler404

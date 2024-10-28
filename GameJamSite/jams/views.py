@@ -27,11 +27,6 @@ class GameJamDetail(DetailView):
         context["form"] = UploadGameForm()
         return context
 
-#Нужно найти способ передать в класс uuid, чтобы его записало в модель UploadFile
-# class GameJamUpload(CreateView):
-#     fields = ['file', 'jam_uuid']
-#     form_class = UploadGameForm
-#     model = UploadFile
 
 def game_jam_upload(request, uuid):
     if request.method == "POST":
@@ -40,9 +35,8 @@ def game_jam_upload(request, uuid):
             game_extension = '.zip'
             if game_extension in game_file.name:
                 instance = UploadFile.objects.create(file=game_file, jam_uuid=get_object_or_404(GameJams, uuid=uuid))
-                instance.full_clean()
                 instance.save()
-                return render(request, 'jams_list')
+                return GameJamDetail.as_view() #render(request, 'jams_list')
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
 
 

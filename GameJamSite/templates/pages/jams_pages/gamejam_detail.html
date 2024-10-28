@@ -23,6 +23,7 @@
     {% endif %}
     {% if gamejam_detail.status == 'OG' %}
         {{gamejam_detail.theme}}
+        <div class="timer"></div>
         <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="file" name="game">
