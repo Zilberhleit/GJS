@@ -1,11 +1,8 @@
-import datetime
-
-from django.http import HttpResponse, HttpRequest, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, FormView, CreateView
+from django.http import HttpRequest, HttpResponseNotFound
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
 from jams.models import GameJams, UploadFile
-from users.forms import UploadGameForm
+from users.models import User
 
 
 class GameJamsLists(ListView):
@@ -22,11 +19,6 @@ class GameJamDetail(DetailView):
     def get_object(self, queryset=None):
         return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = UploadGameForm()
-        return context
-
 
 def game_jam_upload(request, uuid):
     if request.method == "POST":
@@ -34,9 +26,10 @@ def game_jam_upload(request, uuid):
             game_file = request.FILES["game"]
             game_extension = '.zip'
             if game_extension in game_file.name:
-                instance = UploadFile.objects.create(file=game_file, jam_uuid=get_object_or_404(GameJams, uuid=uuid))
+                instance = UploadFile.objects.create(file=game_file, jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                                                     user=get_object_or_404(User, username=request.user))
                 instance.save()
-                return GameJamDetail.as_view() #render(request, 'jams_list')
+                return render(request, 'pages/jams_pages/jams.html')
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
 
 

@@ -20,7 +20,12 @@ class LoginUser(LoginView):
 
 
 class Profile(DetailView):
-    pass
+    model = User
+    template_name = 'pages/user_pages/user_profile.html'
+    context_object_name = 'profile_data'
+
+    def get_object(self, queryset=None):
+        return User.objects.get()
 
 
 class GameList(ListView):

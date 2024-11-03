@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.conf import settings
+from users.models import User
 
 
 class GameJams(models.Model):
@@ -25,6 +26,7 @@ class UploadFile(models.Model):
     file = models.FileField(upload_to="zip_uploads/")
     uploaded_time = models.DateTimeField(auto_now_add=True)
     jam_uuid = models.ForeignKey(GameJams, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.file.name
