@@ -13,9 +13,12 @@
         <br>
         {{gamejam_detail.date_end}}
     </div>
-    {% if gamejam_detail.users is None %}
-        {{gamejam_detail.users}}
-    {% endif %}
+    {% for user_game in user_games %}
+        {{ user_game.user.username }}
+        <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
+            {{user_game.file.name|slice:"12:"}}</a>
+    <br>
+    {% endfor %}
     <br>
     {% if gamejam_detail.status == 'FN' %}
         {{gamejam_detail.theme}}
@@ -24,15 +27,19 @@
     {% if gamejam_detail.status == 'OG' %}
         {{gamejam_detail.theme}}
         <div class="timer"></div>
+        {% if request.user in gamejam_detail.users.all %}
         <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="file" name="game">
             <input type="hidden" name="jam_uuid" value="{{gamejam_detail.uuid}}">
             <button type="submit" class="btn btn-secondary">Отправить</button>
         </form>
+        {% else %}
+        <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
+        {% endif %}
     {% endif %}
     {% if gamejam_detail.status == 'PR' %}
-        <a href="" class="a-button">Выбрать тему</a>
+        <a href="poll" class="a-button">Принять участие</a>
     {% endif %}
 </div>
 {% endblock %}

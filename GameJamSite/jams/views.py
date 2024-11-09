@@ -1,5 +1,7 @@
-from django.http import HttpRequest, HttpResponseNotFound
-from django.shortcuts import render, get_object_or_404
+import os
+
+from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from jams.models import GameJams, UploadFile
 from users.models import User
@@ -16,6 +18,17 @@ class GameJamDetail(DetailView):
     template_name = 'pages/jams_pages/gamejam_detail.html'
     context_object_name = "gamejam_detail"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        already_checked_users = []
+        already_checked_games = []
+        for game in UploadFile.objects.filter(jam_uuid=self.object.uuid).order_by('-uploaded_time'):
+            if game.user.id not in already_checked_users:
+                already_checked_users.append(game.user.id)
+                already_checked_games.append(game)
+        context["user_games"] = already_checked_games
+        return context
+
     def get_object(self, queryset=None):
         return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
 
@@ -26,11 +39,22 @@ def game_jam_upload(request, uuid):
             game_file = request.FILES["game"]
             game_extension = '.zip'
             if game_extension in game_file.name:
-                instance = UploadFile.objects.create(file=game_file, jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                instance = UploadFile.objects.create(file=game_file,
+                                                     jam_uuid=get_object_or_404(GameJams, uuid=uuid),
                                                      user=get_object_or_404(User, username=request.user))
                 instance.save()
-                return render(request, 'pages/jams_pages/jams.html')
+                return redirect("jams_list")
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
+
+
+def game_jam_download(request, id, uuid):
+    file_instance = get_object_or_404(UploadFile, id=id, jam_uuid=uuid, user=request.user)
+    path = file_instance.file.path
+
+    with open(path, 'rb') as fh:
+        response = HttpResponse(fh.read(), content_type='application/force-download')
+        response['Content-Disposition'] = f'attachment; filename={os.path.basename(file_instance.file.name)}'
+        return response
 
 
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:

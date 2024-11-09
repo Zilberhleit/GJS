@@ -1,10 +1,11 @@
 from django.contrib.auth.views import LoginView
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from users.forms import LoginUserForm, RegisterUserForm
 from django.views.generic import ListView, DetailView
 
-from users.models import User, UploadFile
+from users.models import User
 
 
 class RegisterUser(CreateView):
@@ -25,7 +26,8 @@ class Profile(DetailView):
     context_object_name = 'profile_data'
 
     def get_object(self, queryset=None):
-        return User.objects.get()
+        username = self.kwargs.get('username')
+        return get_object_or_404(User, username=username)
 
 
 class GameList(ListView):

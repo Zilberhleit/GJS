@@ -24,8 +24,3 @@ class LoginUserForm(AuthenticationForm):
         model = get_user_model()
         fields = ('username', 'password')
 
-
-class UploadGameForm(ModelForm):
-    class Meta:
-        model = UploadFile
-        fields = ['file','jam_uuid']

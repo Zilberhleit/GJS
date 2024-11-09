@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
-from jam_polls import views as poll_view
 from jams import views
 from users import views as users_view
 
@@ -14,9 +12,7 @@ urlpatterns = [
     path('login/', users_view.LoginUser.as_view(), name='login'),
     #path('logout/', name='logout'),
     path('register/', users_view.RegisterUser.as_view(), name='regist'),
-    path('profile/', include('users.urls')),
-    path('poll/', poll_view.PollList.as_view(), name='poll')
-
+    path('accounts/profile/', include('users.urls'), name='user_profile')
 ]
 
 handler404 = views.handler404
