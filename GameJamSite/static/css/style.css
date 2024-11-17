@@ -72,4 +72,13 @@ img {
     padding: 2%;
 }
 
+.div-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-header {
+    padding: 1%;
+    text-decoration: none;
+}
 /* Классы для user_profile */

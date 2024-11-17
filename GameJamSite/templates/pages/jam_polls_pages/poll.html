@@ -1,1 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block headercontent %}
+<div class="container-title">
+    <h1>Опрос на джем</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<script src="{% static 'javascript/dynamic.js' %}"></script>
+<form action="{% url 'submit' poll_list.0.jam_uuid %}" method="post">
+    {% csrf_token %}
+    {% for question in poll_list %}
+        <div class="question-container">
+            {{ question.question_text }}
+            {{ question.jam_uuid }}
+            <button class="poll-button yes-button" onclick="disable_poll_button(this, 'yes')" value="1">Да</button>
+            <button class="poll-button no-button" onclick="disable_poll_button(this, 'no')" value="-1">Нет</button>
+            <input type="hidden" name="question_id" value="{{question.id}}">
+        </div>
+    {% endfor %}
+    <button class="poll-button">Отправить</button>
+</form>
+{% endblock %}
+
+{% block footercontent %}
+{% endblock %}

@@ -11,3 +11,9 @@ class PollList(ListView):
 
     def get_object(self, queryset=None):
         return GameJams.objects.get(uuid=self.kwargs.get('uuid'))
+
+
+def submit_poll(request, uuid):
+    if request.metchod == "POST":
+        if "question_id" in request.HIDDEN:
+            question_id = request.HIDDEN["question_id"]

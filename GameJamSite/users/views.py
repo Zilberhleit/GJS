@@ -17,7 +17,10 @@ class RegisterUser(CreateView):
 class LoginUser(LoginView):
     template_name = 'pages/user_pages/login.html'
     form_class = LoginUserForm
-    success_url = reverse_lazy('homepage')
+
+    def get_success_url(self):
+        user = self.request.user
+        return reverse_lazy('profile_detail', kwargs={'username': user.username})
 
 
 class Profile(DetailView):
