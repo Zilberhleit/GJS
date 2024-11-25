@@ -8,20 +8,62 @@
 {% endblock %}
 
 {% block content %}
-<script src="{% static 'javascript/dynamic.js' %}"></script>
-<form action="{% url 'submit' poll_list.0.jam_uuid %}" method="post">
+<form action="{% url 'submit' poll_jam_uuid.uuid %}" method="post">
     {% csrf_token %}
-    {% for question in poll_list %}
-        <div class="question-container">
-            {{ question.question_text }}
-            {{ question.jam_uuid }}
-            <button class="poll-button yes-button" onclick="disable_poll_button(this, 'yes')" value="1">Да</button>
-            <button class="poll-button no-button" onclick="disable_poll_button(this, 'no')" value="-1">Нет</button>
-            <input type="hidden" name="question_id" value="{{question.id}}">
-        </div>
-    {% endfor %}
-    <button class="poll-button">Отправить</button>
+    <div class="question">
+        <p class="question-text"></p>
+        <button class="poll-button yes-button" type="button" name="yes"
+                onclick="change_question(1)">Да
+        </button>
+        <button class="poll-button no-button" type="button" name="no"
+                onclick="change_question(-1)">Нет
+        </button>
+<!--        <input type="hidden" name="question_id" value="{{question.id}}">-->
+    </div>
 </form>
+<script>
+    let currentQuestionID = 0;
+    const questions = {{ poll_list_json|safe }};
+    const questionField = document.querySelectorAll('.question');
+    const questionText = document.querySelector('.question-text');
+    console.log(questionField);
+
+    if (questions.length != 0) {
+        questionText.innerText = questions[currentQuestionID].question_text;
+    }
+
+    function change_question(answer){
+        const formData = new FormData();
+        formData.append('question_id', currentQuestionID+1);
+        formData.append('answer', answer);
+
+        fetch("{% url 'submit' poll_jam_uuid.uuid %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Don't exist response");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.question_id) {
+                currentQuestionID += 1;
+                if (currentQuestionID < questions.length) {
+                    questionText.innerText = questions[currentQuestionID].question_text;
+                }
+            }
+            else if (data.message) {
+                alert(data.message);
+                window.location.href = "{% url 'gamejam_detail' poll_jam_uuid.uuid %}";
+            }
+        });
+    }
+</script>
 {% endblock %}
 
 {% block footercontent %}
