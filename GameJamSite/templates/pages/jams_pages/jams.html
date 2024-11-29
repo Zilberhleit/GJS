@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block headercontent%}
+{% block headercontent %}
 <div class="container-md">
     <div class="row">
         <div class="col-12">
@@ -10,23 +10,23 @@
     </div>
 </div>
 {% endblock %}
+
 {% block content %}
-<!--Блок списка джемов-->
-<div class="container-jams">
-    {% for jam in jams_list %}
-        <div class="container-sm">
-            <div class="block-container">
-                <div class="text-container">
-                    <h1>{{jam.title}}</h1>
-                    <br>
-                    <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button">Перейти!</a>
+<!-- Блок списка джемов -->
+<div class="container">
+    <div class="row">
+        {% for jam in jams_list %}
+            <div class="col-md-4 mb-4">
+                <div class="card bg-secondary">
+                    <img src="{% static 'img/logo.png' %}" class="card-img-top" alt="Game Jam Logo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ jam.title }}</h5>
+                        <p class="card-text">{{ jam.get_status_display }}</p>
+                        <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="btn btn-primary">Перейти!</a>
+                    </div>
                 </div>
-                <div class="status-container">
-                    <p>{{jam.get_status_display}}</p>
-                </div>
-                <img src="{% static 'img/logo.png' %}">
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

@@ -30,3 +30,10 @@ class UploadFile(models.Model):
 
     def __str__(self):
         return self.file.name
+
+
+class RatingUserJam(models.Model):
+    jam_uuid = models.ForeignKey(GameJams, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated_user")
+    user_who_rate = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_who_rate")
+    stars = models.IntegerField(blank=True)

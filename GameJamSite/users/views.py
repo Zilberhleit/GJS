@@ -31,7 +31,3 @@ class Profile(DetailView):
     def get_object(self, queryset=None):
         username = self.kwargs.get('username')
         return get_object_or_404(User, username=username)
-
-
-class GameList(ListView):
-    pass

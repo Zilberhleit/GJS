@@ -2,13 +2,12 @@
 
 {% block headercontent %}
 <div class="container-title">
-    <h1>{{ profile_data.username }}</h1>
+    <h1 class="display-5">{{ profile_data.username }}</h1>
 </div>
 {% endblock %}
 
 {% block content %}
-<h2>{{ profile_data.email }}</h2>
-<a href="" class="a-button">Все игры</a>
+<h2 class="text-muted">{{ profile_data.email }}</h2>
 {% endblock %}
 
 {% block footercontent %}
