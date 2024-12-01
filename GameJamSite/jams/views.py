@@ -1,5 +1,5 @@
 import os
-
+from django.db.models import Avg
 from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
@@ -27,10 +27,15 @@ class GameJamDetail(DetailView):
                 already_checked_users.append(game.user.id)
                 already_checked_games.append(game)
         context["user_games"] = already_checked_games
+
+        if self.object.status == 'FN':
+            context["user_avg_rating"] = count_final_rating(self.object.uuid)
+
         return context
 
     def get_object(self, queryset=None):
         return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
+
 
 
 def game_jam_upload(request, uuid):
@@ -66,6 +71,27 @@ def count_stars(request, uuid, id):
                                                               defaults={'stars': request.POST["stars"]})
             return redirect('gamejam_detail', uuid=uuid)
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
+
+
+def count_final_rating(uuid):
+    ratings_jam = RatingUserJam.objects.filter(jam_uuid=uuid)
+    user_avg_rating = []
+    seen_users = set()
+
+    for rating in ratings_jam:
+        user_id = rating.user.id
+        if user_id not in seen_users:
+            seen_users.add(user_id)
+            user_ratings = ratings_jam.filter(user=rating.user.id)
+            average = user_ratings.aggregate(Avg('stars'))['stars__avg']
+
+            user_avg_rating.append({
+                'username': rating.user.username,
+                'avg_rating': average
+            })
+
+    print('avg_rate', user_avg_rating)
+    return user_avg_rating
 
 
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:

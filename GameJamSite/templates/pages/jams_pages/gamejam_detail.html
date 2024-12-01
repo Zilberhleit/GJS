@@ -19,18 +19,29 @@
         {{ user_game.user.username }}
         <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
             {{user_game.file.name|slice:"12:"}}</a>
-        {% if request.user in gamejam_detail.users.all %}
-            <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
-                {% csrf_token %}
-                <select name="stars" id="rating">
-                    <option value="1">1 Звезда</option>
-                    <option value="2">2 Звезды</option>
-                    <option value="3">3 Звезды</option>
-                    <option value="4">4 Звезды</option>
-                    <option value="5">5 Звёзд</option>
-                </select>
-                <button type="submit">Отправить оценку</button>
-            </form>
+        {% if gamejam_detail.status == 'OG' %}
+            {% if request.user in gamejam_detail.users.all %}
+                {% if request.user != user_game.user %}
+                    <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
+                        {% csrf_token %}
+                        <select name="stars" id="rating">
+                            <option value="1">1 Звезда</option>
+                            <option value="2">2 Звезды</option>
+                            <option value="3">3 Звезды</option>
+                            <option value="4">4 Звезды</option>
+                            <option value="5">5 Звёзд</option>
+                        </select>
+                        <button type="submit">Отправить оценку</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% if gamejam_detail.status == 'FN' %}
+            {% for rating in user_avg_rating %}
+                {% if rating.username == user_game.user.username %}
+                    {{ rating.avg_rating }}
+                {% endif %}
+            {% endfor %}
         {% endif %}
         <br>
     {% endfor %}
