@@ -29,17 +29,18 @@ class JamsViewTest(TestCase):
             status='PR'
         )
         self.jam_case_1.users.set([self.user])
-        #для пользователей нужно его авторизовать самому
 
     def test_game_list(self):
         response = self.client.get(reverse('jams_list'))
-        self.assertEqual(response.status_code, int(200))
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/jams_pages/jams.html')
-        self.assertContains(response.content.decode(), self.jam_case_1.title)
-        self.assertContains(response.content.decode(), self.jam_case_2.title)
+        self.assertContains(response, self.jam_case_1.title)
+        self.assertContains(response, self.jam_case_2.title)
 
     def test_jam_detail(self):
-        response = self.client.get(reverse('gamejam_detail',
-                                           kwargs={'uuid':self.jam_case_1.uuid}))
-        self.assertEqual(response.status_code, int(200))
+        response = self.client.get(reverse('gamejam_detail', kwargs={'uuid':self.jam_case_1.uuid}))
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed('pages/jams_pages/gamejam_detail.html')
+        self.assertContains(response, self.jam_case_1.title)
+        self.assertContains(response, self.jam_case_1.theme)
+        self.assertContains(response, self.user.username)

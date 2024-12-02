@@ -7,8 +7,3 @@ class Question(models.Model):
     count = models.IntegerField(default=0)
     jam_uuid = models.ForeignKey(GameJams, on_delete=models.CASCADE)
 
-
-class ChosenTheme(models.Model):
-    name = models.CharField(max_length=1000)
-    date = models.DateTimeField()
-    uuid = models.ForeignKey(GameJams, on_delete=models.CASCADE)
