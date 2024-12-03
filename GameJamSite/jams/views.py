@@ -37,7 +37,6 @@ class GameJamDetail(DetailView):
         return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
 
 
-
 def game_jam_upload(request, uuid):
     if request.method == "POST":
         if "game" in request.FILES:
@@ -84,13 +83,11 @@ def count_final_rating(uuid):
             seen_users.add(user_id)
             user_ratings = ratings_jam.filter(user=rating.user.id)
             average = user_ratings.aggregate(Avg('stars'))['stars__avg']
-
             user_avg_rating.append({
                 'username': rating.user.username,
                 'avg_rating': average
             })
 
-    print('avg_rate', user_avg_rating)
     return user_avg_rating
 
 
