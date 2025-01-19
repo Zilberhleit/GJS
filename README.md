@@ -8,4 +8,5 @@
 * JavaScript
 
 Для установки желательно иметь: PyCharm
+
 После скачивания проекта нужно использовать команду: `python manage.py runserver`
