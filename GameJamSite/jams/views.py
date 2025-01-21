@@ -46,12 +46,13 @@ def game_jam_upload(request, uuid):
                 instance = UploadFile.objects.update_or_create(file=game_file,
                                                      jam_uuid=get_object_or_404(GameJams, uuid=uuid),
                                                      user=get_object_or_404(User, username=request.user))
+                                                    #defaults={'game': request.FILES['game']}) #changes
                 return redirect("jams_list")
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
 
 
 def game_jam_download(request, id, uuid):
-    file_instance = get_object_or_404(UploadFile, id=id, jam_uuid=uuid, user=request.user)
+    file_instance = get_object_or_404(UploadFile, id=id, jam_uuid=uuid)
     path = file_instance.file.path
 
     with open(path, 'rb') as fh:

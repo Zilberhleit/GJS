@@ -8,19 +8,19 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'submit' poll_jam_uuid.uuid %}" method="post">
-    {% csrf_token %}
-    <div class="question">
-        <p class="question-text"></p>
-        <button class="poll-button yes-button" type="button" name="yes"
-                onclick="change_question(1)">Да
-        </button>
-        <button class="poll-button no-button" type="button" name="no"
-                onclick="change_question(-1)">Нет
-        </button>
-<!--        <input type="hidden" name="question_id" value="{{question.id}}">-->
-    </div>
-</form>
+<!--<form action="{% url 'submit' poll_jam_uuid.uuid %}" method="post">-->
+<!--    {% csrf_token %}-->
+<!--    -->
+<!--</form>-->
+<div class="question">
+    <p class="question-text"></p>
+    <button class="poll-button yes-button" type="button" name="yes"
+            onclick="change_question(1)">Да
+    </button>
+    <button class="poll-button no-button" type="button" name="no"
+            onclick="change_question(-1)">Нет
+    </button>
+</div>
 <script>
     let currentQuestionID = 0;
     const questions = {{ poll_list_json|safe }};
@@ -28,21 +28,37 @@
     const questionText = document.querySelector('.question-text');
     console.log(questionField);
 
+    questions.forEach((element) => console.log(element.text));
+    questions.forEach((element) => console.log(element.id));
+    console.log(questions.length);
+
     if (questions.length != 0) {
-        questionText.innerText = questions[currentQuestionID].question_text;
+        questionText.innerText = questions[currentQuestionID].text;
     }
 
     function change_question(answer){
+        questions[currentQuestionID].decision = answer;
+        console.log(questions[currentQuestionID].decision);
+        currentQuestionID++;
+        if (currentQuestionID >= questions.length) {
+            send_answer_to_server();
+        }
+        else {
+            questionText.innerText = questions[currentQuestionID].text;
+        }
+    }
+
+    function send_answer_to_server(){
         const formData = new FormData();
-        formData.append('question_id', currentQuestionID+1);
-        formData.append('answer', answer);
+        formData.append('result', questions);
 
         fetch("{% url 'submit' poll_jam_uuid.uuid %}", {
             method: 'POST',
-            body: formData,
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            }
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ result: questions })
         })
         .then(response => {
             if (!response.ok) {
@@ -51,13 +67,7 @@
             return response.json();
         })
         .then(data => {
-            if (data.question_id) {
-                currentQuestionID += 1;
-                if (currentQuestionID < questions.length) {
-                    questionText.innerText = questions[currentQuestionID].question_text;
-                }
-            }
-            else if (data.message) {
+            if (data.message) {
                 alert(data.message);
                 window.location.href = "{% url 'gamejam_detail' poll_jam_uuid.uuid %}";
             }

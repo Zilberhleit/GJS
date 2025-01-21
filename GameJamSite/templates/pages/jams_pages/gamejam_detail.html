@@ -6,6 +6,19 @@
         <h1>{{gamejam_detail.title}}</h1>
     </div>
 </div>
+<div class="profile-header">
+    <div>
+        <a href="{% url 'jams_list' %}" class="a-button">джемы</a>
+    </div>
+    <div>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'profile_detail' request.user.username %}" class="a-button">{{request.user.username}}</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="a-button">Войти</a>
+            <a href="{% url 'regist' %}" class="a-button">Зарегистрироваться</a>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
 {% block content %}
 <!--Вывод страницы джема-->
@@ -64,8 +77,10 @@
         {% endif %}
     {% endif %}
     {% if gamejam_detail.status == 'PR' %}
-        {% if request.user not in gamejam_detail.users.all %}
+        {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
             <a href="poll" class="a-button">Принять участие</a>
+        {% elif request.user.is_authenticated == False %}
+            <h2>Вы не вошли в свой аккаунт</h2>
         {% else %}
             <h2>Вы участник джема, дождитесь даты начала</h2>
         {% endif %}

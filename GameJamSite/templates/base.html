@@ -14,12 +14,11 @@
 <body>
     <!--Шапка сайта-->
     <header>
+        <div class="container-fluid">
+            <h1 class="text-start text-black gjs">GJS!</h1>
+        </div>
         {% block headercontent %}
         {% endblock %}
-        <div class="profile-header">
-            <a href="{% url 'profile_detail' request.user.username %}">{{request.user.username}}</a>
-            <a href="{% url 'jams_list' %}">джемы</a>
-        </div>
     </header>
     <!--Основной контент-->
     <main>

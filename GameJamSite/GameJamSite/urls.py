@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('jams/', include('jams.urls')),
     path('login/', users_view.LoginUser.as_view(), name='login'),
-    #path('logout/', name='logout'),
+    path('logout/', users_view.logout_view, name='logout'),
     path('register/', users_view.RegisterUser.as_view(), name='regist'),
     path('accounts/profile/', include('users.urls'), name='user_profile')
 ]

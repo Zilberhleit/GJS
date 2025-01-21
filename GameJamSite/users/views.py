@@ -1,10 +1,10 @@
 from django.contrib.auth.views import LoginView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from users.forms import LoginUserForm, RegisterUserForm
 from django.views.generic import ListView, DetailView
-
+from django.contrib.auth import logout
 from users.models import User
 
 
@@ -31,3 +31,16 @@ class Profile(DetailView):
     def get_object(self, queryset=None):
         username = self.kwargs.get('username')
         return get_object_or_404(User, username=username)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('jams_list')
+
+
+def redactor(request, username):
+    return render(request, template_name='pages/user_pages/redaction_page.html')
+
+
+def write_post():
+    return None
