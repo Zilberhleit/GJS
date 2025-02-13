@@ -4,6 +4,9 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+    <p>
+        <a href="">Забыл пароль</a>
+    </p>
     <button class="btn btn-secondary">Войти</button>
 </form>
 {% endblock %}
