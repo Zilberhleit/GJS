@@ -22,5 +22,5 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(AuthenticationForm):
     class Meta:
         model = get_user_model()
-        fields = ('username', 'password')
+        fields = ('email', 'password')
 

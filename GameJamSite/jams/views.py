@@ -43,11 +43,24 @@ def game_jam_upload(request, uuid):
             game_file = request.FILES["game"]
             game_extension = '.zip'
             if game_extension in game_file.name:
-                instance, created = UploadFile.objects.update_or_create(
+                prev_game = UploadFile.objects.filter(
+                    file=game_file,
                     jam_uuid=get_object_or_404(GameJams, uuid=uuid),
-                    user=get_object_or_404(User, username=request.user),
-                    defaults={'file': game_file})  # changes
-                return redirect("jams")  # changes
+                    user=get_object_or_404(User, username=request.user)
+                )
+
+                if prev_game.exists():
+                    prev_game.update(file=game_file)
+                    prev_game.save()
+                else:
+                    instance = UploadFile.objects.create(
+                        file=game_file,
+                        jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                        user=get_object_or_404(User, username=request.user)
+                    )
+                    instance.save()
+
+                return redirect("gamejam_detail", uuid=uuid)  # changes
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
 
 
