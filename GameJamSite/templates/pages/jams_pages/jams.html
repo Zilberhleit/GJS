@@ -2,35 +2,31 @@
 {% load static %}
 
 {% block headercontent %}
-<div class="profile-header">
-    <div></div>
-    <div>
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'profile_detail' request.user.username %}" class="a-button">{{request.user.username}}</a>
-        {% else %}
-            <a href="{% url 'login' %}" class="a-button">Войти</a>
-            <a href="{% url 'regist' %}" class="a-button">Зарегистрироваться</a>
-        {% endif %}
-    </div>
-</div>
+
 {% endblock %}
 
 {% block content %}
+
+
+
 <!-- Блок списка джемов -->
 <div class="container">
     <div class="row" style="padding: 1%">
         {% for jam in jams_list %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
+            <div class="col-md-4 mb-4"  >
+                <div class="card" >
                     <img src="{% static 'img/logo.png' %}" class="card-img-top" alt="Game Jam Logo" style="padding: 3%">
                     <div class="card-body">
                         <h5 class="card-title">{{ jam.get_status_display }}</h5>
                         <p class="card-text">{{ jam.title }}</p>
-                        <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button">Перейти!</a>
+                        <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button card-button">Перейти!</a>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
+
+
 {% endblock %}

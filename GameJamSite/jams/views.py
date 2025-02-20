@@ -105,5 +105,8 @@ def count_final_rating(uuid):
     return user_avg_rating
 
 
+def home_page(request):
+    return render(request, 'pages/index.html')
+
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:
     return HttpResponseNotFound(render(request, "pages/errors/404.html"))
