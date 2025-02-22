@@ -20,7 +20,7 @@
     {% for user_game in user_games %}
         {{ user_game.user.username }}
         <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
-            {{user_game.file.name|slice:"12:"}}</a>
+            {{ user_game }}</a>
         {% if gamejam_detail.status == 'OG' %}
             {% if request.user in gamejam_detail.users.all %}
                 {% if request.user != user_game.user %}
@@ -38,15 +38,17 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        {% if gamejam_detail.status == 'FN' %}
+
+        <br>
+    {% endfor %}
+            {% if gamejam_detail.status == 'FN' %}
             {% for rating in user_avg_rating %}
+                {{ rating }}
                 {% if rating.username == user_game.user.username %}
                     {{ rating.avg_rating }}
                 {% endif %}
             {% endfor %}
         {% endif %}
-        <br>
-    {% endfor %}
     <br>
     {% if gamejam_detail.status == 'FN' %}
         {{gamejam_detail.theme}}
