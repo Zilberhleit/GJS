@@ -51,14 +51,12 @@ def game_jam_upload(request, uuid):
 
                 if prev_game.exists():
                     prev_game.update(file=game_file)
-                    prev_game.save()
                 else:
                     instance = UploadFile.objects.create(
                         file=game_file,
                         jam_uuid=get_object_or_404(GameJams, uuid=uuid),
                         user=get_object_or_404(User, username=request.user)
                     )
-                    instance.save()
 
                 return redirect("gamejam_detail", uuid=uuid)  # changes
         return HttpResponseNotFound(render(request, "pages/errors/404.html"))
