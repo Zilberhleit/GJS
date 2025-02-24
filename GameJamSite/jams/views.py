@@ -5,7 +5,8 @@ from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
-
+from django.db.models.functions import Replace
+from django.db.models import F, Value
 from jams.models import GameJams, UploadFile, RatingUserJam
 from users.models import User
 
@@ -23,11 +24,12 @@ class GameJamDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["user_games"] = UploadFile.objects.filter(jam_uuid=self.object.uuid).order_by('-uploaded_time')
-
+        user_games = UploadFile.objects.filter(jam_uuid=self.object.uuid).order_by('-uploaded_time')
+        for game in user_games:
+            game.cleaned_name = game.file.name.replace('zip_uploads/', '')
+        context["user_games"] = user_games
         if self.object.status == 'FN':
             context["user_avg_rating"] = count_final_rating(self.object.uuid)
-
         return context
 
     def get_object(self, queryset=None):
