@@ -13,13 +13,19 @@
 <div class="container">
     <div class="row" style="padding: 1%">
         {% for jam in jams_list %}
-            <div class="col-md-4 mb-4"  >
-                <div class="card" >
-                    <img src="{% static 'img/logo.png' %}" class="card-img-top" alt="Game Jam Logo" style="padding: 3%">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
+                        <img src="{% static 'img/logo.png' %}" class="card-img-top" alt="Game Jam Logo" style="padding: 3%">
+                    </a>
                     <div class="card-body">
-                        <h5 class="card-title">{{ jam.get_status_display }}</h5>
-                        <p class="card-text">{{ jam.title }}</p>
-                        <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button card-button">Перейти!</a>
+                        <div>
+                            <h5 class="card-title">{{ jam.get_status_display }}</h5>
+                            <p class="card-text">{{ jam.title }}</p>
+                        </div>
+                        <div class="card-button-container">
+                            <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button card-button">Перейти!</a>
+                        </div>
                     </div>
                 </div>
             </div>
