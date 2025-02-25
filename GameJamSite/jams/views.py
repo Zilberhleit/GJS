@@ -34,6 +34,11 @@ class GameJamDetail(DetailView):
         return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
 
 
+def count_final_rating(uuid):
+    return (RatingUserJam.objects.filter(jam_uuid_id=uuid).values('user__username')
+            .annotate(avg_rating=Avg('stars')))
+
+
 def game_jam_upload(request, uuid):
     if request.method == "POST":
         if "game" in request.FILES:
@@ -41,8 +46,9 @@ def game_jam_upload(request, uuid):
             game_extension = '.zip'
 
             if game_file.name.endswith(game_extension):
+                jam = get_object_or_404(GameJams, uuid=uuid)
                 prev_game = UploadFile.objects.filter(
-                    jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                    jam_uuid=jam,
                     user=request.user
                 )
 
@@ -51,7 +57,7 @@ def game_jam_upload(request, uuid):
                 else:
                     UploadFile.objects.create(
                         file=game_file,
-                        jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                        jam_uuid=jam,
                         user=request.user
                     )
 
@@ -71,20 +77,14 @@ def game_jam_download(request, id, uuid):
 
 
 def count_stars(request, uuid, id):
-    if request.method == "POST":
-        if 'stars' in request.POST:
-            RatingUserJam.objects.update_or_create(jam_uuid=get_object_or_404(GameJams,
-                                                                              uuid=uuid),
-                                                   user=get_object_or_404(User, id=id),
-                                                   user_who_rate=get_object_or_404(User, id=request.user.id),
-                                                   defaults={'stars': request.POST["stars"]})
-            return redirect('gamejam_detail', uuid=uuid)
-        raise Http404
-
-
-def count_final_rating(uuid):
-    return (RatingUserJam.objects.filter(jam_uuid_id=uuid).values('user__username')
-            .annotate(avg_rating=Avg('stars')))
+    if request.method == "POST" and 'stars' in request.POST:
+        RatingUserJam.objects.update_or_create(jam_uuid=get_object_or_404(GameJams,
+                                                                          uuid=uuid),
+                                               user=get_object_or_404(User, id=id),
+                                               user_who_rate=get_object_or_404(User, id=request.user.id),
+                                               defaults={'stars': request.POST["stars"]})
+        return redirect('gamejam_detail', uuid=uuid)
+    raise Http404
 
 
 def home_page(request):
