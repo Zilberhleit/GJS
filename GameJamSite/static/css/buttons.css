@@ -7,17 +7,16 @@
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background-position 2s ease-in-out;
+    transition: transform 0.2s, box-shadow 0.2s, background-position 0.5s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    background-size: 200%;
+    background-size: 250%;
     background-position: 0;
 }
 
 .a-button:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    background-position: 100%;
-    animation: gradientMove 0.3s ease-in-out forwards;
+    background-position: 99%;
 }
 
 .a-button:active {

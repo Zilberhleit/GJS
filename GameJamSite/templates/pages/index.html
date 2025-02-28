@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="banner">
+        <div class="slider" style="--quantity: 8">
+            <div class="item" style="--position: 8"><img src="{% static 'img/slider/1.png' %}" alt=""></div>
+            <div class="item" style="--position: 1"><img src="{% static 'img/slider/2.png' %}" alt=""></div>
+            <div class="item" style="--position: 3"><img src="{% static 'img/slider/3.png' %}" alt=""></div>
+            <div class="item" style="--position: 4"><img src="{% static 'img/slider/4.png' %}" alt=""></div>
+            <div class="item" style="--position: 5"><img src="{% static 'img/slider/5.png' %}" alt=""></div>
+            <div class="item" style="--position: 6"><img src="{% static 'img/slider/6.png' %}" alt=""></div>
+            <div class="item" style="--position: 7"><img src="{% static 'img/slider/7.png' %}" alt=""></div>
+            <div class="item" style="--position: 2"><img src="{% static 'img/slider/8.png' %}" alt=""></div>
+        </div>
+        <div class="slider-container">
+            <div class="model" style="background-image: url('{% static 'img/slider/mark.png' %}');"></div>
+        </div>
+    </div>
+{% endblock %}
+

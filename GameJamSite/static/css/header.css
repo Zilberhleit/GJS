@@ -55,13 +55,22 @@ nav a {
 }
 
 #logo {
-    /* background-image: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); */
-    /* background: linear-gradient(55deg, #ff6b6d, #ffb36b); */
+    position: relative;
     background: linear-gradient(90deg, #ff3d3a, #9736ff);
-    /* background: black; */
     background-clip: text;
     color: transparent;
     margin-left: 5%;
+}
+
+#logo::before {
+    content: 'GJS!';
+    position: absolute;
+    color: black;
+    inset: 0;
+    margin: auto;
+    z-index: -1;
+    top: 2px;
+    left: 2px;
 }
 
 /* .menu {

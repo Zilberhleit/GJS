@@ -39,13 +39,13 @@ footer {
     bottom: 0;
 }
 
-img {
+/* img {
     position: relative;
     width: 20%;
     height: 20%;
     top: 0;
     right: 0;
-}
+} */
 
 a, a:hover {
     color: white;
@@ -65,12 +65,13 @@ a, a:hover {
     min-width: 0;
     background-color: #fff;
     background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, .125);
     transition: all 0.25s ease-in-out;
+    box-shadow: 12px 12px 12px rgba(0, 0, 0, 1.5);
 }
 
 .card:hover{
-    transform: scale(1.05);
+    transform: scale(1.01);
+    
 }
 
 .card-button{
@@ -84,7 +85,17 @@ a, a:hover {
 
 .card-button-container {
     display: flex;
-    flex-direction: column-reverse;
+   flex-direction: column-reverse;
+}
+
+.card-title {
+    font-size: 25px;
+    color: #ff6b6b;
+}
+
+.card-text {
+    font-size: 20px;
+    color: rgb(82, 82, 82);
 }
 
 /* Классы для gamejam_detail */

@@ -7,6 +7,7 @@ from users import views as users_view
 
 
 urlpatterns = [
+    path('', views.home_page, name='home_page'),
     path('admin/', admin.site.urls),
     path('jams/', include('jams.urls')),
     path('login/', users_view.LoginUser.as_view(), name='login'),
