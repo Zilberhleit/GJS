@@ -1,10 +1,10 @@
-from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.contrib.auth import logout, login, authenticate
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, DetailView
+
 from users.forms import LoginUserForm, RegisterUserForm
-from django.views.generic import ListView, DetailView
-from django.contrib.auth import logout
 from users.models import User
 
 
@@ -14,13 +14,23 @@ class RegisterUser(CreateView):
     success_url = reverse_lazy('login')
 
 
-class LoginUser(LoginView):
-    template_name = 'pages/user_pages/login.html'
-    form_class = LoginUserForm
+def login_view(request):
+    if request.method == "POST":
+        form = LoginUserForm(request.POST)
 
-    def get_success_url(self):
-        user = self.request.user
-        return reverse_lazy('profile_detail', kwargs={'username': user.username})
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect(reverse('profile_detail', kwargs={'username': user.username}))
+            else:
+                form.add_error(None, 'Неверный адрес электронной почты или пароль.')
+    else:
+        form = LoginUserForm()
+    return render(request, 'pages/user_pages/login.html', context={'form': form})
 
 
 class Profile(DetailView):
