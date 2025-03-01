@@ -24,6 +24,10 @@ body {
     font-style: normal;
     color: #fff;
     font-size: 19px;
+
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 4fr;
 }
 
 main {

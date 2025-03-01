@@ -1,10 +1,4 @@
 /* Классы для gamejam_detail */
-.main-container {
-    display: grid;
-    grid-template-columns: auto 4fr;
-    margin: 0 2% 0 2%;
-}
-
 .container-title {
     color: var(--head-text);
     background-color: var(--head-foot);
@@ -16,13 +10,13 @@
 }
 
 .row {
-    margin-left: 2%;
+    display: flex;
+    margin: 0 2% 0 2%;
     padding: 0;
     justify-content: space-around;
 }
 
 /* Классы для jams.html */
-
 .card {
     position: relative;
     display: flex;
@@ -68,13 +62,4 @@
 .card-text {
     font-size: 20px;
     color: rgb(82, 82, 82);
-}
-
-.filter {
-
-}
-
-.filter form p {
-    display: flex;
-    flex-direction: column;
 }
