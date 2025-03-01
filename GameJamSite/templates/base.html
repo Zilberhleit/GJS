@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/container.css' %}">
     <link rel="stylesheet" href="{% static 'css/buttons.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
@@ -43,7 +44,10 @@
 </header>
 <!--Основной контент-->
 <!-- я в рот ебал этот мейн сука, какого хуя тут блядь стили к нему применяются, которых ни в css нигде нету -->
-<div class="space"></div>
+<aside> 
+    {% block sidebar %}
+    {% endblock %}
+</aside>
 <main>
     {% block content %}
     {% endblock %}

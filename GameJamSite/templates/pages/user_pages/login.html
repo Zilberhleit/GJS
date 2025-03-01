@@ -5,8 +5,8 @@
     {% csrf_token %}
     {{ form.as_p }}
     <div class="text-form">
-        <a href="{% url 'regist' %}">Нет аккаунта?</a>
-        <a href="">Забыли пароль</a>
+        <a href="{% url 'regist' %}" class="reg-text">Нет аккаунта?</a>
+        <a href="" class="reg-text">Забыли пароль</a>
     </div>
     <button class="btn-form">Войти</button>
 </form>

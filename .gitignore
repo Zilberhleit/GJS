@@ -30,4 +30,5 @@ var/
 *.spec
 venv/
 .idea/
+~*
 

@@ -9,17 +9,26 @@ from django.views.generic import ListView, DetailView
 from jams.models import GameJams, UploadFile, RatingUserJam
 from users.models import User
 
+from .filters import GameJamsFilter
+
 
 class GameJamsLists(ListView):
     template_name = 'pages/jams_pages/jams.html'
-    context_object_name = "jams_list"
     queryset = GameJams.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = GameJamsFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
+
 
 
 class GameJamDetail(DetailView):
     model = GameJams
     template_name = 'pages/jams_pages/gamejam_detail.html'
     context_object_name = "gamejam_detail"
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
