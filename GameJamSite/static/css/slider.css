@@ -1,0 +1,65 @@
+.banner {
+    width: 100%;
+    height: 87vh;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.banner .slider {
+    position: absolute;
+    /* поменять */
+    width: 134px;
+    height: 200px; 
+    top: 15%;
+    left: calc(50% - 67px);
+    transform-style: preserve-3d;
+    animation: slider 30s linear infinite;
+    z-index: 2;
+}
+
+
+@keyframes slider {
+    from {
+        transform: perspective(1000px) rotateX(-10deg) rotateY(0deg);
+    } 
+    to {
+        transform: perspective(1000px) rotateX(-10deg) rotateY(-360deg);
+    }
+}
+
+.banner .slider .item {
+    position: absolute;
+    inset: 0 0 0 0;
+    transform:
+        rotateY(calc( (var(--position) - 1) * (360 / var(--quantity)) * 1deg ))
+        translateZ(440px);
+}
+
+.banner .slider .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner .slider-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85vh;
+    height: max-content;
+    padding-bottom: 15vh;
+}
+
+.banner .slider-container .model {
+    position: absolute;
+    width: 200%;
+    height: 55vh;
+    bottom: 0;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: top center;
+}

@@ -1,0 +1,85 @@
+/* Классы формы регитсрации и авторизации */
+.reg-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 25px;
+    margin-top: 6%;
+    margin-right: 30%;
+    margin-left: 30%;
+    padding: 3%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px);
+}
+
+/* позже подправлю */
+.reg-form:has(.errorlist) label[for="id_password1"] {
+    color: #ff332f;
+}
+
+.reg-form:has(.errorlist) input[type="password"][name="password1"] {
+    border-bottom: 1px solid #ff332f;
+}
+
+.reg-form p {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-items: end
+}
+
+.reg-form p label {
+    display: inline;
+}
+
+.reg-form p input {
+    width: 95%;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid white;
+    outline: none;
+    color: #fff;
+}
+
+.text-form {
+    display: flex;
+    justify-content: space-between;
+    padding: 5% 3% 1% 3%;
+    font-size: 15px;
+}
+
+.btn-form {
+    border: none;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+}
+.circle:nth-child(1) { top: 20%; right: 25%; width: 200px; height: 200px;
+    background-image: linear-gradient(86deg, #ff3d3a, #9736ff);
+}
+.circle:nth-child(2) { top: 15%; right: 55%; width: 250px; height: 250px;
+    background-image: linear-gradient(150deg, #ff3d3a, #9736ff);
+}
+.circle:nth-child(3) { top: 50%; right: 35%; width: 150px; height: 150px;
+    background-image: linear-gradient(10deg, #ff3d3a, #9736ff);
+}
+.circle:nth-child(4) { top: 55%; right: 50%; width: 200px; height: 200px;
+    background-image: linear-gradient(320deg, #ff3d3a, #9736ff);
+}
+
+label{
+    color: white;
+}

@@ -10,17 +10,26 @@ from django.db.models import F, Value
 from jams.models import GameJams, UploadFile, RatingUserJam
 from users.models import User
 
+from .filters import GameJamsFilter
+
 
 class GameJamsLists(ListView):
     template_name = 'pages/jams_pages/jams.html'
-    context_object_name = "jams_list"
     queryset = GameJams.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = GameJamsFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
+
 
 
 class GameJamDetail(DetailView):
     model = GameJams
     template_name = 'pages/jams_pages/gamejam_detail.html'
     context_object_name = "gamejam_detail"
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,6 +45,11 @@ class GameJamDetail(DetailView):
         return GameJams.objects.get(uuid=self.kwargs.get("uuid"))
 
 
+def count_final_rating(uuid):
+    return (RatingUserJam.objects.filter(jam_uuid_id=uuid).values('user__username')
+            .annotate(avg_rating=Avg('stars')))
+
+
 def game_jam_upload(request, uuid):
     if request.method == "POST":
         if "game" in request.FILES:
@@ -43,8 +57,9 @@ def game_jam_upload(request, uuid):
             game_extension = '.zip'
 
             if game_file.name.endswith(game_extension):
+                jam = get_object_or_404(GameJams, uuid=uuid)
                 prev_game = UploadFile.objects.filter(
-                    jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                    jam_uuid=jam,
                     user=request.user
                 )
 
@@ -53,7 +68,7 @@ def game_jam_upload(request, uuid):
                 else:
                     UploadFile.objects.create(
                         file=game_file,
-                        jam_uuid=get_object_or_404(GameJams, uuid=uuid),
+                        jam_uuid=jam,
                         user=request.user
                     )
 
@@ -73,21 +88,18 @@ def game_jam_download(request, id, uuid):
 
 
 def count_stars(request, uuid, id):
-    if request.method == "POST":
-        if 'stars' in request.POST:
-            RatingUserJam.objects.update_or_create(jam_uuid=get_object_or_404(GameJams,
-                                                                              uuid=uuid),
-                                                   user=get_object_or_404(User, id=id),
-                                                   user_who_rate=get_object_or_404(User, id=request.user.id),
-                                                   defaults={'stars': request.POST["stars"]})
-            return redirect('gamejam_detail', uuid=uuid)
-        raise Http404
+    if request.method == "POST" and 'stars' in request.POST:
+        RatingUserJam.objects.update_or_create(jam_uuid=get_object_or_404(GameJams,
+                                                                          uuid=uuid),
+                                               user=get_object_or_404(User, id=id),
+                                               user_who_rate=get_object_or_404(User, id=request.user.id),
+                                               defaults={'stars': request.POST["stars"]})
+        return redirect('gamejam_detail', uuid=uuid)
+    raise Http404
 
 
-def count_final_rating(uuid):
-    return (RatingUserJam.objects.filter(jam_uuid_id=uuid).values('user__username')
-            .annotate(avg_rating=Avg('stars')))
-
+def home_page(request):
+    return render(request, 'pages/index.html')
 
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:
     return HttpResponseNotFound(render(request, "pages/errors/404.html"))

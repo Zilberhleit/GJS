@@ -20,27 +20,24 @@
 <script>
     let currentQuestionID = 0;
     const questions = {{ poll_list_json|safe }};
+
     const questionField = document.querySelectorAll('.question');
     const questionText = document.querySelector('.question-text');
-    console.log(questionField);
 
-    questions.forEach((element) => console.log(element.text));
-    questions.forEach((element) => console.log(element.id));
-    console.log(questions.length);
 
     if (questions.length != 0) {
-        questionText.innerText = questions[currentQuestionID].text;
+        questionText.innerText = questions[currentQuestionID].question_text;
     }
 
     function change_question(answer){
         questions[currentQuestionID].decision = answer;
-        console.log(questions[currentQuestionID].decision);
+
         currentQuestionID++;
         if (currentQuestionID >= questions.length) {
             send_answer_to_server();
         }
         else {
-            questionText.innerText = questions[currentQuestionID].text;
+            questionText.innerText = questions[currentQuestionID].question_text;
         }
     }
 

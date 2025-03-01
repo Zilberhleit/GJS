@@ -1,0 +1,48 @@
+/* Кнопки на карточках */
+.a-button {
+    background: linear-gradient(55deg, #ff6b6b, #ff972c, #ff6b6b);
+    border: none;
+    border-radius: 5px;
+    /* color: white; */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-position 0.5s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background-size: 250%;
+    background-position: 0;
+}
+
+.a-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background-position: 99%;
+}
+
+.a-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu-button {
+    position: relative;
+}
+
+.menu-button::before {
+    content: '';
+    position: absolute;
+    top: 26px;
+    right: 0;
+    left: 50%;
+    bottom: 0;
+    width: 0px;
+    height: 2px;
+    background-color: #fff;
+    transform: translateX(-50%);
+    transition: width 0.3s ease-in-out;
+}
+
+.menu-button:hover::before {
+    width: 100%;
+}
+

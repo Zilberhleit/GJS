@@ -14,7 +14,6 @@ class RegisterUser(CreateView):
     success_url = reverse_lazy('login')
 
 
-# changes
 def login_view(request):
     if request.method == "POST":
         form = LoginUserForm(request.POST)

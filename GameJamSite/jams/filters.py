@@ -1,0 +1,14 @@
+import django_filters
+
+from .models import GameJams
+
+
+class GameJamsFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(field_name='title', lookup_expr='icontains', label='Название джема')
+    date_start = django_filters.DateFilter(field_name='date_start', lookup_expr='exact')
+    date_end = django_filters.DateFilter(field_name='date_end', lookup_expr='exact')
+    status = django_filters.ChoiceFilter(field_name='status', lookup_expr='exact', choices=GameJams.jam_status)
+
+    class Meta:
+        model = GameJams
+        fields = ['title', 'date_start', 'date_end', 'status']

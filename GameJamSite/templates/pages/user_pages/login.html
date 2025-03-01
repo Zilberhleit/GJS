@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="post">
+<form method="post" class="reg-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <p>
-        <a href="">Забыл пароль</a>
-    </p>
-    <button class="btn btn-secondary">Войти</button>
+    <div class="text-form">
+        <a href="{% url 'regist' %}">Нет аккаунта?</a>
+        <a href="">Забыли пароль</a>
+    </div>
+    <button class="btn-form">Войти</button>
 </form>
+<div id="circle-container"></div>
+
+<script>
+    const container = document.getElementById('circle-container');
+    for (let i = 0; i < 4; i++) {
+        div = document.createElement('div');
+        div.className = 'circle';
+        container.appendChild(div);
+    }
+</script>
 {% endblock %}

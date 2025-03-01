@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 
-{% block headercontent %}
-
-<a href="{% url 'logout' %}" class="a-button">Выйти</a>
-<a href="{% url 'jams_list' %}" class="a-button">Game Jam</a>
-<a href="{% url 'redactor' request.user.username %}" class="a-button">Дизайн</a>
-{% endblock %}
 
 {% block content %}
+<a href="{% url 'redactor' request.user.username %}" class="a-button">Дизайн</a>
+
+
 <div id="hat">
-    <button>Установить шапку</button>
     <div class="avatar-block">
-        <div id="avatar">
-            <button>Изменить аватарку</button>
+            <div id="avatar">
         </div>
-        <div>
-            <h1 class="display-5">{{ profile_data.username }}</h1>
-            <h2 class="text-muted">{{ profile_data.email }}</h2>
-        </div>
+            <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
+            <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
+
+
+            <button >Изменить аватарку</button>
+            <button style="margin-top: 10px;">Установить шапку</button>
+
     </div>
 </div>
+
+
 <a href="" class="a-button">Написать пост</a>
 {% endblock %}
 

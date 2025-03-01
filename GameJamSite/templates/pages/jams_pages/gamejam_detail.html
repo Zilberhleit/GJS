@@ -1,26 +1,15 @@
 {% extends 'base.html' %}
 
 {% block headercontent %}
+
+
+{% endblock %}
+{% block content %}
 <div class="div-header">
     <div class="container-title">
         <h1>{{gamejam_detail.title}}</h1>
     </div>
 </div>
-<div class="profile-header">
-    <div>
-        <a href="{% url 'jams_list' %}" class="a-button">джемы</a>
-    </div>
-    <div>
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'profile_detail' request.user.username %}" class="a-button">{{request.user.username}}</a>
-        {% else %}
-            <a href="{% url 'login' %}" class="a-button">Войти</a>
-            <a href="{% url 'regist' %}" class="a-button">Зарегистрироваться</a>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
-{% block content %}
 <!--Вывод страницы джема-->
 <div class="jam-container">
     <div class="container-date">
