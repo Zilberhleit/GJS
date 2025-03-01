@@ -36,8 +36,6 @@ def submit_poll(request, uuid):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            print(data)
-
             for question in data['result']:
 
                 question_id = question['id']

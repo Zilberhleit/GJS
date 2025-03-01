@@ -11,11 +11,11 @@ class GameJams(models.Model):
         ("PR", "Подготовка")
     ]
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=255)
-    date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
-    theme = models.CharField(max_length=255)
-    status = models.CharField(max_length=3, choices=jam_status)
+    title = models.CharField(max_length=255, verbose_name='Название джема')
+    date_start = models.DateTimeField(verbose_name='Дата начала')
+    date_end = models.DateTimeField(verbose_name='Дата окончания')
+    theme = models.CharField(max_length=255, verbose_name='Тема')
+    status = models.CharField(max_length=3, choices=jam_status, verbose_name='Статус')
     winner = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="user_winner",
                                   on_delete=models.SET_NULL, blank=True, null=True)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="users",
