@@ -1,0 +1,143 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jacquarda+Bastarda+9&family=Tiny5&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+JP:wght@100..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+:root {
+    --main-background: rgb(32, 37, 58);
+    --head-foot: linear-gradient(90deg, rgb(24, 128, 255) 0%, rgba(24,128,255,1) 50%, rgba(48,159,255,1) 100%);
+    --button: #AB886D;
+    --button-hover: #AB889D;
+    --head-text: #493628;
+    --container-color: gray;
+}
+
+/* Изменение тэгов */
+* {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--main-background);
+    /* background: #fff; */
+    font-family: "PT Sans", serif;
+    font-weight: 400;
+    font-style: normal;
+
+    font-size: 19px;
+}
+
+main {
+    margin-top: 2vh;
+}
+
+footer {
+    background-color: var(--head-foot);
+    position: sticky;
+}
+
+footer {
+    bottom: 0;
+}
+
+/* img {
+    position: relative;
+    width: 20%;
+    height: 20%;
+    top: 0;
+    right: 0;
+} */
+
+a, a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+/* Классы */
+/* Классы для jams.html */
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    border-radius: 10px;
+    /* cursor: pointer; - за что? */ 
+    min-width: 0;
+    background-color: #fff;
+    background-clip: border-box;
+    transition: all 0.25s ease-in-out;
+    box-shadow: 12px 12px 12px rgba(0, 0, 0, 1.5);
+}
+
+.card:hover{
+    transform: scale(1.01);
+    
+}
+
+.card-button{
+    align-self: center;
+}
+
+.card-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-button-container {
+    display: flex;
+   flex-direction: column-reverse;
+}
+
+.card-title {
+    font-size: 25px;
+    color: #ff6b6b;
+}
+
+.card-text {
+    font-size: 20px;
+    color: rgb(82, 82, 82);
+}
+
+/* Классы для gamejam_detail */
+.container-title {
+    color: var(--head-text);
+    background-color: var(--head-foot);
+}
+
+.container-date {
+    background-color: gray;
+    padding: 2%;
+}
+
+.row {
+    justify-content: space-around;
+}
+
+/* Классы для user_profile */
+
+.avatar-block {
+    padding: 0.5%;
+    display: flex;
+    flex-direction: column;
+}
+
+#hat {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 30%;
+    background-color: white;
+    border-radius: 40px;
+}
+
+#avatar {
+    width: 250px;
+    height: 250px;
+    background-color: gray;
+    border-radius: 50%;
+}
+
+.modify-profile{
+    padding: 10px;
+}
