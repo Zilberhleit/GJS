@@ -13,6 +13,24 @@
 
 <script>
     const container = document.getElementById('circle-container');
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        console.log(input);
+        input.addEventListener('focus', function() {
+            console.log(this);
+            const label = this.previousElementSibling;
+            label.classList.add('label-up');
+        });
+        input.addEventListener('blur', function() {
+            console.log(this);
+            const label = this.previousElementSibling;
+            if (this.value.trim() === '') {
+                label.classList.remove('label-up');
+                this.value = '';
+            }
+        });
+    });
+
     for (let i = 0; i < 4; i++) {
         div = document.createElement('div');
         div.className = 'circle';
