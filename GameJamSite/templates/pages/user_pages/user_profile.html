@@ -7,20 +7,31 @@
 
 <div id="hat">
     <div class="avatar-block">
-            <div id="avatar">
+        <div id="avatar">
         </div>
-            <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
-            <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
+        <h2 class="display-5" style="text-align: center; color: black;">{{ profile_data.username }}</h2>
+        <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
 
 
-            <button >Изменить аватарку</button>
-            <button style="margin-top: 10px;">Установить шапку</button>
+        <button>Изменить аватарку</button>
+        <button style="margin-top: 10px;">Установить шапку</button>
 
     </div>
 </div>
 
-
 <a href="" class="a-button">Написать пост</a>
+<p style="">История участия:</p>
+{% for jam in past_jams.all %}
+<a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
+<div class="past-jam-card" style="margin-top: 20px; padding: 40px; border-radius: 20px;background: rgb(2,0,36);
+background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(90,85,232,1) 0%, rgba(66,64,232,1) 48%, rgba(0,212,255,1) 100%); margin: 50px 200px 50px 200px;">
+    <p>{{ jam.title }} </p>
+    <p>Тема: {{ jam.theme }} </p>
+    <p>Ваша оценка: {{ jam.avg_rating }}</p>
+</div>
+    </a>
+{% endfor %}
+
 {% endblock %}
 
 {% block footercontent %}
