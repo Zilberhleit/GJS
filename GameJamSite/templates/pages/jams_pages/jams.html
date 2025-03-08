@@ -7,29 +7,31 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 {% endblock %}
 
-{% block content %}
-
-
-<!-- Блок списка джемов -->
-<div class="container">
+{% block sidebar %}
+<div class="sidebar-container">
     <div class="filter">
         <form method="get">
             {{ filter.form.as_p }}
             <input type="submit">
         </form>
-
     </div>
-<script>
-    $(function() {
-        $("#id_date_start").datepicker({
-            dateFormat: "yy-mm-dd"
+    <script>
+        $(function() {
+            $("#id_date_start").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+            $("#id_date_end").datepicker({
+                dateFormat: "yy-mm-dd" //
+            });
         });
-        $("#id_date_end").datepicker({
-            dateFormat: "yy-mm-dd"
-        });
-    });
-</script>
-    <div class="row" style="padding: 1%">
+    </script>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Блок списка джемов -->
+<div class="main-container">
+    <div class="row">
         {% for jam in filter.qs %}
             <div class="col-md-4 mb-4">
                 <div class="card">
@@ -38,12 +40,12 @@
                     </a>
                     <div class="card-body">
                         <div>
-                            <h5 class="card-title">{{ jam.title }}</h5>
+                            <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="card-title">{{ jam.title }}</a>
                             <p class="card-text">{{ jam.get_status_display }}</p>
                         </div>
-                        <div class="card-button-container">
+                        <!-- <div class="card-button-container">
                             <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button card-button">Перейти!</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

@@ -50,6 +50,11 @@
     font-size: 15px;
 }
 
+.reg-text, .reg-text:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
 .btn-form {
     border: none;
     text-decoration: none;

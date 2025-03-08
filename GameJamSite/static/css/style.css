@@ -22,7 +22,12 @@ body {
     font-family: "PT Sans", serif;
     font-weight: 400;
     font-style: normal;
+    color: #fff;
     font-size: 19px;
+
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 4fr;
 }
 
 main {
@@ -40,6 +45,7 @@ footer {
 
 a, a:hover {
     color: white;
+a {
     text-decoration: none;
 }
 
@@ -110,7 +116,7 @@ a, a:hover {
     height: 100%;
     padding: 0.5%;
     display: flex;
-    flex-direction: column;да
+    flex-direction: column;
 }
 
 #hat {
