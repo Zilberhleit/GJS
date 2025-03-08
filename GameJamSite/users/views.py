@@ -47,8 +47,6 @@ class Profile(DetailView):
 
         context['past_jams'] = get_user_past_jams_history(self.request.user)
 
-        # print(context['past_jams'][0].__dict__)
-        print(context['past_jams'])
         return context
 
 
