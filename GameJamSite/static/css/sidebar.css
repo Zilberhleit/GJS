@@ -1,9 +1,9 @@
 /* Классы боковой панели */
 aside {
-    margin-left: 10%;
+    top: 12%;
+    padding-left: 10%;
     position: sticky;
     align-self: start;
-    top: 12%;
 }
 
 .filter form p {

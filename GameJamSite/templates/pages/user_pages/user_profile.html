@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
 <div class="profile">
     {% if profile_data.hat_image %}
@@ -20,25 +21,30 @@
                 <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
                 <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
 
-                <form name="selectAvatar" onSubmit="return setImage()">
-                    <button>Изменить аватарку</button>
-                </form>
-                <button style="margin-top: 10px;">Установить шапку</button>
+
+            <button >Изменить аватарку</button>
+            <button style="margin-top: 10px;">Установить шапку</button>
 
         </div>
     </div>
     <br>
 </div>
+
 <a href="{% url 'redactor' request.user.username %}" class="a-button">Дизайн</a>
 <a href="" class="a-button">Написать пост</a>
+<p style="">История участия:</p>
+{% for jam in past_jams.all %}
+<a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
+<div class="past-jam-card" style="margin-top: 20px; padding: 40px; border-radius: 20px;background: rgb(2,0,36);
+background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(90,85,232,1) 0%, rgba(66,64,232,1) 48%, rgba(0,212,255,1) 100%); margin: 50px 200px 50px 200px;">
+    <p>{{ jam.title }} </p>
+    <p>Тема: {{ jam.theme }} </p>
+    <p>Ваша оценка: {{ jam.avg_rating }}</p>
+</div>
+    </a>
+{% endfor %}
 
-<script>
-    function setImage(){
-        alert("i need your image");
-    }
-</script>
 {% endblock %}
 
 {% block footercontent %}
 {% endblock %}
-

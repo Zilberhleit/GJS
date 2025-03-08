@@ -21,6 +21,8 @@ class GameJams(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="users",
                                    blank=True)
 
+    def __str__(self):
+        return self.title + " - " + self.theme
 
 class UploadFile(models.Model):
     file = models.FileField(upload_to="zip_uploads/")
@@ -37,3 +39,6 @@ class RatingUserJam(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated_user")
     user_who_rate = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_who_rate")
     stars = models.IntegerField(blank=True)
+
+    def __str__(self):
+        return str(self.jam_uuid) + " - " + str(self.user)

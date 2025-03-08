@@ -24,14 +24,14 @@ body {
     font-style: normal;
     color: #fff;
     font-size: 19px;
-
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr;
     grid-template-columns: auto 4fr;
+    min-height: 100vh;
 }
 
 main {
-    margin-top: 2vh;
+    margin-top: 2%;
 }
 
 footer {
