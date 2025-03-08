@@ -22,7 +22,6 @@ body {
     font-family: "PT Sans", serif;
     font-weight: 400;
     font-style: normal;
-
     font-size: 19px;
 }
 
@@ -39,14 +38,6 @@ footer {
     bottom: 0;
 }
 
-/* img {
-    position: relative;
-    width: 20%;
-    height: 20%;
-    top: 0;
-    right: 0;
-} */
-
 a, a:hover {
     color: white;
     text-decoration: none;
@@ -61,7 +52,6 @@ a, a:hover {
     flex-direction: column;
     word-wrap: break-word;
     border-radius: 10px;
-    /* cursor: pointer; - за что? */ 
     min-width: 0;
     background-color: #fff;
     background-clip: border-box;
@@ -116,9 +106,11 @@ a, a:hover {
 /* Классы для user_profile */
 
 .avatar-block {
+    position: relative;
+    height: 100%;
     padding: 0.5%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;да
 }
 
 #hat {
@@ -127,11 +119,20 @@ a, a:hover {
     justify-content: center;
     padding: 10px;
     width: 30%;
+    height: 50%;
     background-color: white;
     border-radius: 40px;
 }
 
+#hat-image{
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    z-index: -1;
+}
+
 #avatar {
+    position: absolute;
     width: 250px;
     height: 250px;
     background-color: gray;

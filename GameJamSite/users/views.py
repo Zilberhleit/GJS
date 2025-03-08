@@ -48,6 +48,12 @@ def logout_view(request):
     return redirect('jams_list')
 
 
+def avatar_view(request):
+    if request.method == "POST":
+        return None
+    return None
+
+
 def redactor(request, username):
     return render(request, template_name='pages/user_pages/redaction_page.html')
 

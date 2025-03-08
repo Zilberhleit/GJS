@@ -2,26 +2,47 @@
 
 
 {% block content %}
-<a href="{% url 'redactor' request.user.username %}" class="a-button">Дизайн</a>
 
-
+{% if profile_data.hat_image %}
+    <img src="{{ profile_data.hat_image.url }}" alt="Аватар" style="max-width: 100%;
+                                                                           max-height: 100%;"
+        id="hat-image">
+{% endif %}
 <div id="hat">
+
     <div class="avatar-block">
             <div id="avatar">
+                {% if profile_data.avatar_image %}
+                    <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" style="max-width: 100%;
+                                                                                    max-height: 100%;">
+                {% endif %}
         </div>
             <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
             <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
 
-
-            <button >Изменить аватарку</button>
+            <form name="selectAvatar" onSubmit="return setImage()">
+                <button>Изменить аватарку</button>
+            </form>
             <button style="margin-top: 10px;">Установить шапку</button>
 
     </div>
 </div>
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<a href="{% url 'redactor' request.user.username %}" class="a-button">Дизайн</a>
 <a href="" class="a-button">Написать пост</a>
+
+<script>
+    function setImage(){
+        alert("i need your image");
+    }
+</script>
 {% endblock %}
 
 {% block footercontent %}
 {% endblock %}
+

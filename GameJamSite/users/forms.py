@@ -20,3 +20,12 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(forms.Form):
     email = forms.EmailField(label='Почта')
     password = forms.CharField(widget=forms.PasswordInput, label='Пароль')
+
+
+class UserPictureForm(forms.ModelForm):
+    avatar_image = forms.ImageField(label="Profile Picture")
+    hat_image = forms.ImageField(label="Hat Picture")
+
+    class Meta:
+        model = get_user_model()
+        fields = ("avatar_image", "hat_image", )

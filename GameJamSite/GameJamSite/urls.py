@@ -14,8 +14,7 @@ urlpatterns = [
     path('logout/', users_view.logout_view, name='logout'),
     path('register/', users_view.RegisterUser.as_view(), name='regist'),
     path('profile/', include('users.urls')),
-
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.handler404
 
