@@ -7,8 +7,9 @@
 {% block content %}
 <div class="div-header">
     <div class="container-title">
-        <h1>{{gamejam_detail.title}}</h1>
+        <h1>{{gamejam_detail.title}}</h1> 
     </div>
+    <!-- Название -->
 </div>
 <!--Вывод страницы джема-->
 <div class="jam-container">
@@ -16,6 +17,7 @@
         {{gamejam_detail.date_start}}
         <br>
         {{gamejam_detail.date_end}}
+        <!-- Даты конца и начала -->
     </div>
     {% for user_game in user_games %}
         {{ user_game.user.username }}
@@ -38,9 +40,9 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-
         <br>
     {% endfor %}
+    <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
             {% if gamejam_detail.status == 'FN' %}
             {% for rating in user_avg_rating %}
                 {{ rating }}
@@ -49,11 +51,13 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+        <!-- Ср оценка -->
     <br>
     {% if gamejam_detail.status == 'FN' %}
         {{gamejam_detail.theme}}
         {{gamejam_detail.winner}}
     {% endif %}
+    <!-- Тема и побеждатель -->
     {% if gamejam_detail.status == 'OG' %}
         {{gamejam_detail.theme}}
         {% if request.user in gamejam_detail.users.all %}
@@ -67,6 +71,7 @@
         <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
         {% endif %}
     {% endif %}
+    <!-- Загрузка -->
     {% if gamejam_detail.status == 'PR' %}
         {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
             <a href="poll" class="a-button">Принять участие</a>
@@ -76,6 +81,7 @@
             <h2>Вы участник джема, дождитесь даты начала</h2>
         {% endif %}
     {% endif %}
+    <!-- Принять участие -->
 </div>
 
 {% endblock %}
