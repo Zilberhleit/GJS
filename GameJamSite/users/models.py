@@ -4,3 +4,5 @@ from django.db import models
 
 class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name="Электронная почта")
+    avatar_image = models.ImageField(upload_to="users", null=True)
+    hat_image = models.ImageField(upload_to="users", null=True)

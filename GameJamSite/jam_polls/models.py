@@ -7,3 +7,5 @@ class Question(models.Model):
     count = models.IntegerField(default=0)
     jam_uuid = models.ForeignKey(GameJams, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.question_text
