@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block headercontent %}
+
+{% endblock %}
+
+{% block content %}
 <div class="container-title">
     <h1 class="display-5">Изменить страницу</h1>
 </div>
 <a href="{% url 'profile_detail' request.user.username %}" class="a-button">{{request.user.username}}</a>
 <a href="{% url 'jams_list' %}" class="a-button">Game Jam</a>
-{% endblock %}
-
-{% block content %}
-
 <a href="" class="a-button">Сохранить</a>
 {% endblock %}
 

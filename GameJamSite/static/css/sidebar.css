@@ -1,12 +1,73 @@
 /* Классы боковой панели */
 aside {
-    top: 12%;
-    padding-left: 10%;
-    position: sticky;
+    width: auto;
+    /* white-space: nowrap; */
+    position: relative;
     align-self: start;
+}
+
+.space {
+    width: 20vw;
+}
+
+.filter {
+    position: fixed;
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    flex-direction: column;
+    width: 20vw;
+    padding: 2vw;
+}
+
+.filter::before {
+    content: '';
+    position: absolute;
+    top: -12%;
+    left: 0;
+    background-color: rgb(30, 35, 54);;
+    z-index: -1;
+    width: 100%;
+    height: 100vh;
 }
 
 .filter form p {
     display: flex;
     flex-direction: column;
+}
+
+.filter p:nth-child(4) {
+    position: relative;
+    display: flex;
+    justify-content: space-between
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 70%;
+    outline: none;
+    border-radius: 5px;
+    text-indent: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.filter p:nth-child(4)::after {
+    content: '<>';
+    font: 17px "Consolas", monospace;
+    position: absolute;
+    right: 3px;
+    top: 50%;
+    transform: translateY(50%);
+    transform: translateY(-50%) rotate(90deg);
+    border-bottom: 1px solid #999;
+    pointer-events: none;
+}
+
+option {
+    color: black;
+
 }
