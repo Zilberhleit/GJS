@@ -34,14 +34,20 @@ class GameJamDetail(DetailView):
         context["user_games"] = user_games
         if self.object.status == 'FN':
             context["final_rating"] = {}
-
             final_rating = count_final_rating(self.object.uuid)
-            current_user_rating = final_rating.filter(user=self.request.user)
 
-            if current_user_rating.exists():
-                context["final_rating"]['current_user_rating'] = current_user_rating[0]
+            if self.request.user.is_authenticated:
+                current_user_rating = final_rating.filter(user=self.request.user)
 
-            context["final_rating"]['all_rating'] = final_rating.difference(current_user_rating).order_by('-avg_rating')
+                if current_user_rating.exists():
+                    context["final_rating"]['current_user_rating'] = current_user_rating[0]
+
+                context["final_rating"]['all_rating'] = (final_rating
+                                                         .difference(current_user_rating)
+                                                         .order_by('-avg_rating'))
+            else:
+                context["final_rating"]['all_rating'] = final_rating.order_by('-avg_rating')
+
         return context
 
     def get_object(self, queryset=None):
