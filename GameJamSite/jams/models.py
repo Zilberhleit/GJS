@@ -41,4 +41,4 @@ class RatingUserJam(models.Model):
     stars = models.IntegerField(blank=True)
 
     def __str__(self):
-        return str(self.jam_uuid) + " - " + str(self.user)
+        return str(self.jam_uuid) + ' | ' + str(self.user) + ' rated by ' + str(self.user_who_rate)
