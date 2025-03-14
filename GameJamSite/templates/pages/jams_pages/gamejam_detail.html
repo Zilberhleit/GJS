@@ -9,6 +9,7 @@
     <div class="container-title">
         <h1>{{gamejam_detail.title}}</h1>
     </div>
+    <!-- Название -->
 </div>
 <!--Вывод страницы джема-->
 <div class="jam-container">
@@ -16,66 +17,89 @@
         {{gamejam_detail.date_start}}
         <br>
         {{gamejam_detail.date_end}}
+        <!-- Даты конца и начала -->
     </div>
     {% for user_game in user_games %}
-        {{ user_game.user.username }}
-        <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
-            {{ user_game.cleaned_name }}</a>
-        {% if gamejam_detail.status == 'OG' %}
-            {% if request.user in gamejam_detail.users.all %}
-                {% if request.user != user_game.user %}
-                    <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
-                        {% csrf_token %}
-                        <select name="stars" id="rating">
-                            <option value="1">1 Звезда</option>
-                            <option value="2">2 Звезды</option>
-                            <option value="3">3 Звезды</option>
-                            <option value="4">4 Звезды</option>
-                            <option value="5">5 Звёзд</option>
-                        </select>
-                        <button type="submit">Отправить оценку</button>
-                    </form>
-                {% endif %}
-            {% endif %}
+    {{ user_game.user.username }}
+    <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
+        {{ user_game.cleaned_name }}</a>
+    {% if gamejam_detail.status == 'OG' %}
+    {% if request.user in gamejam_detail.users.all %}
+    {% if request.user != user_game.user %}
+    <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
+        {% csrf_token %}
+        <select name="stars" id="rating">
+            <option value="1">1 Звезда</option>
+            <option value="2">2 Звезды</option>
+            <option value="3">3 Звезды</option>
+            <option value="4">4 Звезды</option>
+            <option value="5">5 Звёзд</option>
+        </select>
+        <button type="submit">Отправить оценку</button>
+    </form>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    <br>
+    {% endfor %}
+    <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
+    {% if gamejam_detail.status == 'FN' %}
+    <table>
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Средняя оценка</th>
+        </thead>
+        <tbody>
+        {% if final_rating.current_user_rating %}
+        <tr>
+            <td style="background-color: #BA3A">  {{ final_rating.current_user_rating.user__username }}</td>
+            <td style="background-color: #BA3A"> {{ final_rating.current_user_rating.avg_rating }}</td>
+        </tr>
         {% endif %}
 
-        <br>
-    {% endfor %}
-            {% if gamejam_detail.status == 'FN' %}
-            {% for rating in user_avg_rating %}
-                {{ rating }}
-                {% if rating.username == user_game.user.username %}
-                    {{ rating.avg_rating }}
-                {% endif %}
-            {% endfor %}
+        {% for rating in final_rating.all_rating %}
+        <tr>
+            {% if rating.username == user_game.user.username %}
+            <td> {{ rating.user__username }}</td>
+            <td> {{ rating.avg_rating }}</td>
+        </tr>
         {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <!-- Ср оценка -->
     <br>
     {% if gamejam_detail.status == 'FN' %}
-        {{gamejam_detail.theme}}
-        {{gamejam_detail.winner}}
+    Тема: {{gamejam_detail.theme}}
+    Победитель: {{gamejam_detail.winner}}
     {% endif %}
+    <!-- Тема и побеждатель -->
     {% if gamejam_detail.status == 'OG' %}
-        {{gamejam_detail.theme}}
-        {% if request.user in gamejam_detail.users.all %}
-        <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="game">
-            <input type="hidden" name="jam_uuid" value="{{gamejam_detail.uuid}}">
-            <button type="submit" class="btn btn-secondary">Отправить</button>
-        </form>
-        {% else %}
-        <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
-        {% endif %}
+    {{gamejam_detail.theme}}
+    {% if request.user in gamejam_detail.users.all %}
+    <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="game">
+        <input type="hidden" name="jam_uuid" value="{{gamejam_detail.uuid}}">
+        <button type="submit" class="btn btn-secondary">Отправить</button>
+    </form>
+    {% else %}
+    <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
     {% endif %}
+    {% endif %}
+    <!-- Загрузка -->
     {% if gamejam_detail.status == 'PR' %}
-        {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
-            <a href="poll" class="a-button">Принять участие</a>
-        {% elif request.user.is_authenticated == False %}
-            <h2>Вы не вошли в свой аккаунт</h2>
-        {% else %}
-            <h2>Вы участник джема, дождитесь даты начала</h2>
-        {% endif %}
+    {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
+    <a href="poll" class="a-button">Принять участие</a>
+    {% elif request.user.is_authenticated == False %}
+    <h2>Вы не вошли в свой аккаунт</h2>
+    {% else %}
+    <h2>Вы участник джема, дождитесь даты начала</h2>
     {% endif %}
+    {% endif %}
+    <!-- Принять участие -->
 </div>
 
 {% endblock %}
