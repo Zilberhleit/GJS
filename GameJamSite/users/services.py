@@ -17,4 +17,4 @@ def get_user_jams_history(user: get_user_model()):
             ),
             1  # Округляем до 1 знака после запятой
         )
-    )).exclude(user_rating=None)
+    )).exclude(user_rating=None).values('uuid', 'title', 'theme', 'user_rating')
