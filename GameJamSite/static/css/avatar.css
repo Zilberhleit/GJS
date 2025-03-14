@@ -1,0 +1,41 @@
+/* Классы для user_profile */
+.avatar-block {
+    padding: 0.5%;
+    display: flex;
+    flex-direction: column;
+}
+
+#hat {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 30%;
+    background-color: white;
+    border-radius: 40px;
+}
+
+#avatar {
+    width: 250px;
+    height: 250px;
+    background-color: gray;
+    border-radius: 50%;
+}
+
+.modify-profile{
+    padding: 10px;
+}
+
+.profile {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.profile img {
+    position: absolute;
+    inset:  0 0 0 0;
+    width: 100%;
+    height: auto;
+    z-index: -1;
+}
