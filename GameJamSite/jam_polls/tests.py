@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from django.urls import reverse
 from jam_polls.models import Question
-from jams.models import GameJams
+from jams.models import GameJam
 from users.models import User
 
 
@@ -11,7 +11,7 @@ class PollViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.client.login(username='testuser', password='testpassword')
-        self.jam_case_1 = GameJams.objects.create(
+        self.jam_case_1 = GameJam.objects.create(
             uuid=uuid.uuid4(),
             title="Summer Game Jam 2023",
             date_start=datetime.now(),

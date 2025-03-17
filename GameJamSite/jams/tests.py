@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import redirect
 from django.test import TestCase
 from django.urls import reverse
-from jams.models import GameJams, UploadFile, RatingUserJam
+from jams.models import GameJam, Game, RatingUserJam
 from jams.views import count_final_rating
 from users.models import User
 
@@ -15,7 +15,7 @@ class JamsViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.client.login(username='testuser', password='testpassword')
-        self.jam_case_1 = GameJams.objects.create(
+        self.jam_case_1 = GameJam.objects.create(
             uuid=uuid.uuid4(),
             title="Summer Game Jam 2023",
             date_start=datetime.now(),
@@ -23,7 +23,7 @@ class JamsViewTest(TestCase):
             theme="Space Exploration",
             status='OG'
         )
-        self.jam_case_2 = GameJams.objects.create(
+        self.jam_case_2 = GameJam.objects.create(
             uuid=uuid.uuid4(),
             title="Summer Game Jam 2024",
             date_start=datetime.now(),
@@ -32,7 +32,7 @@ class JamsViewTest(TestCase):
             status='PR'
         )
         self.jam_case_1.users.set([self.user])
-        self.jam_case_3 = GameJams.objects.create(
+        self.jam_case_3 = GameJam.objects.create(
             uuid=uuid.uuid4(),
             title="Autumn Game Jam 2024",
             date_start=datetime.now(),
@@ -68,7 +68,7 @@ class JamsViewTest(TestCase):
         game_file = SimpleUploadedFile("test.zip", b"file_content", content_type="application/zip")
         response = self.client.post(reverse('upload-game', args=[self.jam_case_1.uuid]), {'game': game_file})
         self.assertRedirects(response, reverse('jams_list'))
-        upload_file_exists = UploadFile.objects.filter(user=self.user, jam_uuid=self.jam_case_1).exists()
+        upload_file_exists = Game.objects.filter(user=self.user, jam_uuid=self.jam_case_1).exists()
         self.assertTrue(upload_file_exists)
 
     def test_upload_game_file_invalid_extension(self):
