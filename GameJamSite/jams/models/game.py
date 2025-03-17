@@ -16,7 +16,7 @@ class Game(models.Model):
     uploaded_time = models.DateTimeField(auto_now_add=True, verbose_name='Дата загрузки')
 
     def __str__(self):
-        return self.title + " - " + self.jam_uuid.title + ' - ' + self.uploaded_time
+        return self.title + " - " + self.jam_uuid.title + ' - ' + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S")
 
     class Meta:
         verbose_name = "Игра"

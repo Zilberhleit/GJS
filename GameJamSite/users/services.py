@@ -5,13 +5,13 @@ from django.db.models.functions import Round
 from jams.models import GameJam
 
 
-def get_user_jams_history(user: get_user_model()):
-    return (GameJam.objects.filter(users=user, status='FN')
+def get_user_jams_history(username: str):
+    return (GameJam.objects.filter(users__username=username, status='FN')
     .annotate(
         user_rating=Round(
             Avg(
                 Case(
-                    When(ratinguserjam__user=user, then='ratinguserjam__stars'),
+                    When(ratinguserjam__user__username=username, then='ratinguserjam__stars'),
                     output_field=FloatField()
                 )
             ),
