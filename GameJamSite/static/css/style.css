@@ -5,10 +5,10 @@
 :root {
     --main-background: rgb(32, 37, 58);
     --head-foot: linear-gradient(90deg, rgb(24, 128, 255) 0%, rgba(24,128,255,1) 50%, rgba(48,159,255,1) 100%);
-    --button: #AB886D;
+    /* --button: #AB886D;
     --button-hover: #AB889D;
     --head-text: #493628;
-    --container-color: gray;
+    --container-color: gray; */
 }
 
 /* Изменение тэгов */
@@ -57,4 +57,10 @@ a {
 
 p {
     margin: 0;
+}
+
+button {
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
 }

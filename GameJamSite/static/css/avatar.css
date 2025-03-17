@@ -3,23 +3,56 @@
     padding: 0.5%;
     display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
 #hat {
-    margin: 0 auto;
+    position: absolute;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
     display: flex;
     justify-content: center;
-    padding: 10px;
-    width: 30%;
-    background-color: white;
-    border-radius: 40px;
+    padding: 25px;
+    width: 27%;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(50px);
+    border-radius: 15px;
 }
 
 #avatar {
+    display: flex;
     width: 250px;
     height: 250px;
-    background-color: gray;
+    background-color: #fff;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
+    overflow: hidden;
+}
+
+.nickname {
+    color: #ff6b6b;
+}
+
+.mail {
+    color: rgb(82, 82, 82);
+}
+
+.btn-avatar {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 5px;
+    color: #fff;
+}
+
+#avatar-img {
+    width: auto;
+    height: 100%;
 }
 
 .modify-profile{
@@ -30,12 +63,26 @@
     position: relative;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
-.profile img {
+#hat-img {
     position: absolute;
-    inset:  0 0 0 0;
     width: 100%;
+    inset:  0 0 0 0;
     height: auto;
     z-index: -1;
 }
+
+.avatar-block button {
+    margin-top: 10px;
+}
+
+.past-jam-card {
+    margin-top: 20px; 
+    padding: 40px; 
+    border-radius: 
+    20px;background: rgb(2,0,36);
+    background: #fff;
+}
+

@@ -8,6 +8,7 @@
 <div class="div-header">
     <div class="container-title">
         <h1>{{gamejam_detail.title}}</h1>
+        <p>Тема: {{gamejam_detail.theme}}</p>
     </div>
     <!-- Название -->
 </div>
@@ -40,39 +41,12 @@
     {% endif %}
     {% endif %}
     {% endif %}
-    <br>
     {% endfor %}
     <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
-    {% if gamejam_detail.status == 'FN' %}
-    <table>
-        <thead>
-        <tr>
-            <th>Имя</th>
-            <th>Средняя оценка</th>
-        </thead>
-        <tbody>
-        {% if final_rating.current_user_rating %}
-        <tr>
-            <td style="background-color: #BA3A">  {{ final_rating.current_user_rating.user__username }}</td>
-            <td style="background-color: #BA3A"> {{ final_rating.current_user_rating.avg_rating }}</td>
-        </tr>
-        {% endif %}
-
-        {% for rating in final_rating.all_rating %}
-        <tr>
-            {% if rating.username == user_game.user.username %}
-            <td> {{ rating.user__username }}</td>
-            <td> {{ rating.avg_rating }}</td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
+    
     <!-- Ср оценка -->
-    <br>
     {% if gamejam_detail.status == 'FN' %}
-    Тема: {{gamejam_detail.theme}}
+    
     Победитель: {{gamejam_detail.winner}}
     {% endif %}
     <!-- Тема и побеждатель -->
@@ -100,6 +74,33 @@
     {% endif %}
     {% endif %}
     <!-- Принять участие -->
+
+    {% if gamejam_detail.status == 'FN' %}
+    <table>
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Средняя оценка</th>
+        </thead>
+        <tbody>
+        {% if final_rating.current_user_rating %}
+        <tr>
+            <td>  {{ final_rating.current_user_rating.user__username }}</td>
+            <td> {{ final_rating.current_user_rating.avg_rating }}</td>
+        </tr>
+        {% endif %}
+
+        {% for rating in final_rating.all_rating %}
+        <tr>
+            {% if rating.username == user_game.user.username %}
+            <td> {{ rating.user__username }}</td>
+            <td> {{ rating.avg_rating }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 </div>
 
 {% endblock %}

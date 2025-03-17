@@ -1,24 +1,28 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock head %}
 
 {% block content %}
-<div class="container-title">
-    <h1>Опрос на джем</h1>
-</div>
-
-<div class="question">
+<div class="reg-form">
+    <div class="container-title">
+        <h1>Опрос на джем</h1>
+    </div>
     <p class="question-text"></p>
-    <button class="poll-button yes-button" type="button" name="yes"
-            onclick="change_question(1)">Да
-    </button>
-    <button class="poll-button no-button" type="button" name="no"
-            onclick="change_question(-1)">Нет
-    </button>
+    <div class="question">
+        <button class="poll-button" type="button" name="yes"
+                onclick="change_question(1)">Да
+        </button>
+        <button class="poll-button" type="button" name="no"
+                onclick="change_question(-1)">Нет
+        </button>
+    </div>
 </div>
+<div id="circle-container"></div>
 <script>
     let currentQuestionID = 0;
     const questions = {{ poll_list_json|safe }};
-
     const questionField = document.querySelectorAll('.question');
     const questionText = document.querySelector('.question-text');
 
@@ -65,7 +69,14 @@
         });
     }
 </script>
+<script>
+    const container = document.getElementById('circle-container');
+    for (let i = 0; i < 4; i++) {
+        div = document.createElement('div');
+        div.className = 'circle';
+        container.appendChild(div);
+    }
+</script>
 {% endblock %}
-
 {% block footercontent %}
 {% endblock %}

@@ -47,7 +47,7 @@
 
 .card-button-container {
     display: flex;
-   flex-direction: column-reverse;
+    flex-direction: column-reverse;
 }
 
 .card-title {

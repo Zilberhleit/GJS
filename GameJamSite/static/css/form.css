@@ -1,20 +1,19 @@
-/* Классы формы регитсрации и авторизации */
+/* Классы формы регитсрации и авторизации, а также вопросник */
 .reg-form {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
-
     display: flex;
     gap: 25px;
     flex-direction: column;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.3);
     color: #fff;
     border-radius: 15px;
     width: 25vw;
     height: auto;
     padding: 20px;
+    background: rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(10px);
 }
@@ -49,7 +48,7 @@
 }
 
 .reg-form p .label-up {
-    top: -12px;
+    top: -16px;
     left: 10px;
     font-size: 12px;
 }
@@ -79,12 +78,7 @@ input {
     text-decoration: none;
 }
 
-button {
-    border: none;
-    text-decoration: none;
-    cursor: pointer;
-}
-
+.poll-button,
 .btn-form {
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -92,7 +86,20 @@ button {
     border-radius: 4px;
     padding: 5px;
     color: #fff;
+}
+
+.poll-button {
+    width: 30%;
+}
+
+.btn-form {
     width: 100%;
+}
+
+.question {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
 }
 
 .circle {
@@ -115,8 +122,4 @@ button {
 
 label{
     color: white;
-}
-
-@keyframes anim {
-
 }

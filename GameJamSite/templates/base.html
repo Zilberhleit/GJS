@@ -26,6 +26,9 @@
         <ul>
             <li><a href="{% url 'jams_list' %}" class="menu-button">Джемы</a></li>
             <li><a href="#" class="menu-button">Создать джем</a></li>
+            {% block headButtons %}
+
+            {% endblock %}
         </ul>
         <ul>
             {% if request.user.is_authenticated %}
