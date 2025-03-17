@@ -92,7 +92,7 @@
 
         {% for rating in final_rating.all_rating %}
         <tr>
-            {% if rating.username == user_game.user.username %}
+            {% if rating.username == user_game.user %}
             <td> {{ rating.user__username }}</td>
             <td> {{ rating.avg_rating }}</td>
         </tr>
