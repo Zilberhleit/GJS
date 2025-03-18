@@ -16,7 +16,7 @@ class GameJam(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название джема')
     date_start = models.DateTimeField(verbose_name='Дата начала')
     date_end = models.DateTimeField(verbose_name='Дата окончания')
-    theme = models.CharField(max_length=255, verbose_name='Тема')
+    theme = models.CharField(max_length=255, default="", verbose_name='Тема')
     status = models.CharField(max_length=3, choices=jam_status, default="PR", verbose_name='Статус')
     winner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="user_winner",
                                on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Победитель')

@@ -12,4 +12,4 @@ class Question(models.Model):
         verbose_name_plural = "Вопросы"
 
     def __str__(self):
-        return self.question_text
+        return self.question_text + " - " + self.jam_uuid.title + ' - ' + str(self.count)

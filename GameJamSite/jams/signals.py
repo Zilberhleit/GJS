@@ -1,14 +1,19 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Max
+from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
 
+from jam_polls.models import Question
 from jams.models import GameJam
 from jams.views import count_final_rating
-from django.db.models.signals import pre_save, post_init
 
 
 @receiver(post_init, sender=GameJam)
 def post_init_previous_jam_status_handler(sender, instance, **kwargs):
     instance.previous_status = instance.status
+
+
+# Сигнал вычисляющий победителя при завершении геймджема
 
 @receiver(pre_save, sender=GameJam)
 def calculate_winner_when_jam_finished(sender, instance, **kwargs):
@@ -26,3 +31,16 @@ def calculate_winner_when_jam_finished(sender, instance, **kwargs):
                 instance.winner = winner_user[0]
                 instance.save()
 
+
+# Сигнал устанавливающий тему окончания подготовки джема
+
+@receiver(pre_save, sender=GameJam)
+def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
+    if instance.previous_status == 'PR' and instance.status == 'OG':
+        instance.previous_status = 'OG'
+
+        jam_polls = Question.objects.filter(jam_uuid=instance.uuid)
+
+        theme = jam_polls.filter(count=jam_polls.aggregate(Max('count'))['count__max']).first()
+
+        instance.theme =theme.question_text
