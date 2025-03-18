@@ -1,4 +1,4 @@
 from django.contrib import admin
-from jam_polls.models import Question
+from jam_polls.models import Poll
 
-admin.site.register(Question)
+admin.site.register(Poll)

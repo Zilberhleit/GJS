@@ -3,7 +3,7 @@ from django.db.models import Max
 from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
 
-from jam_polls.models import Question
+from jam_polls.models import Poll
 from jams.models import GameJam
 from jams.views import count_final_rating
 
@@ -39,8 +39,8 @@ def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
     if instance.previous_status == 'PR' and instance.status == 'OG':
         instance.previous_status = 'OG'
 
-        jam_polls = Question.objects.filter(jam_uuid=instance.uuid)
+        jam_polls = Poll.objects.filter(jam_uuid=instance.uuid)
 
-        theme = jam_polls.filter(count=jam_polls.aggregate(Max('count'))['count__max']).first()
+        theme = jam_polls.filter(total_votes=jam_polls.aggregate(Max('count'))['count__max']).first()
 
         instance.theme =theme.question_text
