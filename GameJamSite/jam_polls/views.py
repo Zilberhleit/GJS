@@ -1,57 +1,72 @@
 import json
 
-from django.db.models import Value, IntegerField, F
-from django.http import JsonResponse
+from django.db import transaction
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.urls import reverse
 from django.views.generic import ListView
 
-from jam_polls.models import Question
+from jam_polls.models import ThemeVote, GameJamTheme
 from jams.models import GameJam
 
 
 class PollList(ListView):
-    model = Question
+    model = GameJamTheme
     template_name = 'pages/jam_polls_pages/poll.html'
     context_object_name = 'poll_list'
 
-    def get_object(self, queryset=None):
-        return GameJam.objects.get(uuid=self.kwargs.get('uuid'))
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login'))
+
+        if GameJam.objects.filter(uuid=self.kwargs.get('uuid'), users=request.user).exists():
+            return HttpResponseForbidden('Вы уже прошли опрос')
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["poll_jam_uuid"] = GameJam.objects.get(uuid=self.kwargs.get('uuid'))
-        uuid = GameJam.objects.get(uuid=self.kwargs.get('uuid'))
 
-        question_queryset = list(Question.objects.filter(jam_uuid=uuid).annotate(
-            decision=Value(0, output_field=IntegerField())
-        ).values('id', 'question_text', 'decision'))
+        jam = GameJam.objects.get(uuid=self.kwargs.get('uuid'))
+        context["poll_jam_uuid"] = jam
 
-        context["poll_list_json"] = question_queryset
+        question_queryset = GameJamTheme.objects.filter(gamejam=jam).values('id', 'theme')
+        context["poll_list_json"] = list(question_queryset)
 
         return context
 
 
+@transaction.atomic
 def submit_poll(request, uuid):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Пользователь не аутентифицирован'}, status=403)
+    if GameJam.objects.filter(uuid=uuid, users=request.user).exists():
+        return JsonResponse({'error': 'Вы уже прошли опрос'}, status=403)
 
     if request.method == "POST":
         try:
             data = json.loads(request.body)
             for question in data['result']:
-
                 question_id = question['id']
                 answer = question['decision']
-                current = Question.objects.filter(pk=question_id)
 
-                if answer == 1:
-                    current.update(count=F("count") + 1)
-                elif answer == -1:
-                    current.update(count=F("count") - 1)
+                ThemeVote.objects.create(
+                    user=request.user,
+                    theme=GameJamTheme.objects.get(pk=question_id),
+                    vote=answer
+                )
 
                 gamejam = GameJam.objects.get(uuid=uuid)
                 gamejam.users.add(request.user)
 
-            return JsonResponse({'message': 'Все вопросы пройдены', 'redirect': True})
+            return JsonResponse({'message': 'Все вопросы пройдены успешно', 'redirect': True})
 
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Некорректный JSON'}, status=400)
+
+
+def check_user_vote_permission(request, uuid):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login'))
+
+    if not GameJam.objects.filter(uuid=uuid, users=request.user).exists():
+        return JsonResponse({'error': 'Вы уже прошли опрос'}, status=403)

@@ -12,10 +12,10 @@
     <p class="question-text"></p>
     <div class="question">
         <button class="poll-button" type="button" name="yes"
-                onclick="change_question(1)">Да
+                onclick="change_question(true)">Да
         </button>
         <button class="poll-button" type="button" name="no"
-                onclick="change_question(-1)">Нет
+                onclick="change_question(false)">Нет
         </button>
     </div>
 </div>
@@ -28,7 +28,7 @@
 
 
     if (questions.length != 0) {
-        questionText.innerText = questions[currentQuestionID].question_text;
+        questionText.innerText = questions[currentQuestionID].theme;
     }
 
     function change_question(answer){
@@ -39,14 +39,13 @@
             send_answer_to_server();
         }
         else {
-            questionText.innerText = questions[currentQuestionID].question_text;
+            questionText.innerText = questions[currentQuestionID].theme;
         }
     }
 
     function send_answer_to_server(){
         const formData = new FormData();
         formData.append('result', questions);
-
         fetch("{% url 'submit' poll_jam_uuid.uuid %}", {
             method: 'POST',
             headers: {

@@ -13,7 +13,7 @@ from .filters import GameJamsFilter
 
 class GameJamsLists(ListView):
     template_name = 'pages/jams_pages/jams.html'
-    queryset = GameJam.objects.order_by('-status')
+    queryset = GameJam.objects.order_by('-status', '-date_start')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
