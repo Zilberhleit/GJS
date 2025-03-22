@@ -15,13 +15,9 @@ class PollList(ListView):
     context_object_name = 'poll_list'
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
+        permission = check_user_vote_permission(request, self.kwargs.get('uuid'))
+        return permission if permission else super().dispatch(request, *args, **kwargs)
 
-        if GameJam.objects.filter(uuid=self.kwargs.get('uuid'), users=request.user).exists():
-            return HttpResponseForbidden('Вы уже прошли опрос')
-
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -68,5 +64,5 @@ def check_user_vote_permission(request, uuid):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
 
-    if not GameJam.objects.filter(uuid=uuid, users=request.user).exists():
-        return JsonResponse({'error': 'Вы уже прошли опрос'}, status=403)
+    if GameJam.objects.filter(uuid=uuid, users=request.user).exists():
+        return HttpResponseForbidden('Вы уже прошли опрос')

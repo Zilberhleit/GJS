@@ -25,3 +25,12 @@ class ThemeVote(models.Model):
     def __str__(self):
         return str(self.user) + " проголосовал " + str(self.vote) + " за "  + str(self.theme)
 
+class Theme(models.Model):
+    theme = models.CharField(max_length=255, verbose_name="Тема")
+
+    class Meta:
+        verbose_name = "Тема"
+        verbose_name_plural = "Темы"
+
+    def __str__(self):
+        return self.theme

@@ -1,9 +1,11 @@
+import random
+
 from django.contrib.auth import get_user_model
 from django.db.models import Max, Count, Q
 from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
 
-from jam_polls.models import GameJamTheme
+from jam_polls.models import GameJamTheme, Theme
 from jams.models import GameJam
 from jams.views import count_final_rating
 
@@ -55,14 +57,14 @@ def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
         else:
             instance.theme = None
 
+@receiver(pre_save, sender=GameJam)
+def set_random_themes_for_jam_when_it_created(sender, instance, **kwargs):
+    if instance.status == 'PR' and not GameJamTheme.objects.filter(gamejam=instance).exists():
+        themes_max_pk = Theme.objects.all().aggregate(Max('pk'))['pk__max']
 
-# @receiver(pre_save, sender=GameJam)
-# def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
-#     if instance.previous_status == 'PR' and instance.status == 'OG':
-#         instance.previous_status = 'OG'
-#
-#         jam_polls = GameJamTheme.objects.filter(jam_uuid=instance.uuid)
-#         theme = jam_polls.filter(total_votes=jam_polls.aggregate(Max('count'))['count__max']).first()
-#
-#         instance.theme = theme.theme
+        random_picked_themes = Theme.objects.filter(pk__in=random.sample(range(1, themes_max_pk + 1), 3))
+        GameJamTheme.objects.bulk_create([GameJamTheme(gamejam=instance, theme=theme)
+                                          for theme in random_picked_themes])
+
+
 
