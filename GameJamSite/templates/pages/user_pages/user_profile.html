@@ -27,12 +27,17 @@
 
             {% if request.user.is_authenticated and request.user.id == profile_data.id %}
                 <form method="post"
-                      id="avatarForm" enctype="multipart/form-data"><!--action="{% url 'avatar_photo' request.user.username %}"-->
+                      id="avatarForm" action="{% url 'photo' request.user.username %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="file" name="photo">
+                    <input type="file" name="avatar">
                     <button type="submit">Загрузить фото</button>
                 </form>
-                <button style="margin-top: 10px;">Установить шапку</button>
+                <form method="post"
+                      id="hatForm" action="{% url 'photo' request.user.username %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="hat">
+                    <button type="submit">Загрузить фото</button>
+                </form>
             {% endif %}
         </div>
     </div>
@@ -53,27 +58,6 @@
     </a>
 {% endfor %}
 
-<script>
-    var url = "{% url 'avatar_photo' request.user.username %}";
-    $("#avatarForm").on('submit', function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response){
-                alert('success');
-            },
-            error: function(xhr, status, error) {
-                    alert('Ошибка при загрузке файла: ' + error);
-            }
-        });
-    });
-</script>
 {% endblock %}
 
 {% block footercontent %}
