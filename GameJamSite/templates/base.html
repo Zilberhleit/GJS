@@ -26,6 +26,9 @@
         <ul>
             <li><a href="{% url 'jams_list' %}" class="menu-button">Джемы</a></li>
             <li><a href="#" class="menu-button">Создать джем</a></li>
+            {% block headButtons %}
+
+            {% endblock %}
         </ul>
         <ul>
             {% if request.user.is_authenticated %}
@@ -47,7 +50,6 @@
     {% endblock %}
 </aside>
 <!--Основной контент-->
-<!-- я в рот ебал этот мейн сука, какого хуя тут блядь стили к нему применяются, которых ни в css нигде нету -->
 <main>
     {% block content %}
     {% endblock %}

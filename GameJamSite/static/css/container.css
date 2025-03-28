@@ -10,10 +10,10 @@
 }
 
 .row {
+    padding-top: 2%;
+    padding-bottom: 2%;
     display: flex;
-    margin: 0 2% 0 2%;
-    padding: 0;
-    justify-content: space-around;
+    margin: 0 2% 0 0;
 }
 
 /* Классы для jams.html */
@@ -47,7 +47,7 @@
 
 .card-button-container {
     display: flex;
-   flex-direction: column-reverse;
+    flex-direction: column-reverse;
 }
 
 .card-title {

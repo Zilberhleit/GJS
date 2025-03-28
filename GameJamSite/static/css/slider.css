@@ -1,6 +1,13 @@
+@font-face {
+    font-family: "ICA Rubrik";
+    src: url("/static/fonts/ICARubrikBold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 .banner {
     width: 100%;
-    height: 87vh;
+    height: 88.8vh;
     text-align: center;
     overflow: hidden;
     position: relative;
@@ -42,24 +49,59 @@
     object-fit: cover;
 }
 
-.banner .slider-container {
+.banner .slider-content {
     position: absolute;
     display: flex;
-    justify-content: center;
+    align-items: end;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 85vh;
-    height: max-content;
-    padding-bottom: 15vh;
+    width: 100vw;
 }
 
-.banner .slider-container .model {
-    position: absolute;
+.banner .slider-content .model {
     width: 200%;
     height: 55vh;
     bottom: 0;
     background-size: auto 100%;
     background-repeat: no-repeat;
     background-position: top center;
+}
+
+.banner .gmj-content {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-44%);
+    width: 100vw;
+    bottom: 80px;
+    z-index: 3;
+}
+
+.banner .gmj-content h1 {
+    font-family: "ICA Rubrik";
+    position: relative;
+    font-weight: 900;
+    font-size: 170px;
+    color: transparent;
+    -webkit-text-stroke: 2px #eeeeee;
+    margin: 0;
+}
+
+.banner .gmj-content h1 span {
+    background: linear-gradient(90deg, #ff3d3a, #9736ff);
+    background-clip: text;
+    color: transparent;
+}
+
+.banner .gmj-content .slider-text {
+    padding-left: 30px;
+}
+
+.banner .gmj-content h2 {
+    text-align: start;
 }

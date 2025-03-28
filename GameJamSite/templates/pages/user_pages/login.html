@@ -9,15 +9,19 @@
 {% block content %}
 <form method="post" class="reg-form">
     {% csrf_token %}
+    <h1>Вход</h1>
     {{ form.as_p }}
-    <div class="text-form">
-        <a href="{% url 'regist' %}" class="reg-text">Нет аккаунта?</a>
-        <a href="" class="reg-text">Забыли пароль</a>
+    <div>
+        <div>
+            <div class="text-form">
+                <a href="{% url 'regist' %}" class="reg-text">Нет аккаунта?</a>
+                <a href="" class="reg-text">Забыли пароль</a>
+            </div>
+            <button class="btn-form">Войти</button>
+        </div>
     </div>
-    <button class="btn-form">Войти</button>
 </form>
 <div id="circle-container"></div>
-
 <script>
     const container = document.getElementById('circle-container');
     const inputs = document.querySelectorAll('input');

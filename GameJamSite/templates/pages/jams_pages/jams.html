@@ -2,32 +2,29 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
-
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 {% endblock %}
 
 {% block sidebar %}
-<div class="sidebar-container">
-    <div class="filter">
-        <form method="get">
-            {{ filter.form.as_p }}
-            <input type="submit">
-        </form>
-    </div>
-    <script>
-        $(function() {
-            $("#id_date_start").datepicker({
-                dateFormat: "yy-mm-dd"
-            });
-            $("#id_date_end").datepicker({
-                dateFormat: "yy-mm-dd" //
-            });
+<div class="space"></div>
+<form method="get" class="filter">
+    {{ filter.form.as_p }}
+    <button class="btn-form">Поиск</button>
+</form>
+<script>
+    $(function() {
+        $("#id_date_start").datepicker({
+            dateFormat: "yy-mm-dd"
         });
-    </script>
-</div>
+        $("#id_date_end").datepicker({
+            dateFormat: "yy-mm-dd" //
+        });
+    });
+</script>
 {% endblock %}
 
 {% block content %}
@@ -54,6 +51,24 @@
         {% endfor %}
     </div>
 </div>
-
-
+<script>
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        console.log(input);
+        input.addEventListener('focus', function() {
+            console.log(this);
+            const label = this.previousElementSibling;
+            console.log(label);
+            label.classList.add('label-up');
+            console.log("aaaaaa");
+        });
+        input.addEventListener('blur', function() {
+            console.log(this);
+            const label = this.previousElementSibling;
+            if (this.value.trim() === '') {
+                label.classList.remove('label-up');
+            }
+        });
+    });
+</script>
 {% endblock %}

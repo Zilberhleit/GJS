@@ -5,10 +5,10 @@
 :root {
     --main-background: rgb(32, 37, 58);
     --head-foot: linear-gradient(90deg, rgb(24, 128, 255) 0%, rgba(24,128,255,1) 50%, rgba(48,159,255,1) 100%);
-    --button: #AB886D;
+    /* --button: #AB886D;
     --button-hover: #AB889D;
     --head-text: #493628;
-    --container-color: gray;
+    --container-color: gray; */
 }
 
 /* Изменение тэгов */
@@ -31,7 +31,7 @@ body {
 }
 
 main {
-    margin-top: 2%;
+    
 }
 
 footer {
@@ -43,108 +43,24 @@ footer {
     bottom: 0;
 }
 
-a, a:hover {
-    color: white;
+/* img {
+    position: relative;
+    width: 20%;
+    height: 20%;
+    top: 0;
+    right: 0;
+} */
+
 a {
     text-decoration: none;
 }
 
-/* Классы */
-/* Классы для jams.html */
-
-.card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    word-wrap: break-word;
-    border-radius: 10px;
-    min-width: 0;
-    background-color: #fff;
-    background-clip: border-box;
-    transition: all 0.25s ease-in-out;
-    box-shadow: 12px 12px 12px rgba(0, 0, 0, 1.5);
+p {
+    margin: 0;
 }
 
-.card:hover{
-    transform: scale(1.01);
-    
-}
-
-.card-button{
-    align-self: center;
-}
-
-.card-body {
-    display: flex;
-    justify-content: space-between;
-}
-
-.card-button-container {
-    display: flex;
-   flex-direction: column-reverse;
-}
-
-.card-title {
-    font-size: 25px;
-    color: #ff6b6b;
-}
-
-.card-text {
-    font-size: 20px;
-    color: rgb(82, 82, 82);
-}
-
-/* Классы для gamejam_detail */
-.container-title {
-    color: var(--head-text);
-    background-color: var(--head-foot);
-}
-
-.container-date {
-    background-color: gray;
-    padding: 2%;
-}
-
-.row {
-    justify-content: space-around;
-}
-
-/* Классы для user_profile */
-
-.avatar-block {
-    position: relative;
-    height: 100%;
-    padding: 0.5%;
-    display: flex;
-    flex-direction: column;
-}
-
-#hat {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    width: 30%;
-    height: 50%;
-    background-color: white;
-    border-radius: 40px;
-}
-
-#hat-image{
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    z-index: -1;
-}
-
-#avatar {
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    background-color: gray;
-    border-radius: 50%;
-}
-
-.modify-profile{
-    padding: 10px;
+button {
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
 }

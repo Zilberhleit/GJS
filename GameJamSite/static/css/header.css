@@ -17,7 +17,7 @@ nav {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 10px;
+    padding: 11px;
     height: 100%;
 }
 

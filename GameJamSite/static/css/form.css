@@ -1,61 +1,75 @@
-/* Классы формы регитсрации и авторизации */
+/* Классы формы регитсрации и авторизации, а также вопросник */
 .reg-form {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
     display: flex;
+    gap: 25px;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.3);
+    justify-content: space-between;
     color: #fff;
-    border-radius: 25px;
-    margin-top: 6%;
-    margin-right: 30%;
-    margin-left: 30%;
-    padding: 3%;
+    border-radius: 15px;
+    width: 25vw;
+    height: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(10px);
 }
 
 /* позже подправлю */
-.reg-form:has(.errorlist) label[for="id_password1"] {
+/* .reg-form:has(.errorlist) label[for="id_password1"] {
     color: #ff332f;
 }
 
 .reg-form:has(.errorlist) input[type="password"][name="password1"] {
     border-bottom: 1px solid #ff332f;
-}
+} */
 
 .reg-form p {
     position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+
+.reg-form h1{
+    text-align: center;
+    margin: 10px 0 0 0;
 }
 
 .reg-form p label {
     position: absolute;
-    top: 3px;
+    top: -2px;
     left: 0;
     white-space: nowrap;
-    font-size: 15px;
+    font-size: 20px;
     transition: top 0.3s, left 0.3s, font-size 0.3s;
 }
 
 .reg-form p .label-up {
-    top: -10px;
+    top: -16px;
     left: 10px;
     font-size: 12px;
 }
 
-.reg-form p input {
+input {
+    border: none;
+    outline: none;
+}
+/* .reg-form p  */
+input {
     width: 100%;
     padding: 0;
-    border: none;
     background-color: transparent;
     border-bottom: 1px solid white;
-    outline: none;
     color: #fff;
 }
 
 .text-form {
     display: flex;
     justify-content: space-between;
-    padding: 5% 3% 1% 3%;
+    padding: 5% 1% 1% 1%;
     font-size: 15px;
 }
 
@@ -64,16 +78,28 @@
     text-decoration: none;
 }
 
+.poll-button,
 .btn-form {
-    border: none;
-    text-decoration: none;
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 4px;
     padding: 5px;
-    cursor: pointer;
     color: #fff;
+}
+
+.poll-button {
+    width: 30%;
+}
+
+.btn-form {
+    width: 100%;
+}
+
+.question {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
 }
 
 .circle {
@@ -81,16 +107,16 @@
     border-radius: 50%;
     z-index: -1;
 }
-.circle:nth-child(1) { top: 20%; right: 25%; width: 200px; height: 200px;
+.circle:nth-child(1) { top: 25%; right: 25%; width: 200px; height: 200px;
     background-image: linear-gradient(86deg, #ff3d3a, #9736ff);
 }
-.circle:nth-child(2) { top: 15%; right: 55%; width: 250px; height: 250px;
+.circle:nth-child(2) { top: 20%; right: 55%; width: 250px; height: 250px;
     background-image: linear-gradient(150deg, #ff3d3a, #9736ff);
 }
-.circle:nth-child(3) { top: 50%; right: 35%; width: 150px; height: 150px;
+.circle:nth-child(3) { top: 55%; right: 35%; width: 150px; height: 150px;
     background-image: linear-gradient(10deg, #ff3d3a, #9736ff);
 }
-.circle:nth-child(4) { top: 55%; right: 50%; width: 200px; height: 200px;
+.circle:nth-child(4) { top: 60%; right: 50%; width: 200px; height: 200px;
     background-image: linear-gradient(320deg, #ff3d3a, #9736ff);
 }
 
