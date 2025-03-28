@@ -44,8 +44,6 @@ class Profile(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-
         context['past_jams'] = get_user_jams_history(self.kwargs.get('username'))
 
         return context
@@ -56,10 +54,25 @@ def logout_view(request):
     return redirect('jams_list')
 
 
-def avatar_view(request):
+def photo_view(request, username):
     if request.method == "POST":
-        return None
-    return None
+        user = User.objects.get(username=request.user.username)
+        if "avatar" in request.FILES:
+            avatar_photo = request.FILES["avatar"]
+
+            if user.avatar_image:
+                user.avatar_image.delete()
+            user.avatar_image = avatar_photo
+            user.save()
+        elif "hat" in request.FILES:
+            hat_photo = request.FILES["hat"]
+
+            if user.hat_image:
+                user.hat_image.delete()
+            user.hat_image = hat_photo
+            user.save()
+        return redirect('profile_detail', username=request.user.username)
+
 
 
 def redactor(request, username):
