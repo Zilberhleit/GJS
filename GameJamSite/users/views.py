@@ -55,10 +55,17 @@ def logout_view(request):
     return redirect('jams_list')
 
 
-def avatar_view(request):
+def avatar_view(request, username):
     if request.method == "POST":
-        return None
-    return None
+        print('avafaf')
+        if "photo" in request.FILES:
+            avatar_photo = request.FILES["photo"]
+            prev_avatar = User.objects.get(username=request.user.username)
+            prev_avatar.avatar_image.update(avatar_photo)
+            print("avafs", avatar_photo.file.name)
+
+        return redirect('profile_detail', username=request.user.username)
+    raise Http500
 
 
 def redactor(request, username):

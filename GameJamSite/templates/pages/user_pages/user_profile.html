@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<!--
+<script
+  src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+  integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+  crossorigin="anonymous"></script>-->
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+{% endblock %}
 
 {% block content %}
 <div class="profile">
@@ -21,10 +30,15 @@
                 <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
                 <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
 
-
-            <button >Изменить аватарку</button>
-            <button style="margin-top: 10px;">Установить шапку</button>
-
+            {% if request.user.is_authenticated and request.user.id == profile_data.id %}
+                <form method="post"
+                      id="avatarForm" enctype="multipart/form-data"><!--action="{% url 'avatar_photo' request.user.username %}"-->
+                    {% csrf_token %}
+                    <input type="file" name="photo">
+                    <button type="submit">Загрузить фото</button>
+                </form>
+                <button style="margin-top: 10px;">Установить шапку</button>
+            {% endif %}
         </div>
     </div>
     <br>
@@ -32,6 +46,7 @@
 
 <a href="{% url 'redactor' request.user.username %}" class="a-button">Дизайн</a>
 <a href="" class="a-button">Написать пост</a>
+
 <p style="">История участия:</p>
 {% for jam in past_jams.all %}
 <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
@@ -44,6 +59,27 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(90,85,232,1) 0%, rgba
     </a>
 {% endfor %}
 
+<script>
+    var url = "{% url 'avatar_photo' request.user.username %}";
+    $("#avatarForm").on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response){
+                alert('success');
+            },
+            error: function(xhr, status, error) {
+                    alert('Ошибка при загрузке файла: ' + error);
+            }
+        });
+    });
+</script>
 {% endblock %}
 
 {% block footercontent %}
