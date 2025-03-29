@@ -5,7 +5,7 @@ from django.views.generic import CreateView, DetailView
 from users.forms import LoginUserForm, RegisterUserForm
 from users.models import User
 
-from .services import get_user_jams_history
+from .services import get_user_jams_history, get_user_games_history
 
 
 class RegisterUser(CreateView):
@@ -45,7 +45,7 @@ class Profile(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['past_jams'] = get_user_jams_history(self.kwargs.get('username'))
-
+        context['user_games'] = get_user_games_history(self.kwargs.get('username'))
         return context
 
 
