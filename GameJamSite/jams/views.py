@@ -90,11 +90,11 @@ def game_jam_upload(request, uuid):
 
 def game_jam_download(request, id, uuid):
     file_instance = get_object_or_404(Game, id=id, jam_uuid=uuid)
-    path = file_instance.file.path
+    path = file_instance.game_file.path
 
     with open(path, 'rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/force-download')
-        response['Content-Disposition'] = f'attachment; filename={os.path.basename(file_instance.file.name)}'
+        response['Content-Disposition'] = f'attachment; filename={os.path.basename(file_instance.game_file.name)}'
         return response
 
 

@@ -44,8 +44,6 @@
     <br>
 </div>
 
-
-
 <div class="history">
     <p>История участия:</p>
     {% for jam in past_jams %}
@@ -56,6 +54,23 @@
             <p>Рейтинг игры: {{ jam.user_rating }}</p>
         </div>
     </a>
+</div>
+
+<div class="user_games">
+    <p>Разработанные игры:</p>
+    {% for game in user_games %}
+    <p>
+        <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
+            {{ game.title }}
+        </a>
+        {{ game.uploaded_time }}
+    </p>
+    {% endfor %}
+
+    <!-- тут должен отобразиться список разработанных игр -->
+    <!-- с возможностью скачивания -->
+
+</div>
 {% endfor %}
 
 {% endblock %}
