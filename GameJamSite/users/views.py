@@ -9,12 +9,14 @@ from .services import get_user_jams_history, get_user_games_history
 
 
 class RegisterUser(CreateView):
+    """  Представление регистрации пользователя """
     form_class = RegisterUserForm
     template_name = 'pages/user_pages/register.html'
     success_url = reverse_lazy('login')
 
 
 def login_view(request):
+    """  Представление входа в аккаунт """
     if request.method == "POST":
         form = LoginUserForm(request.POST)
 
@@ -34,6 +36,8 @@ def login_view(request):
 
 
 class Profile(DetailView):
+    """ Представление профиля пользователя """
+
     model = User
     template_name = 'pages/user_pages/user_profile.html'
     context_object_name = 'profile_data'
@@ -50,6 +54,7 @@ class Profile(DetailView):
 
 
 def logout_view(request):
+    """  Представление выхода из аккаунта """
     logout(request)
     return redirect('jams_list')
 
@@ -76,8 +81,10 @@ def photo_view(request, username):
 
 
 def redactor(request, username):
+    """  Представление редактирования страницы пользователя """
     return render(request, template_name='pages/user_pages/redaction_page.html')
 
 
 def write_post():
+    """  Представление создания поста """
     pass

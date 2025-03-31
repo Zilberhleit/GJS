@@ -10,6 +10,7 @@ from jams.models import GameJam
 
 
 class PollList(ListView):
+    """ Представление списка вопросов для опроса """
     model = GameJamTheme
     template_name = 'pages/jam_polls_pages/poll.html'
     context_object_name = 'poll_list'
@@ -33,6 +34,7 @@ class PollList(ListView):
 
 @transaction.atomic
 def submit_poll(request, uuid):
+    """ Представление для обработки ответов на опрос """
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Пользователь не аутентифицирован'}, status=403)
     if GameJam.objects.filter(uuid=uuid, users=request.user).exists():
@@ -61,6 +63,7 @@ def submit_poll(request, uuid):
 
 
 def check_user_vote_permission(request, uuid):
+    """  Проверка прав пользователя на прохождение опроса """
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
 

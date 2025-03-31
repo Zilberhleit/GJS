@@ -7,6 +7,7 @@ from jams.models.game import Game
 
 
 def get_user_jams_history(username: str):
+    """ Получение истории джемов  """
     return (GameJam.objects.filter(users__username=username, status='FN')
     .annotate(
         user_rating=Round(

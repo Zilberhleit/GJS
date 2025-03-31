@@ -4,6 +4,7 @@ from jams.models import GameJam
 
 
 class RatingUserJam(models.Model):
+    """ Модель рейтинга игр джема """
     jam_uuid = models.ForeignKey(GameJam, on_delete=models.CASCADE, verbose_name="Джем")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated_user", verbose_name="Пользователь")
     user_who_rate = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_who_rate", verbose_name="Кто оценил")

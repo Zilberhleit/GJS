@@ -12,13 +12,13 @@ from jams.views import count_final_rating
 
 @receiver(post_init, sender=GameJam)
 def post_init_previous_jam_status_handler(sender, instance, **kwargs):
+    """ Сигнал записывающий предыдущий статус геймджема (исползуется в других сигналах) """
     instance.previous_status = instance.status
 
 
-# Сигнал вычисляющий победителя при завершении геймджема
-
 @receiver(pre_save, sender=GameJam)
 def calculate_winner_when_jam_finished(sender, instance, **kwargs):
+    """ Сигнал вычисляющий победителя при завершении геймджема """
     if instance.previous_status != 'FN' and instance.status == 'FN':
         instance.previous_status = 'FN'
 
@@ -34,11 +34,10 @@ def calculate_winner_when_jam_finished(sender, instance, **kwargs):
                 instance.save()
 
 
-# Сигнал устанавливающий тему окончания подготовки джема
-
 
 @receiver(pre_save, sender=GameJam)
 def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
+    """ Сигнал устанавливающий тему окончания подготовки джема """
     if instance.previous_status == 'PR' and instance.status == 'OG':
         instance.previous_status = 'OG'
 
@@ -57,8 +56,10 @@ def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
         else:
             instance.theme = None
 
+
 @receiver(pre_save, sender=GameJam)
 def set_random_themes_for_jam_when_it_created(sender, instance, **kwargs):
+    """ Сигнал выбирающий 3-и случайные темы на голосование при создании геймджема """
     if instance.status == 'PR' and not GameJamTheme.objects.filter(gamejam=instance).exists():
         themes_max_pk = Theme.objects.all().aggregate(Max('pk'))['pk__max']
 
