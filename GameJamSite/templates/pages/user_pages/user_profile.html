@@ -47,8 +47,8 @@
 <div class="user-st">
     <div class="user_games">
         <h5>История участия</h5>
-        {% for jam in past_jams %}
         <div class="user_games-files">
+        {% for jam in past_jams %}
             <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
                 <div class="past-jam-card">
                     <p>{{ jam.title }}</p>
@@ -64,12 +64,12 @@
             <h5>Разработанные игры</h5>
             <div class="user_games-files">
             {% for game in user_games %}
-            <div>
-                <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
-                    {{ game.title }}
-                </a>
-                {{ game.uploaded_time }}
-            </div>
+                <div>
+                    <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
+                        {{ game.title }}
+                    </a>
+                    {{ game.uploaded_time }}
+                </div>
             {% endfor %}
             </div>
         <!-- тут должен отобразиться список разработанных игр -->
