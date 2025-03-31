@@ -3,15 +3,15 @@
     padding: 0.5%;
     display: flex;
     flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
 #hat {
     position: absolute;
-    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-45%) translateX(-50%);
     display: flex;
     justify-content: center;
     padding: 25px;
@@ -20,6 +20,7 @@
     border: 2px solid rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(50px);
     border-radius: 15px;
+    overflow: hidden;
 }
 
 #avatar {
@@ -60,8 +61,8 @@
 }
 
 .profile {
-    position: relative;
-    height: 100%;
+    /* position: relative; */
+    height: 90vh;
     width: 100%;
     overflow: hidden;
 }
@@ -79,10 +80,72 @@
 }
 
 .past-jam-card {
-    margin-top: 20px; 
     padding: 40px; 
     border-radius: 
     20px;background: rgb(2,0,36);
     background: #fff;
 }
 
+.custom-file-label {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 5px;
+    color: #fff;
+}
+
+.user-st {
+    font-size: 20px;
+    margin: 20px 5% 50px 5%;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+}
+
+.user_games {
+    position: relative;
+    padding: 0.9em 0.9em 0.1em 0.9em;
+    cursor: pointer;
+    background-color: #2a2f3d;
+    border-radius: 10px;
+    transition: 150ms ease;
+    /* height:3em;
+    overflow: hidden; */
+    display: grid;
+    grid-template-rows: 0 0fr;
+}
+
+.user_games::after {
+    content: '<';
+    font: 17px "Consolas", monospace;
+    position: absolute;
+    left: 20px;
+    top: 1.3em;
+    transform: rotate(180deg);
+    pointer-events: none;
+}
+
+.open {
+    grid-template-rows: 1.05em 1fr;
+}
+
+.user_games.open::after {
+    transform: rotate(270deg);
+}
+
+/* .upl-card-container-header {
+    display: flex;
+} */
+
+.user_games h5 {
+    margin: 0 20px;
+}
+
+.user_games-files {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
+    overflow: hidden;
+}

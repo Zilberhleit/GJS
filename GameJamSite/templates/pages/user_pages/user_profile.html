@@ -23,7 +23,7 @@
                 {% endif %}
             </div>
                 <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
-                <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
+                <h2 class="nickname" style="text-align: center">{{ profile_data.email }}</h2>
 
             {% if request.user.is_authenticated and request.user.id == profile_data.id %}
                 <form method="post"
@@ -44,36 +44,52 @@
     <br>
 </div>
 
-<div class="history">
-    <p>История участия:</p>
-    {% for jam in past_jams %}
-    <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
-        <div class="past-jam-card">
-            <p>{{ jam.title }}</p>
-            <p>Тема: {{ jam.theme }}</p>
-            <p>Рейтинг игры: {{ jam.user_rating }}</p>
+<div class="user-st">
+    <div class="user_games">
+        <h5>История участия</h5>
+        {% for jam in past_jams %}
+        <div class="user_games-files">
+            <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
+                <div class="past-jam-card">
+                    <p>{{ jam.title }}</p>
+                    <p>Тема: {{ jam.theme }}</p>
+                    <p>Рейтинг игры: {{ jam.user_rating }}</p>
+                </div>
+            </a>
+        {% endfor %}
         </div>
-    </a>
+    </div>
+
+    <div class="user_games">
+            <h5>Разработанные игры</h5>
+            <div class="user_games-files">
+            {% for game in user_games %}
+            <div>
+                <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
+                    {{ game.title }}
+                </a>
+                {{ game.uploaded_time }}
+            </div>
+            {% endfor %}
+            </div>
+        <!-- тут должен отобразиться список разработанных игр -->
+        <!-- с возможностью скачивания -->
+        <!-- списибо деду за победу -->
+    </div>
 </div>
 
-<div class="user_games">
-    <p>Разработанные игры:</p>
-    {% for game in user_games %}
-    <p>
-        <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
-            {{ game.title }}
-        </a>
-        {{ game.uploaded_time }}
-    </p>
-    {% endfor %}
 
-    <!-- тут должен отобразиться список разработанных игр -->
-    <!-- с возможностью скачивания -->
-
-</div>
-{% endfor %}
-
-{% endblock %}
-
-{% block footercontent %}
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.user_games').forEach(card => {
+            card.addEventListener('click', function(event) {
+                console.log("Clicked:", this); // Проверяем, срабатывает ли клик
+                if (event.target === this || event.target.tagName === 'H5') {
+                    this.classList.toggle('open');
+                }
+                console.log("Class list:", this.classList); // Проверяем, меняется ли класс
+            });
+        });
+});
+</script>
 {% endblock %}

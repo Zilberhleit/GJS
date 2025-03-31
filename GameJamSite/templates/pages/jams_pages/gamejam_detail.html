@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}">
+{% endblock %}
 
 {% block headercontent %}
 
@@ -20,28 +25,34 @@
         {{gamejam_detail.date_end}}
         <!-- Даты конца и начала -->
     </div>
-    {% for user_game in user_games %}
-    {{ user_game.user.username }}
-    <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
-        {{ user_game.cleaned_name }}</a>
-    {% if gamejam_detail.status == 'OG' %}
-    {% if request.user in gamejam_detail.users.all %}
-    {% if request.user != user_game.user %}
-    <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
-        {% csrf_token %}
-        <select name="stars" id="rating">
-            <option value="1">1 Звезда</option>
-            <option value="2">2 Звезды</option>
-            <option value="3">3 Звезды</option>
-            <option value="4">4 Звезды</option>
-            <option value="5">5 Звёзд</option>
-        </select>
-        <button type="submit">Отправить оценку</button>
-    </form>
-    {% endif %}
-    {% endif %}
-    {% endif %}
-    {% endfor %}
+    <div class="upl-container">
+        {% for user_game in user_games %}
+        <div class="upl-card-container">
+            <div class="upl-card-container-header">
+                <h5>{{ user_game.user.username }}</h5>
+                {% if gamejam_detail.status == 'OG' %}
+                {% if request.user in gamejam_detail.users.all %}
+                {% if request.user != user_game.user %}
+                <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
+                    {% csrf_token %}
+                    <select name="stars" id="rating">
+                        <option value="5">5 Звёзд</option>
+                        <option value="4">4 Звезды</option>
+                        <option value="3">3 Звезды</option>
+                        <option value="2">2 Звезды</option>
+                        <option value="1">1 Звезда</option>
+                    </select>
+                    <button type="submit" class="btn-upl">Отправить оценку</button>
+                </form>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+            <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
+                {{ user_game.cleaned_name }}</a>
+            </div>
+        {% endfor %}
+    </div>
     <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
     
     <!-- Ср оценка -->
@@ -51,7 +62,6 @@
     {% endif %}
     <!-- Тема и побеждатель -->
     {% if gamejam_detail.status == 'OG' %}
-    {{gamejam_detail.theme}}
     {% if request.user in gamejam_detail.users.all %}
     <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -103,4 +113,17 @@
     {% endif %}
 </div>
 
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.upl-card-container').forEach(card => {
+            card.addEventListener('click', function(event) {
+                console.log("Clicked:", this); // Проверяем, срабатывает ли клик
+                if (event.target === this || event.target.tagName === 'H5') {
+                    this.classList.toggle('open');
+                }
+                console.log("Class list:", this.classList); // Проверяем, меняется ли класс
+            });
+        });
+});
+</script>
 {% endblock %}

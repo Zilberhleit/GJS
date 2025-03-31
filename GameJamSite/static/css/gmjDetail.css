@@ -1,3 +1,107 @@
 .div-header {
     
 }
+
+.upl-container {
+    font-size: 20px;
+    margin: 20px 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
+}
+
+.upl-card-container {
+    position: relative;
+    padding: 0.9em 0.9em 0.7em 0.9em;
+    cursor: pointer;
+    background-color: #2a2f3d;
+    border-radius: 10px;
+    transition: 150ms ease;
+    /* height:3em;
+    overflow: hidden; */
+    display: grid;
+    grid-template-rows: 0 0fr;
+}
+
+.upl-card-container a {
+    overflow: hidden;
+}
+
+.upl-card-container::after {
+    content: '<';
+    font: 17px "Consolas", monospace;
+    position: absolute;
+    left: 20px;
+    top: 1.3em;
+    transform: rotate(180deg);
+    pointer-events: none;
+}
+
+.open {
+    grid-template-rows: 1.05em 1fr;
+}
+
+.upl-card-container.open::after {
+    transform: rotate(270deg);
+}
+
+/* .upl-card-container-header {
+    display: flex;
+} */
+
+.upl-card-container-header form {
+    position: absolute;
+    display: flex;
+    gap: 20px;
+    right: 0px;
+    top: 0.7em;
+    height: 1.5em;
+    width: 350px;
+    align-items: center;
+}
+
+.upl-card-container-header form::after {
+    content: '<>';
+    font: 17px "Consolas", monospace;
+    position: absolute;
+    left: 34%;
+    top: 50%;
+    transform: translateY(50%);
+    transform: translateY(-50%) rotate(90deg);
+    border-bottom: 1px solid #999;
+    pointer-events: none;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 40%;
+    outline: none;
+    border-radius: 5px;
+    text-indent: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn-upl {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    color: #fff;
+}
+
+option {
+    color: black;
+}
+
+.upl-card-container h5 {
+    margin: 0 20px;
+}
+
+.upl-card-container a {
+    display: inline-block;
+    margin-top: 1.5em;
+}
