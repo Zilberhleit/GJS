@@ -3,6 +3,7 @@ from django.db.models import Avg, Case, When, FloatField
 from django.db.models.functions import Round
 
 from jams.models import GameJam
+from jams.models.game import Game
 
 
 def get_user_jams_history(username: str):
@@ -19,3 +20,7 @@ def get_user_jams_history(username: str):
             1  # Округляем до 1 знака после запятой
         )
     )).exclude(user_rating=None).values('uuid', 'title', 'theme', 'user_rating')
+
+
+def get_user_games_history(username: str):
+    return Game.objects.filter(user__username=username)

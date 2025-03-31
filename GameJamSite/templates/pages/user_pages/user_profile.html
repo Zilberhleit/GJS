@@ -22,17 +22,27 @@
                 <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
                 {% endif %}
             </div>
-            <h2 class="nickname">{{ profile_data.username }}</h2>
-            <h2 class="mail">{{ profile_data.email }}</h2>
+                <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
+                <h2 class="text-muted" style="text-align: center">{{ profile_data.email }}</h2>
 
-            <button class="btn-avatar">Изменить аватарку</button>
-            <button class="btn-avatar">Установить шапку</button>
+            {% if request.user.is_authenticated and request.user.id == profile_data.id %}
+                <form method="post"
+                      id="avatarForm" action="{% url 'photo' request.user.username %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="avatar">
+                    <button type="submit">Загрузить фото</button>
+                </form>
+                <form method="post"
+                      id="hatForm" action="{% url 'photo' request.user.username %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="hat">
+                    <button type="submit">Загрузить фото</button>
+                </form>
+            {% endif %}
         </div>
     </div>
     <br>
 </div>
-
-
 
 <div class="history">
     <p>История участия:</p>
@@ -44,8 +54,25 @@
             <p>Рейтинг игры: {{ jam.user_rating }}</p>
         </div>
     </a>
-    {% endfor %}
 </div>
+
+<div class="user_games">
+    <p>Разработанные игры:</p>
+    {% for game in user_games %}
+    <p>
+        <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
+            {{ game.title }}
+        </a>
+        {{ game.uploaded_time }}
+    </p>
+    {% endfor %}
+
+    <!-- тут должен отобразиться список разработанных игр -->
+    <!-- с возможностью скачивания -->
+
+</div>
+{% endfor %}
+
 {% endblock %}
 
 {% block footercontent %}

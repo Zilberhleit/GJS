@@ -4,5 +4,6 @@ from users import views
 urlpatterns = [
     path('<str:username>/', views.Profile.as_view(), name='profile_detail'),
     path('<str:username>/redaction', views.redactor, name='redactor'),
-    path('<str:username>/write_post', views.write_post, name='write_post')
+    path('<str:username>/write_post', views.write_post, name='write_post'),
+    path('<str:username>/upload_photo', views.photo_view, name='photo'),
 ]
