@@ -1,10 +1,11 @@
 from django.db import models
-from jams.models import GameJam
 
+from jams.models import GameJam
 from users.models import User
 
-class Game(models.Model):
 
+class Game(models.Model):
+    """ Модель игры """
     title = models.CharField(max_length=100, verbose_name='Название игры')
     description = models.TextField(verbose_name='Описание игры', blank=True, null=True)
     image = models.ImageField(upload_to="game_images/", verbose_name='Изображение игры', blank=True, null=True)

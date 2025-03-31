@@ -3,6 +3,8 @@ from django.contrib.auth.backends import ModelBackend, BaseBackend
 
 
 class EmailAuthBackend(BaseBackend):
+    """ Аутентификация по email """
+
     def authenticate(self, request, email=None, password=None):
         User = get_user_model()
         try:
