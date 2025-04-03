@@ -2,42 +2,38 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/avatar.css' %}">
+<link rel="stylesheet" href="{% static 'css/avatar.css' %}">
 {% endblock head %}
 
 {% block headButtons %}
-    <li><a href="{% url 'redactor' request.user.username %}" class="menu-button">Дизайн</a></li>
-    <li><a href="" class="menu-button">Написать пост</a></li>
+<li><a href="{% url 'redactor' request.user.username %}" class="menu-button">Дизайн</a></li>
+<li><a href="" class="menu-button">Написать пост</a></li>
 {% endblock %}
 
 {% block content %}
 <div class="profile">
     {% if profile_data.hat_image %}
-    <img src="{{ profile_data.hat_image.url }}" alt="Аватар" id="hat-img">
+    <img src="{{ profile_data.hat_image.url }}" alt="Шапка" id="hat-img">
     {% endif %}
     <div id="hat">
         <div class="avatar-block">
-            <div id="avatar">
-                {% if profile_data.avatar_image %}
-                <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
+            <div>
+                {% if profile_data.avatar_image and request.user.is_authenticated and request.user.id == profile_data.id %}
+                <label for="avatar-input" id="avatar">
+                    <input id="avatar-input" type="file" name="avatar_image"
+                           accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
+                    <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
+                </label>
                 {% endif %}
             </div>
-                <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
-                <h2 class="nickname" style="text-align: center">{{ profile_data.email }}</h2>
+            <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
+            <h2 class="nickname" style="text-align: center">{{ profile_data.email }}</h2>
 
             {% if request.user.is_authenticated and request.user.id == profile_data.id %}
-                <form method="post"
-                      id="avatarForm" action="{% url 'photo' request.user.username %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="avatar">
-                    <button type="submit">Загрузить фото</button>
-                </form>
-                <form method="post"
-                      id="hatForm" action="{% url 'photo' request.user.username %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="hat">
-                    <button type="submit">Загрузить фото</button>
-                </form>
+
+            <input type="file" name="hat_photo" id="hat-input" accept="image/png, image/jpeg, image/jpg, image/webp,
+            image/jfif">
+            <span class="load-photo-status" style="color: red;"></span>
             {% endif %}
         </div>
     </div>
@@ -48,7 +44,7 @@
     <div class="user_games">
         <h5>История участия</h5>
         <div class="user_games-files">
-        {% for jam in past_jams %}
+            {% for jam in past_jams %}
             <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
                 <div class="past-jam-card">
                     <p>{{ jam.title }}</p>
@@ -56,22 +52,22 @@
                     <p>Рейтинг игры: {{ jam.user_rating }}</p>
                 </div>
             </a>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
 
     <div class="user_games">
-            <h5>Разработанные игры</h5>
-            <div class="user_games-files">
+        <h5>Разработанные игры</h5>
+        <div class="user_games-files">
             {% for game in user_games %}
-                <div>
-                    <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
-                        {{ game.title }}
-                    </a>
-                    {{ game.uploaded_time }}
-                </div>
-            {% endfor %}
+            <div>
+                <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
+                    {{ game.title }}
+                </a>
+                {{ game.uploaded_time }}
             </div>
+            {% endfor %}
+        </div>
         <!-- тут должен отобразиться список разработанных игр -->
         <!-- с возможностью скачивания -->
         <!-- списибо деду за победу -->
@@ -92,4 +88,68 @@
         });
 });
 </script>
+
+<!-- Скрипт для смены аватарок через ajax -->
+<script>
+    const imageInput = document.getElementById('avatar-input');
+    const hatInput = document.getElementById('hat-input');
+
+    const loadPhotoStatus = document.querySelector('.load-photo-status');
+    const url = "{% url 'upload-photo' request.user.username %}";
+
+    imageInput.addEventListener('change', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('avatar_image', imageInput.files[0]);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.avatar){
+                    const avatarImg = document.getElementById('avatar-img');
+                    avatarImg.src = data.avatar;
+                }
+
+                loadPhotoStatus.textContent = data['message'];
+
+            })
+            .catch(error => console.error(error));
+    });
+
+    hatInput.addEventListener('change', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('hat_image', hatInput.files[0]);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+
+        })
+            .then(response => response.json())
+            .then(data => {
+
+
+                if (data.hat){
+                    const hatImg = document.getElementById('hat-img');
+                    hatImg.src = data.hat;
+                }
+
+                loadPhotoStatus.textContent = data['message'];
+
+            })
+            .catch(error => console.error(error));
+    });
+</script>
+
 {% endblock %}

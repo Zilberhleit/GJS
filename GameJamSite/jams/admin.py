@@ -1,15 +1,10 @@
 import random
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.contrib import admin
 
 from jams.models import GameJam, Game, RatingUserJam
-
-
-def rand_date():
-    start = datetime.now()
-    end = start + timedelta(days=3)
-    return start + (end - start) * random.random()
+from jams.utils import rand_date
 
 
 class GameJamAdmin(admin.ModelAdmin):

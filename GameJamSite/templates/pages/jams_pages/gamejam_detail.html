@@ -30,6 +30,27 @@
 
     </div>
 
+
+    <div class="countdown-container">
+        {% if gamejam_detail.status == 'PR' %}
+        <h2 class="countdown-status">Джем начнется через:</h2>
+        {% elif gamejam_detail.status == 'OG' %}
+        <h2 class="countdown-status">Джем закончится через:</h2>
+        {% elif gamejam_detail.status == 'FN' %}
+        <h2 class="countdown-status">Джем окончен</h2>
+        {% endif %}
+
+        {% if gamejam_detail.status != 'FN' %}
+        <div id="countdown">
+            <ul>
+                <li class="countdown-element"><span id="days"></span>Дней</li>
+                <li class="countdown-element"><span id="hours"></span>Часов</li>
+                <li class="countdown-element"><span id="minutes"></span>Минут</li>
+                <li class="countdown-element"><span id="seconds"></span>Секунд</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="upl-container">
         {% for user_game in user_games %}
         <div class="upl-card-container">
@@ -60,25 +81,6 @@
     </div>
     <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
 
-    <div class="countdown-container">
-        {% if gamejam_detail.status == 'PR' %}
-        <h2 class="countdown-status">Джем начнется через:</h2>
-        {% elif gamejam_detail.status == 'OG' %}
-        <h2 class="countdown-status">Джем закончится через:</h2>
-        {% elif gamejam_detail.status == 'FN' %}
-        <h2 class="countdown-status">Джем окончен</h2>
-        {% endif %}
-
-        {% if gamejam_detail.status != 'FN' %}
-        <div id="countdown">
-            <ul>
-                <li class="countdown-element"><span id="days"></span>Дней</li>
-                <li class="countdown-element"><span id="hours"></span>Часов</li>
-                <li class="countdown-element"><span id="minutes"></span>Минут</li>
-                <li class="countdown-element"><span id="seconds"></span>Секунд</li>
-            </ul>
-        </div>
-    </div>
     {% endif %}
 
     <!-- Ср оценка -->
@@ -153,7 +155,6 @@
         });
 });
 </script>
-{% endblock %}
 
 {% if gamejam_detail.status != 'FN' %}
 <script>
@@ -198,3 +199,5 @@
     var x = setInterval(updateCountdown, 1000);
 </script>
 {% endif %}
+{% endblock %}
+

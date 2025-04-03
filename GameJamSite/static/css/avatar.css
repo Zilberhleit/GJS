@@ -23,6 +23,14 @@
     overflow: hidden;
 }
 
+#avatar-input {
+  opacity: 0;
+  width: 0px;
+}
+
+
+label {cursor: pointer;}
+
 #avatar {
     display: flex;
     width: 250px;
@@ -32,6 +40,14 @@
     align-items: center;
     border-radius: 50%;
     overflow: hidden;
+    cursor: pointer;
+
+    outline: 2px solid #696AE0;
+    transition: 200ms ease-in-out;
+}
+
+#avatar:hover {
+  outline: 6px solid #696AE0;
 }
 
 .nickname {

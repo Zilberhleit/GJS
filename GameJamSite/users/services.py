@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.db.models import Avg, Case, When, FloatField
 from django.db.models.functions import Round
 
@@ -24,3 +23,20 @@ def get_user_jams_history(username: str):
 
 def get_user_games_history(username: str):
     return Game.objects.filter(user__username=username)
+
+
+def upload_photo(photo_type, request_files, user):
+    """ Установка фото пользователя (аватар или шапка) """
+    photo = request_files[photo_type]
+    if is_valid_photo(photo):
+
+        setattr(user, photo_type, photo)
+
+        user.save()
+        return user
+
+def is_valid_photo(photo):
+    """ Проверка фото пользователя (аватар или шапка) """
+    return photo is not None and (photo.content_type == 'image/jpeg' or
+            photo.content_type == 'image/png' or photo.content_type == 'image/jpg' or
+            photo.content_type == 'image/webp' or photo.content_type == 'image/jfif') and photo.size <=  3 * 1024 * 1024
