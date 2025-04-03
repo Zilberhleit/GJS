@@ -74,7 +74,6 @@ def photo_view(request, username):
         return redirect('profile_detail', username=request.user.username)
 
 
-
 def redactor(request, username):
     return render(request, template_name='pages/user_pages/redaction_page.html')
 

@@ -75,10 +75,12 @@ def game_jam_upload(request, uuid):
                 )
 
                 if prev_game.exists():
-                    prev_game.update(file=game_file)
+                    prev_game.update(
+                        game_file=game_file,
+                        title=game_file.name[0])
                 else:
                     Game.objects.create(
-                        file=game_file,
+                        game_file=game_file,
                         jam_uuid=jam,
                         user=request.user
                     )
@@ -111,6 +113,10 @@ def count_stars(request, uuid, id):
 
 def home_page(request):
     return render(request, 'pages/index.html')
+
+
+def game_page(request, uuid, slug):
+    return render(request, 'pages/jams_pages/game_page.html')
 
 
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:

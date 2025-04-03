@@ -64,12 +64,11 @@
             {{ game.title }}
         </a>
         {{ game.uploaded_time }}
+        {% if game.description != None %}
+        {{ game.description }}
+        {% endif %}
     </p>
     {% endfor %}
-
-    <!-- тут должен отобразиться список разработанных игр -->
-    <!-- с возможностью скачивания -->
-
 </div>
 {% endfor %}
 

@@ -9,5 +9,6 @@ urlpatterns = [
     path('<uuid:uuid>/stars/<int:id>/', views.count_stars, name='count_stars'),
     path('<uuid:uuid>/download/<int:id>/', views.game_jam_download, name='download_file'),
     path('<uuid:uuid>/poll/', poll_view.PollList.as_view(), name='poll'),
-    path('<uuid:uuid>/poll/submit/', poll_view.submit_poll, name='submit')
+    path('<uuid:uuid>/poll/submit/', poll_view.submit_poll, name='submit'),
+    path('<uuid:uuid>/games/<slug:slug>', views.game_page, name='game_page')
 ]
