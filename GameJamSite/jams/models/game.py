@@ -3,13 +3,13 @@ import os
 from django.db import models
 from django.utils.text import slugify
 
-from jams.models import GameJam
 
+from jams.models import GameJam
 from users.models import User
 
 
 class Game(models.Model):
-
+    """ Модель игры """
     title = models.CharField(max_length=100, verbose_name='Название игры')
     slug = models.SlugField(blank=True)
     description = models.TextField(verbose_name='Описание игры', blank=True, null=True)

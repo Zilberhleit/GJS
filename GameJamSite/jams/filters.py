@@ -4,6 +4,7 @@ from .models import GameJam
 
 
 class GameJamsFilter(django_filters.FilterSet):
+    """  Фильтры для джемов   """
     title = django_filters.CharFilter(field_name='title', lookup_expr='icontains', label='Название джема')
 
     date_start = django_filters.DateFilter(field_name='date_start', label='Дата начала джема', lookup_expr='gte')
