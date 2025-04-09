@@ -1,11 +1,12 @@
 from django.contrib.auth import logout, login, authenticate
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView
+
 from users.forms import LoginUserForm, RegisterUserForm
 from users.models import User
-
-from .services import get_user_jams_history, get_user_games_history
+from .services import get_user_jams_history, get_user_games_history, upload_photo
 
 
 class RegisterUser(CreateView):
@@ -59,25 +60,19 @@ def logout_view(request):
     return redirect('jams_list')
 
 
-def photo_view(request, username):
+def upload_photo_view(request, username):
     if request.method == "POST":
         user = User.objects.get(username=request.user.username)
-        if "avatar" in request.FILES:
-            avatar_photo = request.FILES["avatar"]
+        if "avatar_image" in request.FILES:
+            if upload_photo("avatar_image", request.FILES, user):
+                return JsonResponse({'message': 'Фото успешно загружено', 'avatar': user.avatar_image.url})
 
-            if user.avatar_image:
-                user.avatar_image.delete()
-            user.avatar_image = avatar_photo
-            user.save()
-        elif "hat" in request.FILES:
-            hat_photo = request.FILES["hat"]
+        elif "hat_image" in request.FILES:
+            if upload_photo("hat_image", request.FILES, user):
+                return JsonResponse({'message': 'Шапка успешно загружена', 'hat': user.hat_image.url})
 
-            if user.hat_image:
-                user.hat_image.delete()
-            user.hat_image = hat_photo
-            user.save()
-        return redirect('profile_detail', username=request.user.username)
-
+        else:
+            return JsonResponse({'message': 'Предоставлен неверный формат файла / Размер файла превышает 3Мб'})
 
 def redactor(request, username):
     """  Представление редактирования страницы пользователя """
