@@ -12,6 +12,7 @@ class GameJamAdmin(admin.ModelAdmin):
 
     @admin.action(description='Change Start Date')
     def set_actual_start_and_end_dates(self, request, queryset):
+        """  Action для генерации случайных дат """
         for gamejam in queryset:
             if gamejam.status == 'PR' or gamejam.status == 'OG':
                 gamejam.date_start = rand_date()

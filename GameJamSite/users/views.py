@@ -61,6 +61,8 @@ def logout_view(request):
 
 
 def upload_photo_view(request, username):
+    """  Представление загрузки фото (аватара или шапки) """
+
     if request.method == "POST":
         user = User.objects.get(username=request.user.username)
         if "avatar_image" in request.FILES:

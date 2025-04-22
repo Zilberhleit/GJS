@@ -1,4 +1,4 @@
-GameJamSite package
+project configuration
 ===================
 
 Submodules
@@ -22,10 +22,3 @@ GameJamSite.urls module
    :undoc-members:
 
 
-Module contents
----------------
-
-.. automodule:: GameJamSite
-   :members:
-   :show-inheritance:
-   :undoc-members:

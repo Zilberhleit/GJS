@@ -1,4 +1,5 @@
 import os
+from uuid import UUID
 
 from django.db.models import Avg
 from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, Http404
@@ -59,13 +60,13 @@ class GameJamDetail(DetailView):
         return GameJam.objects.get(uuid=self.kwargs.get("uuid"))
 
 
-def count_final_rating(uuid):
+def count_final_rating(uuid: UUID):
     """ Функция подсчета рейтинга геймджема """
     return (RatingUserJam.objects.filter(jam_uuid_id=uuid).values('user__username', 'user__id')
             .annotate(avg_rating=Avg('stars')))
 
 
-def game_jam_upload(request, uuid):
+def game_jam_upload(request, uuid: UUID):
     """ Представление для загрузки игры """
     if request.method == "POST":
         if "game" in request.FILES:
@@ -93,7 +94,7 @@ def game_jam_upload(request, uuid):
         raise Http404
 
 
-def game_jam_download(request, id, uuid):
+def game_jam_download(request, id: int, uuid: UUID):
     """ Представление для скачивания игры """
     file_instance = get_object_or_404(Game, id=id, jam_uuid=uuid)
     path = file_instance.game_file.path
@@ -104,7 +105,7 @@ def game_jam_download(request, id, uuid):
         return response
 
 
-def count_stars(request, uuid, id):
+def count_stars(request, uuid: UUID, id: int):
     """ Представление для рейтинга игры """
     if request.method == "POST" and 'stars' in request.POST:
         RatingUserJam.objects.update_or_create(jam_uuid=get_object_or_404(GameJam,
@@ -121,5 +122,5 @@ def home_page(request):
     return render(request, 'pages/index.html')
 
 
-def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:
+def handler404(request, exception: Exception):
     return HttpResponseNotFound(render(request, "pages/errors/404.html"))

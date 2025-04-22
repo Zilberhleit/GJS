@@ -1,4 +1,5 @@
 import json
+from uuid import UUID
 
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseForbidden
@@ -33,7 +34,7 @@ class PollList(ListView):
 
 
 @transaction.atomic
-def submit_poll(request, uuid):
+def submit_poll(request, uuid: UUID):
     """ Представление для обработки ответов на опрос """
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Пользователь не аутентифицирован'}, status=403)
@@ -62,7 +63,7 @@ def submit_poll(request, uuid):
             return JsonResponse({'error': 'Некорректный JSON'}, status=400)
 
 
-def check_user_vote_permission(request, uuid):
+def check_user_vote_permission(request, uuid: UUID):
     """  Проверка прав пользователя на прохождение опроса """
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
