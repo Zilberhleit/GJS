@@ -1,0 +1,77 @@
+jam\_polls.migrations package
+=============================
+
+Submodules
+----------
+
+jam\_polls.migrations.0001\_initial module
+------------------------------------------
+
+.. automodule:: jam_polls.migrations.0001_initial
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0002\_chosentheme\_jam\_uuid module
+---------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0002_chosentheme_jam_uuid
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0003\_rename\_jam\_uuid\_chosentheme\_uuid\_question\_uuid module
+---------------------------------------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0003_rename_jam_uuid_chosentheme_uuid_question_uuid
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0004\_alter\_question\_count module
+---------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0004_alter_question_count
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0005\_rename\_uuid\_question\_jam\_uuid module
+--------------------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0005_rename_uuid_question_jam_uuid
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0006\_delete\_chosentheme module
+------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0006_delete_chosentheme
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0007\_gamejamtheme\_themevote\_delete\_question module
+----------------------------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0007_gamejamtheme_themevote_delete_question
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jam\_polls.migrations.0008\_theme\_alter\_gamejamtheme\_gamejam\_and\_more module
+---------------------------------------------------------------------------------
+
+.. automodule:: jam_polls.migrations.0008_theme_alter_gamejamtheme_gamejam_and_more
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: jam_polls.migrations
+   :members:
+   :show-inheritance:
+   :undoc-members:

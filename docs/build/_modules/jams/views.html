@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jams.views &mdash; документация GJS! </title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=372fde1a"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GJS!
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Модули GJS</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GJS!</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Код модуля</a></li>
+      <li class="breadcrumb-item active">jams.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Исходный код jams.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Avg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpRequest</span><span class="p">,</span> <span class="n">HttpResponseNotFound</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">Http404</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.views.generic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListView</span><span class="p">,</span> <span class="n">DetailView</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">jams.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameJam</span><span class="p">,</span> <span class="n">RatingUserJam</span><span class="p">,</span> <span class="n">Game</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameJamsFilter</span>
+
+
+<div class="viewcode-block" id="GameJamsLists">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.GameJamsLists">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameJamsLists</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Представление списка геймджемов &quot;&quot;&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;pages/jams_pages/jams.html&#39;</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">GameJam</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-status&#39;</span><span class="p">,</span> <span class="s1">&#39;-date_start&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GameJamsLists.get_context_data">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.GameJamsLists.get_context_data">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GameJamsFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">context</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GameJamDetail">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.GameJamDetail">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameJamDetail</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Представление просмотра деталей конкретного геймджема &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">GameJam</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;pages/jams_pages/gamejam_detail.html&#39;</span>
+    <span class="n">context_object_name</span> <span class="o">=</span> <span class="s2">&quot;gamejam_detail&quot;</span>
+
+<div class="viewcode-block" id="GameJamDetail.get_context_data">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.GameJamDetail.get_context_data">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">user_games</span> <span class="o">=</span> <span class="n">Game</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">jam_uuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-uploaded_time&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">game</span> <span class="ow">in</span> <span class="n">user_games</span><span class="p">:</span>
+            <span class="n">game</span><span class="o">.</span><span class="n">cleaned_name</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">game_file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;zip_uploads/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;user_games&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_games</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;FN&#39;</span><span class="p">:</span>
+            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;final_rating&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">final_rating</span> <span class="o">=</span> <span class="n">count_final_rating</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+                <span class="n">current_user_rating</span> <span class="o">=</span> <span class="n">final_rating</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">current_user_rating</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="n">context</span><span class="p">[</span><span class="s2">&quot;final_rating&quot;</span><span class="p">][</span><span class="s1">&#39;current_user_rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_user_rating</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;final_rating&quot;</span><span class="p">][</span><span class="s1">&#39;all_rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">final_rating</span>
+                                                         <span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">current_user_rating</span><span class="p">)</span>
+                                                         <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-avg_rating&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;final_rating&quot;</span><span class="p">][</span><span class="s1">&#39;all_rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_rating</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-avg_rating&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">context</span></div>
+
+
+<div class="viewcode-block" id="GameJamDetail.get_object">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.GameJamDetail.get_object">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">GameJam</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uuid&quot;</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="count_final_rating">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.count_final_rating">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_final_rating</span><span class="p">(</span><span class="n">uuid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Функция подсчета рейтинга геймджема &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">RatingUserJam</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">jam_uuid_id</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s1">&#39;user__username&#39;</span><span class="p">,</span> <span class="s1">&#39;user__id&#39;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">avg_rating</span><span class="o">=</span><span class="n">Avg</span><span class="p">(</span><span class="s1">&#39;stars&#39;</span><span class="p">)))</span></div>
+
+
+
+<div class="viewcode-block" id="game_jam_upload">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.game_jam_upload">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">game_jam_upload</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Представление для загрузки игры &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;game&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">:</span>
+            <span class="n">game_file</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s2">&quot;game&quot;</span><span class="p">]</span>
+            <span class="n">game_extension</span> <span class="o">=</span> <span class="s1">&#39;.zip&#39;</span>
+
+            <span class="k">if</span> <span class="n">game_file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">game_extension</span><span class="p">):</span>
+                <span class="n">jam</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">GameJam</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span>
+                <span class="n">prev_game</span> <span class="o">=</span> <span class="n">Game</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">jam_uuid</span><span class="o">=</span><span class="n">jam</span><span class="p">,</span>
+                    <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">prev_game</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="n">prev_game</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">game_file</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">Game</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                        <span class="n">file</span><span class="o">=</span><span class="n">game_file</span><span class="p">,</span>
+                        <span class="n">jam_uuid</span><span class="o">=</span><span class="n">jam</span><span class="p">,</span>
+                        <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span>
+                    <span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;gamejam_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;uuid&#39;</span><span class="p">:</span> <span class="n">uuid</span><span class="p">}))</span>
+
+        <span class="k">raise</span> <span class="n">Http404</span></div>
+
+
+
+<div class="viewcode-block" id="game_jam_download">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.game_jam_download">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">game_jam_download</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Представление для скачивания игры &quot;&quot;&quot;</span>
+    <span class="n">file_instance</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Game</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">jam_uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">file_instance</span><span class="o">.</span><span class="n">game_file</span><span class="o">.</span><span class="n">path</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/force-download&#39;</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">[</span><span class="s1">&#39;Content-Disposition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;attachment; filename=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_instance</span><span class="o">.</span><span class="n">game_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
+
+
+<div class="viewcode-block" id="count_stars">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.count_stars">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_stars</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Представление для рейтинга игры &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span> <span class="ow">and</span> <span class="s1">&#39;stars&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">RatingUserJam</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="n">jam_uuid</span><span class="o">=</span><span class="n">get_object_or_404</span><span class="p">(</span><span class="n">GameJam</span><span class="p">,</span>
+                                                                          <span class="n">uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">),</span>
+                                               <span class="n">user</span><span class="o">=</span><span class="n">get_object_or_404</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">),</span>
+                                               <span class="n">user_who_rate</span><span class="o">=</span><span class="n">get_object_or_404</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                                               <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;stars&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;stars&quot;</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;gamejam_detail&#39;</span><span class="p">,</span> <span class="n">uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">Http404</span></div>
+
+
+
+<div class="viewcode-block" id="home_page">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.home_page">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Представление для главной страницы &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;pages/index.html&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="handler404">
+<a class="viewcode-back" href="../../apps/jams.html#jams.views.handler404">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">handler404</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponseNotFound</span><span class="p">(</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;pages/errors/404.html&quot;</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, Zilberhleyt Mark, Ignatkin Ilya, Pashkin Valeriy, Chetin Grigoriy. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+jams.migrations package
+=======================
+
+Submodules
+----------
+
+jams.migrations.0001\_initial module
+------------------------------------
+
+.. automodule:: jams.migrations.0001_initial
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0002\_initial module
+------------------------------------
+
+.. automodule:: jams.migrations.0002_initial
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0003\_gamejams\_id\_alter\_gamejams\_uuid module
+----------------------------------------------------------------
+
+.. automodule:: jams.migrations.0003_gamejams_id_alter_gamejams_uuid
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0004\_remove\_gamejams\_id\_alter\_gamejams\_uuid module
+------------------------------------------------------------------------
+
+.. automodule:: jams.migrations.0004_remove_gamejams_id_alter_gamejams_uuid
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0005\_uploadfiles\_gamejams\_status module
+----------------------------------------------------------
+
+.. automodule:: jams.migrations.0005_uploadfiles_gamejams_status
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0006\_uploadfile\_delete\_uploadfiles module
+------------------------------------------------------------
+
+.. automodule:: jams.migrations.0006_uploadfile_delete_uploadfiles
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0007\_uploadfile\_user module
+---------------------------------------------
+
+.. automodule:: jams.migrations.0007_uploadfile_user
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0008\_ratinguserjam module
+------------------------------------------
+
+.. automodule:: jams.migrations.0008_ratinguserjam
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0009\_alter\_gamejams\_date\_end\_alter\_gamejams\_date\_start\_and\_more module
+------------------------------------------------------------------------------------------------
+
+.. automodule:: jams.migrations.0009_alter_gamejams_date_end_alter_gamejams_date_start_and_more
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0010\_alter\_ratinguserjam\_options\_and\_more module
+---------------------------------------------------------------------
+
+.. automodule:: jams.migrations.0010_alter_ratinguserjam_options_and_more
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0011\_rename\_uploadfile\_game\_rename\_gamejams\_gamejam module
+--------------------------------------------------------------------------------
+
+.. automodule:: jams.migrations.0011_rename_uploadfile_game_rename_gamejams_gamejam
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0012\_alter\_game\_options\_alter\_gamejam\_options\_and\_more module
+-------------------------------------------------------------------------------------
+
+.. automodule:: jams.migrations.0012_alter_game_options_alter_gamejam_options_and_more
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+jams.migrations.0013\_alter\_gamejam\_theme module
+--------------------------------------------------
+
+.. automodule:: jams.migrations.0013_alter_gamejam_theme
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: jams.migrations
+   :members:
+   :show-inheritance:
+   :undoc-members:
