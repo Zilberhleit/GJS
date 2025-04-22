@@ -1,0 +1,779 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jams &mdash; документация GJS! </title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=372fde1a"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="jam_polls" href="jam_polls.html" />
+    <link rel="prev" title="Модули GJS" href="../modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GJS!
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Модули GJS</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">jams</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.admin">admin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jams.admin.GameJamAdmin"><code class="docutils literal notranslate"><span class="pre">GameJamAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.apps">apps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jams.apps.JamsConfig"><code class="docutils literal notranslate"><span class="pre">JamsConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.filters">filters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jams.filters.GameJamsFilter"><code class="docutils literal notranslate"><span class="pre">GameJamsFilter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.signals">signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jams.signals.post_init_previous_jam_status_handler"><code class="docutils literal notranslate"><span class="pre">post_init_previous_jam_status_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.signals.calculate_winner_when_jam_finished"><code class="docutils literal notranslate"><span class="pre">calculate_winner_when_jam_finished()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.signals.set_final_theme_when_jam_prepared"><code class="docutils literal notranslate"><span class="pre">set_final_theme_when_jam_prepared()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.signals.set_random_themes_for_jam_when_it_created"><code class="docutils literal notranslate"><span class="pre">set_random_themes_for_jam_when_it_created()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.models">models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jams.models.GameJam"><code class="docutils literal notranslate"><span class="pre">GameJam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.models.Game"><code class="docutils literal notranslate"><span class="pre">Game</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.models.RatingUserJam"><code class="docutils literal notranslate"><span class="pre">RatingUserJam</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.urls">urls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jams.views">views</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.GameJamsLists"><code class="docutils literal notranslate"><span class="pre">GameJamsLists</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.GameJamDetail"><code class="docutils literal notranslate"><span class="pre">GameJamDetail</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.count_final_rating"><code class="docutils literal notranslate"><span class="pre">count_final_rating()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.game_jam_upload"><code class="docutils literal notranslate"><span class="pre">game_jam_upload()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.game_jam_download"><code class="docutils literal notranslate"><span class="pre">game_jam_download()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.count_stars"><code class="docutils literal notranslate"><span class="pre">count_stars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.home_page"><code class="docutils literal notranslate"><span class="pre">home_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jams.views.handler404"><code class="docutils literal notranslate"><span class="pre">handler404()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="jam_polls.html">jam_polls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html">users</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GJS!</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">Модули GJS</a></li>
+      <li class="breadcrumb-item active">jams</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apps/jams.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="jams">
+<h1>jams<a class="headerlink" href="#jams" title="Ссылка на этот заголовок"></a></h1>
+<p>Модуль jams предназначен для работы с геймджемами, включая:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Вывод списка геймджемов</p></li>
+<li><p>Филтрация геймджемов</p></li>
+<li><p>Просмотр геймджема</p></li>
+<li><p>Управление геймджемом (установка темы, смена статуса, определение победителя)</p></li>
+<li><p>Загрузка игры разработчиками</p></li>
+<li><p>Скачивание игры пользователями</p></li>
+<li><p>Выставление оценок играм</p></li>
+</ul>
+</div></blockquote>
+<section id="module-jams.admin">
+<span id="admin"></span><h2>admin<a class="headerlink" href="#module-jams.admin" title="Ссылка на этот заголовок"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.admin.GameJamAdmin">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.admin.</span></span><span class="sig-name descname"><span class="pre">GameJamAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/admin.html#GameJamAdmin"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.admin.GameJamAdmin" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.admin.GameJamAdmin.actions">
+<span class="sig-name descname"><span class="pre">actions</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('set_actual_start_and_end_dates',)</span></em><a class="headerlink" href="#jams.admin.GameJamAdmin.actions" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.admin.GameJamAdmin.set_actual_start_and_end_dates">
+<span class="sig-name descname"><span class="pre">set_actual_start_and_end_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/admin.html#GameJamAdmin.set_actual_start_and_end_dates"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.admin.GameJamAdmin.set_actual_start_and_end_dates" title="Ссылка на это определение"></a></dt>
+<dd><p>Action для генерации случайных дат</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="jams.admin.GameJamAdmin.media">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#jams.admin.GameJamAdmin.media" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-jams.apps">
+<span id="apps"></span><h2>apps<a class="headerlink" href="#module-jams.apps" title="Ссылка на этот заголовок"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.apps.JamsConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.apps.</span></span><span class="sig-name descname"><span class="pre">JamsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/apps.html#JamsConfig"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.apps.JamsConfig" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.apps.JamsConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#jams.apps.JamsConfig.default_auto_field" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.apps.JamsConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jams'</span></em><a class="headerlink" href="#jams.apps.JamsConfig.name" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.apps.JamsConfig.verbose_name">
+<span class="sig-name descname"><span class="pre">verbose_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Геймджемы'</span></em><a class="headerlink" href="#jams.apps.JamsConfig.verbose_name" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.apps.JamsConfig.ready">
+<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/apps.html#JamsConfig.ready"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.apps.JamsConfig.ready" title="Ссылка на это определение"></a></dt>
+<dd><p>Override this method in subclasses to run code when Django starts.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-jams.filters">
+<span id="filters"></span><h2>filters<a class="headerlink" href="#module-jams.filters" title="Ссылка на этот заголовок"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.filters.GameJamsFilter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.filters.</span></span><span class="sig-name descname"><span class="pre">GameJamsFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/filters.html#GameJamsFilter"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.filters.GameJamsFilter" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterSet</span></code></p>
+<p>Фильтры для джемов</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.filters.GameJamsFilter.Meta">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/jams/filters.html#GameJamsFilter.Meta"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.filters.GameJamsFilter.Meta" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.filters.GameJamsFilter.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#jams.filters.GameJamsFilter.Meta.model" title="Ссылка на это определение"></a></dt>
+<dd><p>псевдоним для <a class="reference internal" href="jams.models.html#jams.models.gamejam.GameJam" title="jams.models.gamejam.GameJam"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameJam</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.filters.GameJamsFilter.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['title',</span> <span class="pre">'date_start',</span> <span class="pre">'date_end',</span> <span class="pre">'status']</span></em><a class="headerlink" href="#jams.filters.GameJamsFilter.Meta.fields" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.filters.GameJamsFilter.base_filters">
+<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'date_end':</span> <span class="pre">&lt;django_filters.filters.DateFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'date_start':</span> <span class="pre">&lt;django_filters.filters.DateFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'status':</span> <span class="pre">&lt;django_filters.filters.ChoiceFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'title':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#jams.filters.GameJamsFilter.base_filters" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.filters.GameJamsFilter.declared_filters">
+<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'date_end':</span> <span class="pre">&lt;django_filters.filters.DateFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'date_start':</span> <span class="pre">&lt;django_filters.filters.DateFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'status':</span> <span class="pre">&lt;django_filters.filters.ChoiceFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'title':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#jams.filters.GameJamsFilter.declared_filters" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-jams.signals">
+<span id="signals"></span><h2>signals<a class="headerlink" href="#module-jams.signals" title="Ссылка на этот заголовок"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.signals.post_init_previous_jam_status_handler">
+<span class="sig-prename descclassname"><span class="pre">jams.signals.</span></span><span class="sig-name descname"><span class="pre">post_init_previous_jam_status_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/signals.html#post_init_previous_jam_status_handler"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.signals.post_init_previous_jam_status_handler" title="Ссылка на это определение"></a></dt>
+<dd><p>Сигнал записывающий предыдущий статус геймджема (исползуется в других сигналах)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.signals.calculate_winner_when_jam_finished">
+<span class="sig-prename descclassname"><span class="pre">jams.signals.</span></span><span class="sig-name descname"><span class="pre">calculate_winner_when_jam_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/signals.html#calculate_winner_when_jam_finished"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.signals.calculate_winner_when_jam_finished" title="Ссылка на это определение"></a></dt>
+<dd><p>Сигнал вычисляющий победителя при завершении геймджема</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.signals.set_final_theme_when_jam_prepared">
+<span class="sig-prename descclassname"><span class="pre">jams.signals.</span></span><span class="sig-name descname"><span class="pre">set_final_theme_when_jam_prepared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/signals.html#set_final_theme_when_jam_prepared"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.signals.set_final_theme_when_jam_prepared" title="Ссылка на это определение"></a></dt>
+<dd><p>Сигнал устанавливающий тему окончания подготовки джема</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.signals.set_random_themes_for_jam_when_it_created">
+<span class="sig-prename descclassname"><span class="pre">jams.signals.</span></span><span class="sig-name descname"><span class="pre">set_random_themes_for_jam_when_it_created</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/signals.html#set_random_themes_for_jam_when_it_created"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.signals.set_random_themes_for_jam_when_it_created" title="Ссылка на это определение"></a></dt>
+<dd><p>Сигнал выбирающий 3-и случайные темы на голосование при создании геймджема</p>
+</dd></dl>
+
+</section>
+<section id="module-jams.models">
+<span id="models"></span><h2>models<a class="headerlink" href="#module-jams.models" title="Ссылка на этот заголовок"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.models.GameJam">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.models.</span></span><span class="sig-name descname"><span class="pre">GameJam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/models/gamejam.html#GameJam"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.models.GameJam" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Модель геймджема</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="jams.models.GameJam.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#jams.models.GameJam.DoesNotExist" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jams.models.GameJam.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#jams.models.GameJam.MultipleObjectsReturned" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.date_end">
+<span class="sig-name descname"><span class="pre">date_end</span></span><a class="headerlink" href="#jams.models.GameJam.date_end" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.date_start">
+<span class="sig-name descname"><span class="pre">date_start</span></span><a class="headerlink" href="#jams.models.GameJam.date_start" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.gamejamtheme_set">
+<span class="sig-name descname"><span class="pre">gamejamtheme_set</span></span><a class="headerlink" href="#jams.models.GameJam.gamejamtheme_set" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.games">
+<span class="sig-name descname"><span class="pre">games</span></span><a class="headerlink" href="#jams.models.GameJam.games" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.GameJam.get_next_by_date_end">
+<span class="sig-name descname"><span class="pre">get_next_by_date_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date_end&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.GameJam.get_next_by_date_end" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.GameJam.get_next_by_date_start">
+<span class="sig-name descname"><span class="pre">get_next_by_date_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date_start&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.GameJam.get_next_by_date_start" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.GameJam.get_previous_by_date_end">
+<span class="sig-name descname"><span class="pre">get_previous_by_date_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date_end&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.GameJam.get_previous_by_date_end" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.GameJam.get_previous_by_date_start">
+<span class="sig-name descname"><span class="pre">get_previous_by_date_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date_start&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.GameJam.get_previous_by_date_start" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.GameJam.get_status_display">
+<span class="sig-name descname"><span class="pre">get_status_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.CharField:</span> <span class="pre">status&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.GameJam.get_status_display" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.jam_status">
+<span class="sig-name descname"><span class="pre">jam_status</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('FN',</span> <span class="pre">'Завершён'),</span> <span class="pre">('OG',</span> <span class="pre">'Идёт'),</span> <span class="pre">('PR',</span> <span class="pre">'Подготовка')]</span></em><a class="headerlink" href="#jams.models.GameJam.jam_status" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#jams.models.GameJam.objects" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.ratinguserjam_set">
+<span class="sig-name descname"><span class="pre">ratinguserjam_set</span></span><a class="headerlink" href="#jams.models.GameJam.ratinguserjam_set" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#jams.models.GameJam.status" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.theme">
+<span class="sig-name descname"><span class="pre">theme</span></span><a class="headerlink" href="#jams.models.GameJam.theme" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#jams.models.GameJam.title" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.users">
+<span class="sig-name descname"><span class="pre">users</span></span><a class="headerlink" href="#jams.models.GameJam.users" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.uuid">
+<span class="sig-name descname"><span class="pre">uuid</span></span><a class="headerlink" href="#jams.models.GameJam.uuid" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.winner">
+<span class="sig-name descname"><span class="pre">winner</span></span><a class="headerlink" href="#jams.models.GameJam.winner" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.GameJam.winner_id">
+<span class="sig-name descname"><span class="pre">winner_id</span></span><a class="headerlink" href="#jams.models.GameJam.winner_id" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.models.Game">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.models.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/models/game.html#Game"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.models.Game" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Модель игры</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="jams.models.Game.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#jams.models.Game.DoesNotExist" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jams.models.Game.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#jams.models.Game.MultipleObjectsReturned" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#jams.models.Game.description" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.game_file">
+<span class="sig-name descname"><span class="pre">game_file</span></span><a class="headerlink" href="#jams.models.Game.game_file" title="Ссылка на это определение"></a></dt>
+<dd><p>The descriptor for the file attribute on the model instance. Return a
+FieldFile when accessed so you can write code like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">myapp.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">size</span>
+</pre></div>
+</div>
+<p>Assign a file object on assignment so you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/hello.world&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">instance</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.Game.get_next_by_uploaded_time">
+<span class="sig-name descname"><span class="pre">get_next_by_uploaded_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">uploaded_time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.Game.get_next_by_uploaded_time" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.models.Game.get_previous_by_uploaded_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_uploaded_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">uploaded_time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jams.models.Game.get_previous_by_uploaded_time" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#jams.models.Game.id" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.image">
+<span class="sig-name descname"><span class="pre">image</span></span><a class="headerlink" href="#jams.models.Game.image" title="Ссылка на это определение"></a></dt>
+<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
+assigning the width/height to the width_field/height_field, if appropriate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.jam_uuid">
+<span class="sig-name descname"><span class="pre">jam_uuid</span></span><a class="headerlink" href="#jams.models.Game.jam_uuid" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.jam_uuid_id">
+<span class="sig-name descname"><span class="pre">jam_uuid_id</span></span><a class="headerlink" href="#jams.models.Game.jam_uuid_id" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#jams.models.Game.objects" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#jams.models.Game.title" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.uploaded_time">
+<span class="sig-name descname"><span class="pre">uploaded_time</span></span><a class="headerlink" href="#jams.models.Game.uploaded_time" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#jams.models.Game.user" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.Game.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#jams.models.Game.user_id" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.models.</span></span><span class="sig-name descname"><span class="pre">RatingUserJam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/models/rating_user_jam.html#RatingUserJam"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.models.RatingUserJam" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Модель рейтинга игр джема</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#jams.models.RatingUserJam.DoesNotExist" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#jams.models.RatingUserJam.MultipleObjectsReturned" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#jams.models.RatingUserJam.id" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.jam_uuid">
+<span class="sig-name descname"><span class="pre">jam_uuid</span></span><a class="headerlink" href="#jams.models.RatingUserJam.jam_uuid" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.jam_uuid_id">
+<span class="sig-name descname"><span class="pre">jam_uuid_id</span></span><a class="headerlink" href="#jams.models.RatingUserJam.jam_uuid_id" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#jams.models.RatingUserJam.objects" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.stars">
+<span class="sig-name descname"><span class="pre">stars</span></span><a class="headerlink" href="#jams.models.RatingUserJam.stars" title="Ссылка на это определение"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#jams.models.RatingUserJam.user" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#jams.models.RatingUserJam.user_id" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.user_who_rate">
+<span class="sig-name descname"><span class="pre">user_who_rate</span></span><a class="headerlink" href="#jams.models.RatingUserJam.user_who_rate" title="Ссылка на это определение"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.models.RatingUserJam.user_who_rate_id">
+<span class="sig-name descname"><span class="pre">user_who_rate_id</span></span><a class="headerlink" href="#jams.models.RatingUserJam.user_who_rate_id" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-jams.urls">
+<span id="urls"></span><h2>urls<a class="headerlink" href="#module-jams.urls" title="Ссылка на этот заголовок"></a></h2>
+</section>
+<section id="module-jams.views">
+<span id="views"></span><h2>views<a class="headerlink" href="#module-jams.views" title="Ссылка на этот заголовок"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.views.GameJamsLists">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">GameJamsLists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#GameJamsLists"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.GameJamsLists" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListView</span></code></p>
+<p>Представление списка геймджемов</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.views.GameJamsLists.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pages/jams_pages/jams.html'</span></em><a class="headerlink" href="#jams.views.GameJamsLists.template_name" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.views.GameJamsLists.queryset">
+<span class="sig-name descname"><span class="pre">queryset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;QuerySet</span> <span class="pre">[&lt;GameJam:</span> <span class="pre">dada</span> <span class="pre">-</span> <span class="pre">&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">check_poll</span> <span class="pre">-</span> <span class="pre">gamejam&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">checkin'</span> <span class="pre">-</span> <span class="pre">check_poll&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">xxxx</span> <span class="pre">-</span> <span class="pre">&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">ongoing_jam</span> <span class="pre">-</span> <span class="pre">ongoing&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">jjj</span> <span class="pre">-</span> <span class="pre">dfdfd&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">check_add_user</span> <span class="pre">-</span> <span class="pre">wewd&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">выфвыф</span> <span class="pre">-</span> <span class="pre">какая-то</span> <span class="pre">тема&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">testiiiing</span> <span class="pre">-</span> <span class="pre">Final</span> <span class="pre">theme&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">asd</span> <span class="pre">-</span> <span class="pre">wewd&gt;,</span> <span class="pre">&lt;GameJam:</span> <span class="pre">gamejam</span> <span class="pre">-</span> <span class="pre">gamejam&gt;]&gt;</span></em><a class="headerlink" href="#jams.views.GameJamsLists.queryset" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.views.GameJamsLists.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#GameJamsLists.get_context_data"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.GameJamsLists.get_context_data" title="Ссылка на это определение"></a></dt>
+<dd><p>Get the context for this view.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jams.views.GameJamDetail">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">GameJamDetail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#GameJamDetail"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.GameJamDetail" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">DetailView</span></code></p>
+<p>Представление просмотра деталей конкретного геймджема</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.views.GameJamDetail.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#jams.views.GameJamDetail.model" title="Ссылка на это определение"></a></dt>
+<dd><p>псевдоним для <a class="reference internal" href="jams.models.html#jams.models.gamejam.GameJam" title="jams.models.gamejam.GameJam"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameJam</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.views.GameJamDetail.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pages/jams_pages/gamejam_detail.html'</span></em><a class="headerlink" href="#jams.views.GameJamDetail.template_name" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jams.views.GameJamDetail.context_object_name">
+<span class="sig-name descname"><span class="pre">context_object_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gamejam_detail'</span></em><a class="headerlink" href="#jams.views.GameJamDetail.context_object_name" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.views.GameJamDetail.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#GameJamDetail.get_context_data"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.GameJamDetail.get_context_data" title="Ссылка на это определение"></a></dt>
+<dd><p>Insert the single object into the context dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jams.views.GameJamDetail.get_object">
+<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#GameJamDetail.get_object"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.GameJamDetail.get_object" title="Ссылка на это определение"></a></dt>
+<dd><p>Return the object the view is displaying.</p>
+<p>Require <cite>self.queryset</cite> and a <cite>pk</cite> or <cite>slug</cite> argument in the URLconf.
+Subclasses can override this to return any object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.views.count_final_rating">
+<span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">count_final_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#count_final_rating"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.count_final_rating" title="Ссылка на это определение"></a></dt>
+<dd><p>Функция подсчета рейтинга геймджема</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.views.game_jam_upload">
+<span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">game_jam_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#game_jam_upload"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.game_jam_upload" title="Ссылка на это определение"></a></dt>
+<dd><p>Представление для загрузки игры</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.views.game_jam_download">
+<span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">game_jam_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#game_jam_download"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.game_jam_download" title="Ссылка на это определение"></a></dt>
+<dd><p>Представление для скачивания игры</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.views.count_stars">
+<span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">count_stars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#count_stars"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.count_stars" title="Ссылка на это определение"></a></dt>
+<dd><p>Представление для рейтинга игры</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.views.home_page">
+<span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">home_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#home_page"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.home_page" title="Ссылка на это определение"></a></dt>
+<dd><p>Представление для главной страницы</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jams.views.handler404">
+<span class="sig-prename descclassname"><span class="pre">jams.views.</span></span><span class="sig-name descname"><span class="pre">handler404</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jams/views.html#handler404"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#jams.views.handler404" title="Ссылка на это определение"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="../modules.html" class="btn btn-neutral float-left" title="Модули GJS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="jam_polls.html" class="btn btn-neutral float-right" title="jam_polls" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, Zilberhleyt Mark, Ignatkin Ilya, Pashkin Valeriy, Chetin Grigoriy. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
