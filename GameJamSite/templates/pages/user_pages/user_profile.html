@@ -6,8 +6,8 @@
 {% endblock head %}
 
 {% block headButtons %}
-<li><a href="{% url 'redactor' request.user.username %}" class="menu-button">Дизайн</a></li>
-<li><a href="" class="menu-button">Написать пост</a></li>
+<!--<li><a href="{% url 'redactor' request.user.username %}" class="menu-button">Дизайн</a></li>-->
+<!--<li><a href="" class="menu-button">Написать пост</a></li>-->
 {% endblock %}
 
 {% block content %}
@@ -18,11 +18,13 @@
     <div id="hat">
         <div class="avatar-block">
             <div>
-                {% if profile_data.avatar_image and request.user.is_authenticated and request.user.id == profile_data.id %}
+                {% if request.user.is_authenticated and request.user.id == profile_data.id %}
                 <label for="avatar-input" id="avatar">
                     <input id="avatar-input" type="file" name="avatar_image"
                            accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
+                    {% if profile_data.avatar_image  %}
                     <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
+                    {% endif %}
                 </label>
                 {% endif %}
             </div>
@@ -30,10 +32,9 @@
             <h2 class="nickname" style="text-align: center">{{ profile_data.email }}</h2>
 
             {% if request.user.is_authenticated and request.user.id == profile_data.id %}
-
-            <input type="file" name="hat_photo" id="hat-input" accept="image/png, image/jpeg, image/jpg, image/webp,
-            image/jfif">
-            <span class="load-photo-status" style="color: red;"></span>
+                <input type="file" name="hat_photo" id="hat-input" accept="image/png, image/jpeg, image/jpg, image/webp,
+                image/jfif">
+                <span class="load-photo-status" style="color: white;"></span>
             {% endif %}
         </div>
     </div>
@@ -72,21 +73,6 @@
         <!-- с возможностью скачивания -->
         <!-- списибо деду за победу (удалить все комментарии!!!!!!) -->
     </div>
-</div>
-
-<div class="user_games">
-    <p>Разработанные игры:</p>
-    {% for game in user_games %}
-    <p>
-        <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
-            {{ game.title }}
-        </a>
-        {{ game.uploaded_time }}
-        {% if game.description != None %}
-        {{ game.description }}
-        {% endif %}
-    </p>
-    {% endfor %}
 </div>
 
 {% endblock %}
