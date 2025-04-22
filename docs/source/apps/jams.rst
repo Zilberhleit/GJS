@@ -1,19 +1,19 @@
-jams package
+jams
 ============
 
-Subpackages
------------
+Модуль jams предназначен для работы с геймджемами, включая:
 
-.. toctree::
-   :maxdepth: 4
+  - Вывод списка геймджемов
+  - Филтрация геймджемов
+  - Просмотр геймджема
+  - Управление геймджемом (установка темы, смена статуса, определение победителя)
+  - Загрузка игры разработчиками
+  - Скачивание игры пользователями
+  - Выставление оценок играм
 
-   jams.migrations
-   jams.models
 
-Submodules
-----------
 
-jams.admin module
+admin
 -----------------
 
 .. automodule:: jams.admin
@@ -21,7 +21,7 @@ jams.admin module
    :show-inheritance:
    :undoc-members:
 
-jams.apps module
+apps
 ----------------
 
 .. automodule:: jams.apps
@@ -29,7 +29,7 @@ jams.apps module
    :show-inheritance:
    :undoc-members:
 
-jams.filters module
+filters
 -------------------
 
 .. automodule:: jams.filters
@@ -37,7 +37,7 @@ jams.filters module
    :show-inheritance:
    :undoc-members:
 
-jams.signals module
+signals
 -------------------
 
 .. automodule:: jams.signals
@@ -45,15 +45,17 @@ jams.signals module
    :show-inheritance:
    :undoc-members:
 
-jams.tests module
------------------
 
-.. automodule:: jams.tests
+models
+-------------------
+
+.. automodule:: jams.models
    :members:
    :show-inheritance:
    :undoc-members:
 
-jams.urls module
+
+urls
 ----------------
 
 .. automodule:: jams.urls
@@ -61,7 +63,7 @@ jams.urls module
    :show-inheritance:
    :undoc-members:
 
-jams.views module
+views
 -----------------
 
 .. automodule:: jams.views
@@ -69,10 +71,4 @@ jams.views module
    :show-inheritance:
    :undoc-members:
 
-Module contents
----------------
 
-.. automodule:: jams
-   :members:
-   :show-inheritance:
-   :undoc-members:

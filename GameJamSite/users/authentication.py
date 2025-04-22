@@ -6,6 +6,7 @@ class EmailAuthBackend(BaseBackend):
     """ Аутентификация по email """
 
     def authenticate(self, request, email=None, password=None):
+        """  Получение пользователя по email и проверка пароля """
         User = get_user_model()
         try:
             user = User.objects.get(email=email)
@@ -16,6 +17,7 @@ class EmailAuthBackend(BaseBackend):
                 return user
 
     def get_user(self, user_id):
+        """ Получение пользователя по id """
         UserModel = get_user_model()
         try:
             return UserModel.objects.get(pk=user_id)

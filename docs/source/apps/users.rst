@@ -1,18 +1,14 @@
-users package
+users
 =============
+Модуль users предназначен для работы с пользователями, включая:
+  - Регистрацию пользователей
+  - Авторизацию и аутентификацию пользователей
+  - Просмотр профилей пользователей
+  - Кастомизацию профиля (загрузки аватарки и шапки)
+  - Отображение истории участия в геймджемах
+  - Отображение игр пользователя в профиле
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   users.migrations
-
-Submodules
-----------
-
-users.admin module
+admin
 ------------------
 
 .. automodule:: users.admin
@@ -20,7 +16,7 @@ users.admin module
    :show-inheritance:
    :undoc-members:
 
-users.apps module
+apps
 -----------------
 
 .. automodule:: users.apps
@@ -28,7 +24,7 @@ users.apps module
    :show-inheritance:
    :undoc-members:
 
-users.authentication module
+authentication
 ---------------------------
 
 .. automodule:: users.authentication
@@ -36,7 +32,7 @@ users.authentication module
    :show-inheritance:
    :undoc-members:
 
-users.forms module
+forms
 ------------------
 
 .. automodule:: users.forms
@@ -44,7 +40,7 @@ users.forms module
    :show-inheritance:
    :undoc-members:
 
-users.models module
+models
 -------------------
 
 .. automodule:: users.models
@@ -52,7 +48,7 @@ users.models module
    :show-inheritance:
    :undoc-members:
 
-users.services module
+services
 ---------------------
 
 .. automodule:: users.services
@@ -60,15 +56,8 @@ users.services module
    :show-inheritance:
    :undoc-members:
 
-users.tests module
-------------------
 
-.. automodule:: users.tests
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-users.urls module
+urls
 -----------------
 
 .. automodule:: users.urls
@@ -76,7 +65,7 @@ users.urls module
    :show-inheritance:
    :undoc-members:
 
-users.views module
+views
 ------------------
 
 .. automodule:: users.views
@@ -84,10 +73,3 @@ users.views module
    :show-inheritance:
    :undoc-members:
 
-Module contents
----------------
-
-.. automodule:: users
-   :members:
-   :show-inheritance:
-   :undoc-members:

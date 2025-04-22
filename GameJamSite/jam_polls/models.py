@@ -3,7 +3,7 @@ from jams.models import GameJam
 from django.conf import settings
 
 class GameJamTheme(models.Model):
-    """  Модель темы джема """
+    """  Модель темы джема; используется в голосовании """
     theme = models.CharField(max_length=255, verbose_name="Тема")
     gamejam = models.ForeignKey(GameJam, on_delete=models.CASCADE, verbose_name="Джем")
 
@@ -28,7 +28,9 @@ class ThemeVote(models.Model):
         return str(self.user) + " проголосовал " + str(self.vote) + " за "  + str(self.theme)
 
 class Theme(models.Model):
-    """ Модель темы """
+    """ Модель темы
+        Хранит общий список тем
+     """
     theme = models.CharField(max_length=255, verbose_name="Тема")
 
     class Meta:

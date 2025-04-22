@@ -6,5 +6,6 @@ class JamsConfig(AppConfig):
     name = 'jams'
     verbose_name = 'Геймджемы'
 
+    # Для работы с сигналами
     def ready(self):
         import jams.signals
