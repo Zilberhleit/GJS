@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 
     # 3rd-party
     'django_filters',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -80,9 +82,10 @@ WSGI_APPLICATION = 'GameJamSite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.environ.get("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -136,3 +139,13 @@ AUTHENTICATION_BACKENDS = (
     'users.authentication.EmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+
+# Celery & Celery Beat
+
+CELERY_BROKER_URL = f'redis://redis:6379/1'
+CELERY_RESULT_BACKEND = f'redis://redis:6379/1'
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
