@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 
+from jams.utils import create_gamejam_change_status_periodic_task
 
 
 class GameJam(models.Model):
@@ -28,6 +29,16 @@ class GameJam(models.Model):
     class Meta:
         verbose_name = "Геймджем"
         verbose_name_plural = "Геймджемы"
+
+    def save(self, *args, **kwargs):
+        is_new = self._state.adding
+
+        super().save(*args, **kwargs)
+
+        if is_new:
+            create_gamejam_change_status_periodic_task(self, "OG", self.date_start)
+            create_gamejam_change_status_periodic_task(self, "FN", self.date_end)
+
 
     def __str__(self):
         return self.title + " - " + self.theme

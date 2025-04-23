@@ -1,53 +1,42 @@
 services:
-  django:
-    container_name: django
-    build: .
-    command: >
-      sh -c " python3 manage.py migrate &&
-             python3 manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/app
-      - sqlite_data:/data
-    ports:
-      - "8000:8000"
-    environment:
-      - DJANGO_DB_PATH=/data/db.sqlite3
+ django:
+   container_name: django
+   build: .
+   command: >
+     sh -c " python3 manage.py migrate &&
+            python3 manage.py runserver 0.0.0.0:8000"
+   volumes:
+     - .:/app
+   ports:
+     - "8000:8000"
+   depends_on:
+     - redis
 
-    depends_on:
-      - redis
+ redis:
+   image: redis:alpine
+   container_name: redis
+   ports:
+     - "6379:6379"
 
-  redis:
-    image: redis:alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
+ celery:
+   build: .
+   command: celery -A GameJamSite worker -l INFO
+   environment:
+     - HOME=/app
+   volumes:
+     - .:/app
+   user: "1000:1000"
+   depends_on:
+     - django
+     - redis
 
-  celery:
-    build: .
-    command: celery -A GameJamSite worker -l INFO
-    environment:
-      - DJANGO_DB_PATH=/data/db.sqlite3
-    volumes:
-      - .:/app
-      - sqlite_data:/data
-    depends_on:
-      - django
-      - redis
-
-  celery-beat:
-    container_name: celery-beat
-    build:
-      context: .
-    command: celery -A GameJamSite beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    environment:
-      - DJANGO_DB_PATH=/data/db.sqlite3
-    volumes:
-      - .:/app
-      - sqlite_data:/data
-    depends_on:
-      - django
-      - redis
-
-
-volumes:
-  sqlite_data:
+ celery-beat:
+   container_name: celery-beat
+   build:
+     context: .
+   command: celery -A GameJamSite beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+   volumes:
+     - .:/app
+   depends_on:
+     - django
+     - redis
