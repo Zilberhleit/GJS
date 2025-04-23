@@ -21,32 +21,28 @@
 </div>
 <!--Вывод страницы джема-->
 <div class="jam-container">
-    <div class="container-date">
-        {{gamejam_detail.date_start}}
-        <br>
-        {{gamejam_detail.date_end}}
-        <!-- Даты конца и начала -->
-
-
-    </div>
-
-    <div class="countdown-container">
-        {% if gamejam_detail.status == 'PR' %}
-        <h2 class="countdown-status">Джем начнется через:</h2>
-        {% elif gamejam_detail.status == 'OG' %}
-        <h2 class="countdown-status">Джем закончится через:</h2>
-        {% elif gamejam_detail.status == 'FN' %}
-        <h2 class="countdown-status">Джем окончен</h2>
-        {% endif %}
-
-        {% if gamejam_detail.status != 'FN' %}
-        <div id="countdown">
-            <ul>
-                <li class="countdown-element"><span id="days"></span>Дней</li>
-                <li class="countdown-element"><span id="hours"></span>Часов</li>
-                <li class="countdown-element"><span id="minutes"></span>Минут</li>
-                <li class="countdown-element"><span id="seconds"></span>Секунд</li>
-            </ul>
+    <div class="date">
+        <div class="countdown-container">
+            {% if gamejam_detail.status == 'PR' %}
+            <h2 class="countdown-status">Начало в:</h2>
+            {% elif gamejam_detail.status == 'FN' %}
+            <h2 class="countdown-status">Джем окончен</h2>
+            {% endif %}
+            {% if gamejam_detail.status != 'FN' %}
+            <div id="countdown">
+                <div class="container-date">
+                    {{gamejam_detail.date_start}}
+                    по
+                    {{gamejam_detail.date_end}}
+                    <!-- Даты конца и начала -->
+                </div>
+                <ul>
+                    <li class="countdown-element"><span id="days"></span><p>Дней</p></li>
+                    <li class="countdown-element"><span id="hours"></span><p>Часов</p></li>
+                    <li class="countdown-element"><span id="minutes"></span><p>Минут</p></li>
+                    <li class="countdown-element"><span id="seconds"></span><p>Секунд</p></li>
+                </ul>
+            </div>
         </div>
     </div>
 
