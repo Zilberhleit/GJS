@@ -24,8 +24,6 @@ def create_gamejam_change_status_periodic_task(gamejam_instance ,
         clocked_time=run_at
     )
 
-
-
     kwargs = {'new_status': new_status, 'gamejam_uuid': str(gamejam_instance.uuid)}
     task_name = f'Update gamejam status {gamejam_instance.title} to {new_status}'
 
