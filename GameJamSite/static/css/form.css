@@ -16,16 +16,8 @@
     background: rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(10px);
+    z-index: 1;
 }
-
-/* позже подправлю */
-/* .reg-form:has(.errorlist) label[for="id_password1"] {
-    color: #ff332f;
-}
-
-.reg-form:has(.errorlist) input[type="password"][name="password1"] {
-    border-bottom: 1px solid #ff332f;
-} */
 
 .reg-form p {
     position: relative;
@@ -57,7 +49,7 @@ input {
     border: none;
     outline: none;
 }
-/* .reg-form p  */
+
 input {
     width: 100%;
     padding: 0;
@@ -102,10 +94,21 @@ input {
     padding: 0px 20px;
 }
 
+#circle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: auto;
+}
+
 .circle {
     position: absolute;
     border-radius: 50%;
     z-index: -1;
+    transition: transform 0.6s ease;
+    pointer-events: auto;
 }
 .circle:nth-child(1) { top: 25%; right: 25%; width: 200px; height: 200px;
     background-image: linear-gradient(86deg, #ff3d3a, #9736ff);

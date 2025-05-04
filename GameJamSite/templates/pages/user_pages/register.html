@@ -22,14 +22,11 @@
     const container = document.getElementById('circle-container');
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => {
-        console.log(input);
         input.addEventListener('focus', function() {
-            console.log(this);
             const label = this.previousElementSibling;
             label.classList.add('label-up');
         });
         input.addEventListener('blur', function() {
-            console.log(this);
             const label = this.previousElementSibling;
             if (this.value.trim() === '') {
                 label.classList.remove('label-up');
@@ -37,10 +34,42 @@
             }
         });
     });
+
     for (let i = 0; i < 4; i++) {
+        console.log("aaaa" + i);
         div = document.createElement('div');
         div.className = 'circle';
         container.appendChild(div);
     }
+
+    const circles = document.querySelectorAll('.circle');
+
+    container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        circles.forEach(circle => {
+            const circleRect = circle.getBoundingClientRect();
+            const circleX = circleRect.left + circleRect.width / 2;
+            const circleY = circleRect.top + circleRect.height / 2;
+
+            const dx = circleX - e.clientX;
+            const dy = circleY - e.clientY;
+
+            // Нормализуем вектор и умножаем на дистанцию
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const moveX = (dx / distance) * 20;
+            const moveY = (dy / distance) * 20;
+
+            circle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    });
+
+    container.addEventListener('mouseleave', () => {
+        circles.forEach(circle => {
+            circle.style.transform = 'translate(0, 0)';
+        });
+    });
 </script>
 {% endblock %}

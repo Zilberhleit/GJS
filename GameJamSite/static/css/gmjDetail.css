@@ -3,16 +3,33 @@
 
 .div-header {
     margin-top: 30px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.div-header .del {
+    display: block;
+    border: 1px solid #fff;
+    width: 1px;
+    height: 160px;
 }
 
 /* Классы для gamejam_detail */
 .container-title {
     color: var(--head-text);
     background-color: var(--head-foot);
+    margin-left: 70px;
 }
 
-.container-date {
-    padding: 2%;
+.a-button-join {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 5px;
+    color: #fff;
 }
 
 .row {
@@ -23,13 +40,11 @@
 }
 
 .div-header h1 {
-    margin-left: 70px;
     font-size: 52px;
     margin-bottom: 0;
 }
 
 .container-title p {
-    margin-left: 70px;
     color: #ff6b6b;
     font-size: 36px;
 }
@@ -38,15 +53,11 @@
     width: 100%;
     text-align: center;
     padding: 5px 0;
-
 }
 
 .date {
     display: flex;
     flex-direction: column;
-
-    border-radius: 10px;
-    margin: 0px 25%;
 }
 
 .upl-container {
@@ -64,8 +75,6 @@
     background-color: #2a2f3d;
     border-radius: 10px;
     transition: 150ms ease;
-    /* height:3em;
-    overflow: hidden; */
     display: grid;
     grid-template-rows: 0 0fr;
 }
@@ -97,88 +106,58 @@
 
 .countdown-element span {
   display: block;
-  font-size: 24px;
+  font-size: 32px;
 }
 
 .countdown-element p {
-    font-size: 20px;
+    font-size: 28px;
 }
 
 #countdown ul {
     display: flex;
     align-items: center;
     margin: 0;
+    padding-left: 10px;
 }
-
-/* .upl-card-container a {
-    overflow: hidden;
-} */
-
-/* .upl-card-container::after {
-    content: '<';
-    font: 17px "Consolas", monospace;
-    position: absolute;
-    left: 20px;
-    top: 1.3em;
-    transform: rotate(180deg);
-    pointer-events: none;
-} */
 
 .open {
     grid-template-rows: 1.05em 1fr;
 }
 
-/* .upl-card-container.open::after {
-    transform: rotate(270deg);
-} */
-
-/* .upl-card-container-header {
-    display: flex;
-} */
-
-/* .upl-card-container-header form {
-    position: absolute;
-    display: flex;
-    gap: 20px;
-    right: 0px;
-    top: 0.7em;
-    height: 1.5em;
-    width: 350px;
-    align-items: center;
-} */
-
-/* .upl-card-container-header form::after {
+.rating-form::after {
     content: '<>';
     font: 17px "Consolas", monospace;
     position: absolute;
-    left: 34%;
+    left: 50%;
     top: 50%;
+    color: #000;
     transform: translateY(50%);
     transform: translateY(-50%) rotate(90deg);
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #000;
     pointer-events: none;
-} */
+}
 
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    width: 40%;
+    width: 140px;
+    cursor: pointer;
     outline: none;
     border-radius: 5px;
     text-indent: 10px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background-color: rgba(47, 47, 47, 0.05);
+    border: 1px solid rgba(53, 53, 53, 0.1);
+    color: #000;
 }
 
-/* .btn-upl {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.btn-rate {
+    background-color: rgba(47, 47, 47, 0.05);
+    border: 1px solid rgba(53, 53, 53, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 4px;
-    color: #fff;
-} */
+    color: #000;
+}
 
 option {
     color: black;
@@ -191,4 +170,55 @@ option {
 .upl-card-container a {
     display: inline-block;
     margin-top: 1.5em;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #dcdcdc;
+}
+
+thead tr {
+    background-color: #ff6b6b;
+}
+
+thead tr th {
+    padding: 5px;
+}
+
+thead tr th:nth-child(2), 
+thead tr th:nth-child(3) {
+    border-left: 1px solid #fff;
+}
+
+thead tr th:nth-child(3) {
+    border-right: 1px solid #fff;
+}
+
+tbody tr {
+    background-color: #fff;
+}
+
+td {
+    padding: 5px;
+}
+
+td:nth-child(4) {
+    width: 20%;
+}
+
+tbody tr .username, .rank {
+    color: #000;
+}
+
+tbody tr td .btn {
+    padding: 0;
+}
+
+.rating-form {
+    position: relative;
+    display: flex;
+    justify-content: space-evenly;
 }

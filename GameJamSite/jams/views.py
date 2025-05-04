@@ -25,6 +25,7 @@ class GameJamsLists(ListView):
 
 class GameJamDetail(DetailView):
     """ Представление просмотра деталей конкретного геймджема """
+    # ну что пайтонисты как там без инкапсуляции?
     model = GameJam
     template_name = 'pages/jams_pages/gamejam_detail.html'
     context_object_name = "gamejam_detail"

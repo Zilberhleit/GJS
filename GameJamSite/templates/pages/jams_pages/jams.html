@@ -42,9 +42,6 @@
                             <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="card-title">{{ jam.title }}</a>
                             <p class="card-text">{{ jam.get_status_display }}</p>
                         </div>
-                        <!-- <div class="card-button-container">
-                            <a href="{% url 'gamejam_detail' uuid=jam.uuid %}" class="a-button card-button">Перейти!</a>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -54,16 +51,11 @@
 <script>
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => {
-        console.log(input);
         input.addEventListener('focus', function() {
-            console.log(this);
             const label = this.previousElementSibling;
-            console.log(label);
             label.classList.add('label-up');
-            console.log("aaaaaa");
         });
         input.addEventListener('blur', function() {
-            console.log(this);
             const label = this.previousElementSibling;
             if (this.value.trim() === '') {
                 label.classList.remove('label-up');
