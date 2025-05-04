@@ -25,7 +25,7 @@ class Game(models.Model):
         return self.title + " - " + self.jam_uuid.title + ' - ' + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S")
 
     def save(self, *args, **kwargs):
-        if not self.title and self.file:
+        if not self.title and self.game_file:
             self.title = os.path.splitext(os.path.basename(self.game_file.name))[0]
         if self.slug is not None:
             self.slug = slugify(self.title)

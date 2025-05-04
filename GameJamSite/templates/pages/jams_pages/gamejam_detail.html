@@ -49,7 +49,7 @@
     <div class="upl-container">
         {% for user_game in user_games %}
         {{ user_game.user.username }}
-        <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
+        <a href="{% url 'download_file' gamejam_detail.uuid user_game.slug %}">
             {{ user_game.cleaned_name }}</a>
         <a href="{% url 'game_page' uuid=gamejam_detail.uuid slug=user_game.slug %}">
             Перейти на страницу игры</a>

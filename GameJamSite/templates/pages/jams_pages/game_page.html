@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<div class="game_image"></div>
+<div class="game_description"></div>
+<a href="{% url 'download_file' uuid=game.jam_uuid.uuid slug=game.slug %}">
+            {{ game.cleaned_name }}</a>
 {% endblock %}

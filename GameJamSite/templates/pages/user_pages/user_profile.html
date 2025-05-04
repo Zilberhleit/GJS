@@ -62,7 +62,7 @@
         <div class="user_games-files">
             {% for game in user_games %}
             <div>
-                <a href="{%  url 'download_file' game.jam_uuid.uuid game.id  %}">
+                <a href="{%  url 'download_file' game.jam_uuid.uuid game.slug  %}">
                     {{ game.title }}
                 </a>
                 {{ game.uploaded_time }}
