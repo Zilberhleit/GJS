@@ -6,7 +6,6 @@ from django.db.models import DateTimeField
 from django_celery_beat.models import PeriodicTask, ClockedSchedule
 
 
-
 def rand_date():
     """ Функция генерирующая случайную дату в некотором промежутке """
     start = datetime.now()
@@ -14,8 +13,7 @@ def rand_date():
     return start + (end - start) * random.random()
 
 
-
-def create_gamejam_change_status_periodic_task(gamejam_instance ,
+def create_gamejam_change_status_periodic_task(gamejam_instance,
                                                new_status: str,
                                                run_at: DateTimeField):
     """ Создает периодическую задачу для изменения статуса геймджема """

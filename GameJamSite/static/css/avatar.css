@@ -77,7 +77,6 @@ label {cursor: pointer;}
 }
 
 .profile {
-    /* position: relative; */
     height: 90vh;
     width: 100%;
     overflow: hidden;
@@ -126,8 +125,6 @@ label {cursor: pointer;}
     background-color: #2a2f3d;
     border-radius: 10px;
     transition: 150ms ease;
-    /* height:3em;
-    overflow: hidden; */
     display: grid;
     grid-template-rows: 0 0fr;
 }
@@ -149,10 +146,6 @@ label {cursor: pointer;}
 .user_games.open::after {
     transform: rotate(270deg);
 }
-
-/* .upl-card-container-header {
-    display: flex;
-} */
 
 .user_games h5 {
     margin: 0 20px;

@@ -23,18 +23,13 @@
     margin-left: 70px;
 }
 
-.a-button {
+.a-button-join {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 5px;
     color: #fff;
-}
-
-.a-button:hover {
-    color: #fff;
-}
-
-.button-conteiner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .row {
@@ -58,7 +53,6 @@
     width: 100%;
     text-align: center;
     padding: 5px 0;
-
 }
 
 .date {
@@ -81,8 +75,6 @@
     background-color: #2a2f3d;
     border-radius: 10px;
     transition: 150ms ease;
-    /* height:3em;
-    overflow: hidden; */
     display: grid;
     grid-template-rows: 0 0fr;
 }
@@ -128,31 +120,9 @@
     padding-left: 10px;
 }
 
-/* .upl-card-container a {
-    overflow: hidden;
-} */
-
-/* .upl-card-container::after {
-    content: '<';
-    font: 17px "Consolas", monospace;
-    position: absolute;
-    left: 20px;
-    top: 1.3em;
-    transform: rotate(180deg);
-    pointer-events: none;
-} */
-
 .open {
     grid-template-rows: 1.05em 1fr;
 }
-
-/* .upl-card-container.open::after {
-    transform: rotate(270deg);
-} */
-
-/* .upl-card-container-header {
-    display: flex;
-} */
 
 .rating-form::after {
     content: '<>';
@@ -172,6 +142,7 @@ select {
     -moz-appearance: none;
     appearance: none;
     width: 140px;
+    cursor: pointer;
     outline: none;
     border-radius: 5px;
     text-indent: 10px;
