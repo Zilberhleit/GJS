@@ -96,9 +96,9 @@ def game_jam_upload(request, uuid: UUID):
         raise Http404
 
 
-def game_jam_download(request, id: int, uuid: UUID):
+def game_jam_download(request, uuid: UUID, slug):
     """ Представление для скачивания игры """
-    file_instance = get_object_or_404(Game, id=id, jam_uuid=uuid)
+    file_instance = get_object_or_404(Game, jam_uuid=uuid, slug=slug)
     path = file_instance.game_file.path
 
     with open(path, 'rb') as fh:
@@ -125,7 +125,12 @@ def home_page(request):
 
 
 def game_page(request, uuid, slug):
-    return render(request, 'pages/jams_pages/game_page.html')
+    game = Game.objects.get(
+        jam_uuid=uuid,
+        slug=slug
+    )
+    game.cleaned_name = game.game_file.name.replace('zip_uploads/', '')
+    return render(request, 'pages/jams_pages/game_page.html', {'game': game})
 
 
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:

@@ -17,13 +17,18 @@
         <h1>{{gamejam_detail.title}}</h1>
         <p>Тема: {{gamejam_detail.theme}}</p>
     </div>
-    <span class="del"></span>
+    <!-- Название -->
+</div>
+<!--Вывод страницы джема-->
+<div class="jam-container">
     <div class="date">
         <div class="countdown-container">
-            {% if gamejam_detail.status == 'FN' %}
+            {% if gamejam_detail.status == 'PR' %}
+            <h2 class="countdown-status">Начало в:</h2>
+            {% elif gamejam_detail.status == 'FN' %}
             <h2 class="countdown-status">Джем окончен</h2>
             {% endif %}
-            {% if 1 == 1 %}
+            {% if gamejam_detail.status != 'FN' %}
             <div id="countdown">
                 <div class="container-date">
                     {{gamejam_detail.date_start}}
@@ -31,7 +36,7 @@
                     {{gamejam_detail.date_end}}
                     <!-- Даты конца и начала -->
                 </div>
-                <ul id="countdown-list">
+                <ul>
                     <li class="countdown-element"><span id="days"></span><p>Дней</p></li>
                     <li class="countdown-element"><span id="hours"></span><p>Часов</p></li>
                     <li class="countdown-element"><span id="minutes"></span><p>Минут</p></li>
@@ -40,49 +45,37 @@
             </div>
         </div>
     </div>
-    <!-- Название -->
-</div>
-<!--Вывод страницы джема-->
-<div class="jam-container">
+
     <div class="upl-container">
-        <table class="games-table">
-            <thead>
-                <tr>
-                    <th>Ранг</th>
-                    <th>Автор</th>
-                    <th>Игра</th>
-                    <th>Оценка</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user_game in user_games %}
-                <tr>
-                    <td class="rank">{{forloop.counter}}</td>
-                    <td class="username">{{ user_game.user.username }}</td>
-                    <td>
-                        <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
-                            {{ user_game.cleaned_name }}
-                        </a>
-                    </td>
-                    <td>
-                        {% if gamejam_detail.status == 'OG' and request.user in gamejam_detail.users.all and request.user != user_game.user %}
-                        <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post" class="rating-form">
-                            {% csrf_token %}
-                            <select name="stars" id="rating">
-                                <option value="5">★★★★★</option>
-                                <option value="4">★★★★</option>
-                                <option value="3">★★★</option>
-                                <option value="2">★★</option>
-                                <option value="1">★</option>
-                            </select>
-                            <button type="submit" class="btn-rate">Оценить</button>
-                        </form>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% for user_game in user_games %}
+        {{ user_game.user.username }}
+        <a href="{% url 'download_file' gamejam_detail.uuid user_game.slug %}">
+            {{ user_game.cleaned_name }}</a>
+        <a href="{% url 'game_page' uuid=gamejam_detail.uuid slug=user_game.slug %}">
+            Перейти на страницу игры</a>
+        {% if gamejam_detail.status == 'OG' %}
+        {% if request.user in gamejam_detail.users.all %}
+        {% if request.user != user_game.user %}
+        <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post">
+            {% csrf_token %}
+            <select name="stars" id="rating">
+                <option value="1">1 Звезда</option>
+                <option value="2">2 Звезды</option>
+                <option value="3">3 Звезды</option>
+                <option value="4">4 Звезды</option>
+                <option value="5">5 Звёзд</option>
+            </select>
+            <button type="submit">Отправить оценку</button>
+        </form>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        <!--{ endfor %}
+                </div>
+                <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
+                    {{ user_game.cleaned_name }}</a>
+                </div>-->
+        {% endfor %}
     </div>
     <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
 
@@ -108,9 +101,7 @@
     <!-- Загрузка -->
     {% if gamejam_detail.status == 'PR' %}
         {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
-            <div class="button-conteiner">
-                <a href="poll" class="a-button">Принять участие</a>
-            </div>
+            <a href="poll" class="a-button">Принять участие</a>
         {% elif request.user.is_authenticated == False %}
             <h2>Вы не вошли в свой аккаунт</h2>
         {% else %}
@@ -174,10 +165,10 @@
         var now = new Date().getTime();
         var distance = countDownDate - now;
 
-        var days = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-        var hours =  Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-        var minutes =  Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-        var seconds =  Math.max(0, Math.floor((distance % (1000 * 60)) / 1000));
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         document.getElementById("days").innerHTML = days;
         document.getElementById("hours").innerHTML = hours;
@@ -187,10 +178,10 @@
         if (distance < 0) {
             clearInterval(x);
             {% if gamejam_detail.status == 'OG' %}
-            // document.getElementById("countdown-list").style.display = "none";
+            document.getElementById("countdown").style.display = "none";
             document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем окончен";
             {% elif gamejam_detail.status == 'PR' %}
-            // document.getElementById("countdown-list").style.display = "none";
+            document.getElementById("countdown").style.display = "none";
             document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем начался";
 
             //window.location.reload(); // опасная штука, но в теории будет лучше всего работать
