@@ -18,15 +18,15 @@
     <div id="hat">
         <div class="avatar-block">
             <div>
-                {% if request.user.is_authenticated and request.user.id == profile_data.id %}
                 <label for="avatar-input" id="avatar">
-                    <input id="avatar-input" type="file" name="avatar_image"
-                           accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
+                    {% if request.user.is_authenticated and request.user.id == profile_data.id %}
+                        <input id="avatar-input" type="file" name="avatar_image"
+                            accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
+                    {% endif %}
                     {% if profile_data.avatar_image  %}
                     <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
                     {% endif %}
                 </label>
-                {% endif %}
             </div>
             <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
             <h2 class="nickname" style="text-align: center">{{ profile_data.email }}</h2>
