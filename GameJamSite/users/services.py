@@ -64,4 +64,4 @@ def is_valid_photo(photo: InMemoryUploadedFile) -> bool:
     """
     return photo is not None and (photo.content_type == 'image/jpeg' or
                                   photo.content_type == 'image/png' or photo.content_type == 'image/jpg' or
-                                  photo.content_type == 'image/webp' or photo.content_type == 'image/jfif') and photo.size <= 3 * 1024 * 1024
+                                  photo.content_type == 'image/webp' or photo.content_type == 'image/jfif') and photo.size <= 5 * 1024 * 1024

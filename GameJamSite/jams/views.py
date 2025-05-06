@@ -6,6 +6,7 @@ from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
+from docutils.nodes import description
 
 from jams.models import GameJam, RatingUserJam, Game
 from users.models import User
@@ -70,23 +71,40 @@ def count_final_rating(uuid: UUID):
 def game_jam_upload(request, uuid: UUID):
     """ Представление для загрузки игры """
     if request.method == "POST":
-        if "game" in request.FILES:
-            game_file = request.FILES["game"]
-            game_extension = '.zip'
+        fields_to_check = ('jam_uuid', 'title', 'description',)
+        if "game_file" in request.FILES and all(field in request.POST for field in fields_to_check):
 
-            if game_file.name.endswith(game_extension):
+            title = request.POST["title"]
+            description = request.POST["description"]
+            game_file = request.FILES["game_file"]
+            image_file = request.FILES.get("image", None)
+
+            game_extensions = ('.zip', '.rar')
+            image_extensions = ('.jpg', '.png', '.jpeg', 'webp', 'jfif')
+
+            if (any(game_file.name.endswith(game_extension)
+                    for game_extension in game_extensions) and
+                    (image_file is None or any(image_file.name.endswith(image_extension)
+                         for image_extension in image_extensions))):
+
                 jam = get_object_or_404(GameJam, uuid=uuid)
                 prev_game = Game.objects.filter(
-                    jam_uuid=jam,
+                    jam_uuid__uuid=uuid,
                     user=request.user
                 )
 
                 if prev_game.exists():
                     prev_game.update(
+                        title=title,
+                        description=description,
+                        image=image_file,
                         game_file=game_file,
-                        title=os.path.splitext(os.path.basename(game_file.name))[0])
+                    )
                 else:
                     Game.objects.create(
+                        title=title,
+                        description=description,
+                        image=image_file,
                         game_file=game_file,
                         jam_uuid=jam,
                         user=request.user

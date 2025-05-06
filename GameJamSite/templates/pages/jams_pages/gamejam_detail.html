@@ -4,6 +4,8 @@
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}">
 <link rel="stylesheet" href="{% static 'css/popup.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
 {% endblock %}
 
 
@@ -21,17 +23,7 @@
     <span class="del"></span>
     <div class="date">
         <div class="countdown-container">
-            {% if gamejam_detail.status == 'FN' %}
-            <h2 class="countdown-status">Джем окончен</h2>
-            {% elif gamejam_detail.status == 'PR' %}
-                {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
-                    <a href="poll" class="a-button-join">Принять участие</a>
-                {% endif %}
-            {% elif gamejam_detail.status == 'OG' %}
-                {% if request.user in gamejam_detail.users.all %}
-                    <a class="button" href="#popup1">Загрузить игру</a>
-                {% endif %}   
-            {% endif %}
+
             <div id="countdown">
                 <div class="container-date">
                     {{gamejam_detail.date_start}}
@@ -48,10 +40,32 @@
             </div>
         </div>
     </div>
-    <!-- Название -->
 </div>
 <!--Вывод страницы джема-->
 <div class="jam-container">
+    <div class="jam-status-container">
+<!--        Статус джема / Кнопка принятия участия / Загрузка игры        -->
+        {% if gamejam_detail.status == 'FN' %}
+                    <h2 class="countdown-status">Джем окончен</h2>
+        {% elif gamejam_detail.status == 'PR' %}
+                    {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
+                        <a href="poll" class="button">Принять участие</a>
+                    {% elif not request.user.is_authenticated  %}
+                        <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
+                    {% else %}
+                        <h2 style="text-align: center">Вы участник джема, дождитесь даты начала</h2>
+                    {% endif %}
+        {% elif gamejam_detail.status == 'OG' %}
+                    {% if request.user in gamejam_detail.users.all %}
+                        <a class="button" href="#popup1">Загрузить игру</a>
+                    {% else %}
+                        <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
+                    {% endif %}
+        {% endif %}
+    </div>
+
+    <!--    Таблица джема    -->
+    {% if gamejam_detail.status != 'PR' %}
     <div class="upl-container">
         <table class="games-table">
             <thead>
@@ -94,6 +108,7 @@
             </tbody>
         </table>
     </div>
+    {% endif %}
     <!-- Перечень игр (файлы), пользователь, возможность оценивая, отправить -->
 
     <!--{ endif %}-->
@@ -103,22 +118,9 @@
     Победитель: {{gamejam_detail.winner}}
     {% endif %} -->
     <!-- Тема и побеждатель -->
-    {% if gamejam_detail.status == 'OG' %}
-        {% if request.user not in gamejam_detail.users.all %}
-            <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
-        {% endif %}
-    {% endif %}
 
-    <!-- Загрузка -->
-    {% if gamejam_detail.status == 'PR' %}
-        {% if request.user.is_authenticated == False %}
-            <h2>Вы не вошли в свой аккаунт</h2>
-        {% else %}
-            <h2>Вы участник джема, дождитесь даты начала</h2>
-        {% endif %}
-    {% endif %}
-    <!-- Принять участие -->
-    
+
+
     <!-- {% if gamejam_detail.status == 'FN' %}
     <table>
         <thead>
@@ -162,8 +164,8 @@
 });
 </script>
 
-{% if gamejam_detail.status != 'FN' %}
 <script>
+    var countDownDate = 0;
     {% if gamejam_detail.status == 'PR' %}
     var countDownDate = new Date("{{ gamejam_detail.date_start|date:'Y-m-d H:i:s' }}").getTime();
     {% elif gamejam_detail.status == 'OG' %}
@@ -186,12 +188,10 @@
 
         if (distance < 0) {
             clearInterval(x);
-            {% if gamejam_detail.status == 'OG' %}
-            // document.getElementById("countdown-list").style.display = "none";
-            document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем окончен";
-            {% elif gamejam_detail.status == 'PR' %}
-            // document.getElementById("countdown-list").style.display = "none";
-            document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем начался";
+            // {% if gamejam_detail.status == 'OG' %}
+            // document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем окончен";
+            // {% elif gamejam_detail.status == 'PR' %}
+            // document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем начался";
 
             //window.location.reload(); // опасная штука, но в теории будет лучше всего работать
             // если на сервере поменяется статус джема, иначе дудос запросами
@@ -204,18 +204,128 @@
 
     var x = setInterval(updateCountdown, 1000);
 </script>
-{% endif %}
-
 <div id="popup1" class="overlay">
     <div class="popup">
-        <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data">
+        <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data" class="game-upload-form">
             {% csrf_token %}
-            <input type="file" name="game">
-            <input type="hidden" name="jam_uuid" value="{{gamejam_detail.uuid}}">
-            <button type="submit" class="btn btn-secondary">Отправить</button>
+            <input type="hidden" name="jam_uuid" value="{{ gamejam_detail.uuid }}">
+
+            <div class="form-header">
+                <h2>Добавьте вашу игру</h2>
+                <p>Пожалуйста, заполните следующие поля</p>
+                <a class="close" href="#">&times;</a>
+            </div>
+
+            <div class="form-content">
+                <div class="form-group">
+                    <label for="title">Название игры <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="form-input"
+                        placeholder="Название вашей игры"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Описание <span class="required">*</span></label>
+                    <textarea
+                            id="description"
+                            name="description"
+                            rows="4"
+                            class="form-input"
+                            placeholder="Опишите свою игру, ее механику, сюжет и то, что делает ее уникальной.."
+                            required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Картинка игры<span ></span></label>
+
+                        <span class="dragBox" >
+                            <span class="material-symbols-outlined upload-icon">image</span>
+                            <p>Перетащите картинку сюда или
+                            <span style="color: #7341ff;">нажмите</span> для загрузки</p>
+                            <p class="upload-hint">Форматы: PNG, JPG, JPEG, WEBP, JFIF (Максимально: 5MB)</p>
+
+
+                            <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif">
+                        </span>
+                    </div>
+                    <div id="preview"></div>
+
+
+                <div class="form-group">
+                    <label>Файл игры <span class="required">*</span></label>
+
+
+                    <span class="dragBox" >
+                            <span class="material-symbols-outlined upload-icon">folder_zip</span>
+
+                            <p>Перетащите файл сюда или
+                            <span style="color: #7341ff;">нажмите</span> для загрузки</p>
+                            <p class="upload-hint">Форматы: RAR, ZIP (Максимально: 3GB)</p>
+                            <input type="file" name="game_file" class="uploadFile"  onChange="dragNdrop(event, false)" ondragover="drag()" ondrop="drop()" accept=".rar,.zip" required>
+                        </span>
+                            <div class="file-info">
+                                <div class="file-details">
+                                    <div class="file-meta">
+                                        <span class="material-symbols-outlined file-icon">description</span>
+                                        <div>
+                                            <p class="file-name">my-awesome-game.zip</p>
+                                            <p class="file-size">32.4 MB</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                    </div>
+                </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <a class="btn btn-secondary cancel-button" href="#">
+                        <span class="material-symbols-outlined">cancel</span> <span>Отмена</span>
+                    </a>
+                    <button type="submit" class="btn btn-primary submit-button">
+                        <span class="material-symbols-outlined">send</span> <span>Отправить игру</span>
+                    </button>
+                </div>
+            </div>
         </form>
-        <a class="close" href="#">&times;</a>
     </div>
 </div>
+<script>
+
+    function dragNdrop(event, isImg = true) {
+        var fileName = URL.createObjectURL(event.target.files[0]);
+        if (isImg) {
+            var preview = document.getElementById("preview");
+            var previewImg = document.createElement("img");
+            previewImg.setAttribute("src", fileName);
+            preview.innerHTML = "";
+            preview.appendChild(previewImg);
+        }
+        else{
+            var preview = document.getElementsByClassName("file-info");
+            preview[0].style.display = "block";
+            game_file_name_element = document.getElementsByClassName("file-name");
+            game_file_name_element[0].innerHTML = event.target.files[0].name;
+
+            game_file_size_element = document.getElementsByClassName("file-size");
+            game_file_size_element[0].innerHTML = Math.round((event.target.files[0].size / 1024 / 1024)) + " MB";
+
+        }
+    }
+    function drag(event) {
+        event.target.parentNode.className = 'dragBox dragging';
+    }
+    function drop() {
+        event.target.parentNode.className = 'dragBox';
+    }
+</script>
 
 {% endblock %}

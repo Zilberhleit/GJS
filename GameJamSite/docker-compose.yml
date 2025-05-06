@@ -7,6 +7,9 @@ services:
             python3 manage.py runserver 0.0.0.0:8000"
    volumes:
      - .:/app
+     - sqlite_data:/data
+   environment:
+     - DB_FILE=/data/db.sqlite3
    ports:
      - "8000:8000"
    depends_on:
@@ -40,3 +43,6 @@ services:
    depends_on:
      - django
      - redis
+
+volumes:
+  sqlite_data:
