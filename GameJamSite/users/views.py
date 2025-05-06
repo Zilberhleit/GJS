@@ -76,6 +76,7 @@ def upload_photo_view(request, username):
         else:
             return JsonResponse({'message': 'Предоставлен неверный формат файла / Размер файла превышает 3Мб'})
 
+
 def redactor(request, username):
     """  Представление редактирования страницы пользователя """
     return render(request, template_name='pages/user_pages/redaction_page.html')

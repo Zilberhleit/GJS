@@ -9,7 +9,10 @@ class UserViewTest(TestCase):
         self.login_url = reverse('login')
         self.username = 'user'
         self.password = 'password123'
-        self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.user = User.objects.create_user(
+            email='test@example.com',
+            username=self.username,
+            password=self.password)
 
     def test_register_form(self):
         data = {
@@ -34,17 +37,24 @@ class UserViewTest(TestCase):
 
     def test_login_valid_user(self):
         login_data = {
-            'username': self.username,
+            'email': 'test@example.com',
             'password': self.password
         }
         response = self.client.post(self.login_url, login_data)
-        self.assertRedirects(response, reverse('profile_detail', kwargs={'username': self.username}))
+        print('response', response)
+        self.assertRedirects(response, reverse('profile_detail', kwargs={'username': self.user.username}))
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
     def test_user_detail(self):
         self.client.login(username='user', password='password123')
-        response = self.client.get(reverse('profile_detail', kwargs={'username': self.username}))
+        response = self.client.get(reverse('profile_detail', kwargs={'username': self.user.username}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed('pages/jams_pages/user_detail.html')
         self.assertContains(response, self.user.username)
         self.assertContains(response, self.user.email)
+
+    def test_logout(self):
+        self.client.logout()
+        response = self.client.get(reverse('jams_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('pages/jam_pages/jams.html')

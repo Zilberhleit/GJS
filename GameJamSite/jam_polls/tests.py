@@ -1,3 +1,4 @@
+import json
 import uuid
 from datetime import datetime, timedelta
 
@@ -44,27 +45,37 @@ class PollViewTest(TestCase):
         self.assertContains(response, GameJamTheme.objects.get(id=1).theme)
 
     def test_submit_poll(self):
-        response = self.client.post(reverse('submit', kwargs={'uuid':self.jam_case_1.uuid}), {'question_id':
-                                                                                              self.question1.id,
-                                                                                              'answer': '1'})
-        self.assertEqual(response.status_code, 200)
-        self.question1.refresh_from_db()
-        self.assertEqual(self.question1.total_votes, 1)
-        self.assertEqual(response.json()['question_id'], self.question2.id)
-
-        response = self.client.post(reverse('submit', kwargs={'uuid': self.jam_case_1.uuid}), {'question_id':
-                                                                                                   self.question2.id,
-                                                                                               'answer': '-1'})
-        self.assertEqual(response.status_code, 200)
-        self.question1.refresh_from_db()
-        self.assertEqual(self.question2.total_votes, 0)
-
-    def test_submit_poll_all_questions_completed(self):
+        """Тестирование прохождения опроса"""
         response = self.client.post(reverse('submit', kwargs={'uuid': self.jam_case_1.uuid}),
-                                    {'question_id': self.question2.id, 'answer': '1'})
-        self.assertEqual(response.status_code, 200)
-        self.jam_case_1.refresh_from_db()
-        self.assertIn(self.user, self.jam_case_1.users.all())
+                                    data=json.dumps({
+                                        'result': [
+                                            {'id': self.question1.id, 'decision': True},
+                                            {'id': self.question2.id, 'decision': False}
+                                        ]
+                                    }),
+                                    content_type='application/json')
 
-        self.assertEqual(response.json()['message'], 'Все вопросы пройдены')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['message'], "Все вопросы пройдены успешно")
         self.assertTrue(response.json()['redirect'])
+        self.assertTrue(self.jam_case_1.users.filter(id=self.user.id).exists())
+
+        self.question1.refresh_from_db()
+        self.question2.refresh_from_db()
+        self.assertTrue(ThemeVote.objects.filter(theme=self.question1, vote=True).exists())
+        self.assertEqual(ThemeVote.objects.filter(theme=self.question1, vote=True).count(), 1)
+        self.assertEqual(ThemeVote.objects.filter(theme=self.question2, vote=False).count(), 1)
+
+        """Повторная попытка пройти тест"""
+        response = self.client.post(reverse('submit', kwargs={'uuid': self.jam_case_1.uuid}),
+                                    data=json.dumps({
+                                        'result': [
+                                            {'id': self.question1.id, 'decision': True},
+                                            {'id': self.question2.id, 'decision': False}
+                                        ]
+                                    }),
+                                    content_type='application/json')
+        print('TSP response: ', response)
+        print('TSP JSON response: ', response.json())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['error'], 'Вы уже прошли опрос')
