@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 from jam_polls.models import GameJamTheme, Theme
 from jams.models import GameJam
-from jams.views import count_final_rating
+from jams.views import count_jam_rating
 
 
 @receiver(post_init, sender=GameJam)
@@ -22,7 +22,7 @@ def calculate_winner_when_jam_finished(sender, instance, **kwargs):
     if instance.previous_status != 'FN' and instance.status == 'FN':
         instance.previous_status = 'FN'
 
-        final_rating = count_final_rating(instance.uuid).order_by('-avg_rating')
+        final_rating = count_jam_rating(instance.uuid).order_by('-avg_rating')
 
         if final_rating.exists():
             winner_id = final_rating.first()['user__id']

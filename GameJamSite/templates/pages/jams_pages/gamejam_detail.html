@@ -17,8 +17,8 @@
 {% block content %}
 <div class="div-header">
     <div class="container-title">
-        <h1>{{gamejam_detail.title}}</h1>
-        <p>Тема: {{gamejam_detail.theme}}</p>
+        <h1>{{object.title}}</h1>
+        <p>Тема: {{object.theme}}</p>
     </div>
     <span class="del"></span>
     <div class="date">
@@ -26,9 +26,9 @@
 
             <div id="countdown">
                 <div class="container-date">
-                    {{gamejam_detail.date_start}}
+                    {{object.date_start}}
                     по
-                    {{gamejam_detail.date_end}}
+                    {{object.date_end}}
                     <!-- Даты конца и начала -->
                 </div>
                 <ul id="countdown-list">
@@ -45,18 +45,18 @@
 <div class="jam-container">
     <div class="jam-status-container">
 <!--        Статус джема / Кнопка принятия участия / Загрузка игры        -->
-        {% if gamejam_detail.status == 'FN' %}
+        {% if object.status == 'FN' %}
                     <h2 class="countdown-status">Джем окончен</h2>
-        {% elif gamejam_detail.status == 'PR' %}
-                    {% if request.user.is_authenticated and request.user not in gamejam_detail.users.all %}
+        {% elif object.status == 'PR' %}
+                    {% if request.user.is_authenticated and request.user not in object.users.all %}
                         <a href="poll" class="button">Принять участие</a>
                     {% elif not request.user.is_authenticated  %}
                         <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
                     {% else %}
                         <h2 style="text-align: center">Вы участник джема, дождитесь даты начала</h2>
                     {% endif %}
-        {% elif gamejam_detail.status == 'OG' %}
-                    {% if request.user in gamejam_detail.users.all %}
+        {% elif object.status == 'OG' %}
+                    {% if request.user in object.users.all %}
                         <a class="button" href="#popup1">Загрузить игру</a>
                     {% else %}
                         <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
@@ -65,7 +65,7 @@
     </div>
 
     <!--    Таблица джема    -->
-    {% if gamejam_detail.status != 'PR' %}
+    {% if object.status != 'PR' %}
     <div class="upl-container">
         <table class="games-table">
             <thead>
@@ -73,22 +73,35 @@
                     <th>Ранг</th>
                     <th>Автор</th>
                     <th>Игра</th>
-                    <th>Оценка</th>
+                    <th>Рейтинг</th>
+                    <th>Оценить</th>
                 </tr>
             </thead>
             <tbody>
+
+                {% if current_user_game %}
+                <tr style="background-color: #f0f0f0">
+                    <td class="rank"> {{ current_user_game.place }}</td>
+                    <td class="username"> {{ current_user_game.user.username }}</td>
+                    <td><a href="{% url 'game_page' object.uuid current_user_game.slug %}">{{ current_user_game.title }}</a></td>
+                    <td class="rank" style="color: red"> {{ current_user_game.avg_rating }}</td>
+                    <td> - </td>
+                </tr>
+                {% endif %}
+
                 {% for user_game in user_games %}
                 <tr>
-                    <td class="rank">{{forloop.counter}}</td>
+                    <td class="rank">{{ user_game.place }}</td>
                     <td class="username">{{ user_game.user.username }}</td>
                     <td>
-                        <a href="{% url 'download_file' gamejam_detail.uuid user_game.id %}">
-                            {{ user_game.cleaned_name }}
-                        </a>
+                        <a href="{% url 'game_page' object.uuid user_game.slug %}">{{ user_game.title }}</a>
+                    </td>
+                    <td style="color: red">
+                        {{ user_game.avg_rating }}
                     </td>
                     <td>
-                        {% if gamejam_detail.status == 'OG' and request.user in gamejam_detail.users.all and request.user != user_game.user %}
-                        <form action="{% url 'count_stars' gamejam_detail.uuid user_game.user.id %}" method="post" class="rating-form">
+                        {% if object.status == 'OG' and request.user in object.users.all and request.user != user_game.user %}
+                        <form action="{% url 'count_stars' object.uuid request.user.id %}"  method="post" class="rating-form">
                             {% csrf_token %}
                             <select name="stars" id="rating">
                                 <option value="5">★★★★★</option>
@@ -99,8 +112,6 @@
                             </select>
                             <button type="submit" class="btn-rate">Оценить</button>
                         </form>
-                        {% else %}
-                        {{ user_game.avg_rating }}
                         {% endif %}
                     </td>
                 </tr>
@@ -114,14 +125,14 @@
     <!--{ endif %}-->
 
     <!-- Ср оценка -->
-    <!-- {% if gamejam_detail.status == 'FN' %}
-    Победитель: {{gamejam_detail.winner}}
+    <!-- {% if object.status == 'FN' %}
+    Победитель: {{object.winner}}
     {% endif %} -->
     <!-- Тема и побеждатель -->
 
 
 
-    <!-- {% if gamejam_detail.status == 'FN' %}
+    <!-- {% if object.status == 'FN' %}
     <table>
         <thead>
         <tr>
@@ -166,10 +177,10 @@
 
 <script>
     var countDownDate = 0;
-    {% if gamejam_detail.status == 'PR' %}
-    var countDownDate = new Date("{{ gamejam_detail.date_start|date:'Y-m-d H:i:s' }}").getTime();
-    {% elif gamejam_detail.status == 'OG' %}
-    var countDownDate = new Date("{{ gamejam_detail.date_end|date:'Y-m-d H:i:s' }}").getTime();
+    {% if object.status == 'PR' %}
+    var countDownDate = new Date("{{ object.date_start|date:'Y-m-d H:i:s' }}").getTime();
+    {% elif object.status == 'OG' %}
+    var countDownDate = new Date("{{ object.date_end|date:'Y-m-d H:i:s' }}").getTime();
     {% endif %}
 
     function updateCountdown() {
@@ -188,9 +199,9 @@
 
         if (distance < 0) {
             clearInterval(x);
-            // {% if gamejam_detail.status == 'OG' %}
+            // {% if object.status == 'OG' %}
             // document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем окончен";
-            // {% elif gamejam_detail.status == 'PR' %}
+            // {% elif object.status == 'PR' %}
             // document.getElementsByClassName("countdown-status")[0].innerHTML = "Джем начался";
 
             //window.location.reload(); // опасная штука, но в теории будет лучше всего работать
@@ -206,9 +217,9 @@
 </script>
 <div id="popup1" class="overlay">
     <div class="popup">
-        <form action="{% url 'upload-game' gamejam_detail.uuid %}" method="post" enctype="multipart/form-data" class="game-upload-form">
+        <form action="{% url 'upload-game' object.uuid %}" method="post" enctype="multipart/form-data" class="game-upload-form">
             {% csrf_token %}
-            <input type="hidden" name="jam_uuid" value="{{ gamejam_detail.uuid }}">
+            <input type="hidden" name="jam_uuid" value="{{ object.uuid }}">
 
             <div class="form-header">
                 <h2>Добавьте вашу игру</h2>

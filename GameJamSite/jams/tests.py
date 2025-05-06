@@ -11,7 +11,7 @@ from django.test import TestCase
 from django.urls import reverse
 from jams.models import GameJam, Game, RatingUserJam
 from jams.signals import *
-from jams.views import count_final_rating
+from jams.views import count_jam_rating
 from users.models import User
 
 class JamsViewTest(TestCase):
@@ -119,7 +119,7 @@ class JamsViewTest(TestCase):
             {'user__username': 'user2', 'user__id': 2, 'avg_rating': 3.0}
         ]
 
-        result = count_final_rating(self.jam_case_3.uuid)
+        result = count_jam_rating(self.jam_case_3.uuid)
 
         self.assertEqual(result[0], expected_result[0])
         self.assertEqual(result[1], expected_result[1])

@@ -1,12 +1,13 @@
 import os
 from uuid import UUID
 
-from django.db.models import Avg
+from django.db.models import Avg, Count, Q
+from django.db.models import Window, F
+from django.db.models.functions import Rank
 from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from docutils.nodes import description
 
 from jams.models import GameJam, RatingUserJam, Game
 from users.models import User
@@ -26,43 +27,42 @@ class GameJamsLists(ListView):
 
 class GameJamDetail(DetailView):
     """ Представление просмотра деталей конкретного геймджема """
-    # ну что пайтонисты как там без инкапсуляции?
+
     model = GameJam
     template_name = 'pages/jams_pages/gamejam_detail.html'
-    context_object_name = "gamejam_detail"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_games = Game.objects.filter(jam_uuid=self.object.uuid).order_by('-uploaded_time')
-        for game in user_games:
-            game.cleaned_name = game.game_file.name.replace('zip_uploads/', '')
-
-        context["user_games"] = user_games
-
-        if self.object.status == 'FN':
-            context["final_rating"] = {}
-
-            final_rating = count_final_rating(self.object.uuid)
-
-            if self.request.user.is_authenticated:
-                current_user_rating = final_rating.filter(user=self.request.user)
-
-                if current_user_rating.exists():
-                    context["final_rating"]['current_user_rating'] = current_user_rating[0]
-
-                context["final_rating"]['all_rating'] = (final_rating
-                                                         .difference(current_user_rating)
-                                                         .order_by('-avg_rating'))
-            else:
-                context["final_rating"]['all_rating'] = final_rating.order_by('-avg_rating')
-
-        return context
 
     def get_object(self, queryset=None):
         return GameJam.objects.get(uuid=self.kwargs.get("uuid"))
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-def count_final_rating(uuid: UUID):
+        user_games = Game.objects.filter(jam_uuid=self.object.uuid).annotate(
+            avg_rating=Avg('user__rated_user__stars', filter=Q(user__rated_user__jam_uuid=self.object)),
+        ).annotate(
+            place=Window(
+                expression=Rank(),
+                order_by=F('avg_rating').desc(nulls_last=True)
+            )
+        ).order_by('-avg_rating')
+
+        context["user_games"] = user_games
+        if self.request.user.is_authenticated:
+            current_user_game = next(
+                (game for game in user_games if game.user_id == self.request.user.id),
+                None
+            )
+            if current_user_game:
+                context["current_user_game"] = current_user_game
+
+        return context
+
+
+def get_object(self, queryset=None):
+    return GameJam.objects.get(uuid=self.kwargs.get("uuid"))
+
+
+def count_jam_rating(uuid: UUID):
     """ Функция подсчета рейтинга геймджема """
     return (RatingUserJam.objects.filter(jam_uuid_id=uuid).values('user__username', 'user__id')
             .annotate(avg_rating=Avg('stars')))
@@ -85,7 +85,7 @@ def game_jam_upload(request, uuid: UUID):
             if (any(game_file.name.endswith(game_extension)
                     for game_extension in game_extensions) and
                     (image_file is None or any(image_file.name.endswith(image_extension)
-                         for image_extension in image_extensions))):
+                                               for image_extension in image_extensions))):
 
                 jam = get_object_or_404(GameJam, uuid=uuid)
                 prev_game = Game.objects.filter(
@@ -126,7 +126,7 @@ def game_jam_download(request, uuid: UUID, slug):
         return response
 
 
-def count_stars(request, uuid: UUID, id: int):
+def rate_game(request, uuid: UUID, id: int):
     """ Представление для рейтинга игры """
     if request.method == "POST" and 'stars' in request.POST:
         RatingUserJam.objects.update_or_create(jam_uuid=get_object_or_404(GameJam,
@@ -148,7 +148,6 @@ def game_page(request, uuid, slug):
         jam_uuid=uuid,
         slug=slug
     )
-    game.cleaned_name = game.game_file.name.replace('zip_uploads/', '')
     return render(request, 'pages/jams_pages/game_page.html', {'game': game})
 
 
