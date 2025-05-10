@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/game_page.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+{% endblock head %}
 
 {% block content %}
-<div class="game_image"></div>
-<div class="game_description"></div>
-<a href="{% url 'download_file' uuid=game.jam_uuid.uuid slug=game.slug %}">
-            {{ game.cleaned_name }}</a>
+<div class="game-container">
+    <h1 class="game_title">{{ game.title }}</h1>
+    <div class="game_author">
+        <span class="material-symbols-outlined text-sm">person</span>
+        <a class="game_author_link" href="{% url 'profile_detail' game.user.username %}"> {{ game.user.username }}</a>
+    </div>
+    {% if game.image %}
+    <div class="game_image">
+        <img src="{{ game.image.url }}" alt="{{ game.title }}">
+    </div>
+    {% endif %}
+
+<!--    !!!!!! Test image (delete after)-->
+        <div class="game_image">
+        <img src="https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format" alt="{{ game.title }}">
+    </div>
+
+
+    <div class="game_description">
+        {{ game.description|safe }}
+    </div>
+    <a href="{% url 'download_file' uuid=game.jam_uuid.uuid slug=game.slug %}" class="download-btn">
+        Скачать
+    </a>
+</div>
 {% endblock %}

@@ -22,7 +22,8 @@ class Game(models.Model):
     uploaded_time = models.DateTimeField(auto_now_add=True, verbose_name='Дата загрузки')
 
     def __str__(self):
-        return self.title + " - " + self.jam_uuid.title + ' - ' + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S")
+        return self.title + " - " + self.jam_uuid.title + ' - ' + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S") + \
+            ' - added by ' + self.user.username
 
     def save(self, *args, **kwargs):
         if not self.title and self.game_file:
