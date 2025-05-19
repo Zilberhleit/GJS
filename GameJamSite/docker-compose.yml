@@ -11,7 +11,7 @@ services:
    environment:
      - DB_FILE=/data/db.sqlite3
    ports:
-     - "$PORT:3000"
+     - "8000:8000"
    depends_on:
      - redis
 
