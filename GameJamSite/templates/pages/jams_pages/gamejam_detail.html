@@ -101,7 +101,7 @@
                     <td class="rank">{{ user_game.place }}</td>
                     <td class="username">{{ user_game.user.username }}</td>
                     <td>
-                        <a href="{% url 'game_page' object.uuid user_game.slug %}">{{ user_game.title }}</a>
+                        <a href="{% url 'download_file' object.uuid user_game.slug %}">{{ user_game.title }}</a>
                     </td>
                     <td style="color: red">
                         {% if user_game.avg_rating %}
@@ -112,7 +112,7 @@
                     </td>
                     <td>
                         {% if object.status == 'OG' and request.user in object.users.all and request.user != user_game.user %}
-                        <form action="{% url 'count_stars' object.uuid request.user.id %}"  method="post" class="rating-form">
+                        <form action="{% url 'count_stars' object.uuid user_game.user.id %}"  method="post" class="rating-form">
                             {% csrf_token %}
                             <select name="stars" id="rating">
                                 <option value="5">★★★★★</option>
@@ -267,13 +267,14 @@
                 <div class="form-group">
                     <label>Картинка игры<span ></span></label>
 
-                        <span class="dragBox" >
-                            <span class="material-symbols-outlined upload-icon">image</span>
-                            <p>Перетащите картинку сюда или
+                    <span class="dragBox" >
+                        <span class="material-symbols-outlined upload-icon">image</span>
+                        <p>Перетащите картинку сюда или
                             <span style="color: #7341ff;">нажмите</span> для загрузки</p>
-                            <p class="upload-hint">Форматы: PNG, JPG, JPEG, WEBP, JFIF (Максимально: 5MB)</p>
+                        <p class="upload-hint">Форматы: PNG, JPG, JPEG, WEBP, JFIF (Максимально: 5MB)</p>
 
 
+<<<<<<< Updated upstream
                             <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif"
                             value="{{ current_user_game.image }}">
                         </span>
@@ -282,13 +283,19 @@
                         <img src="{{ current_user_game.image.url }}" alt="">
                     {% endif %}
                     </div>
+=======
+                        <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif">
+                    </span>
+                </div>
+                <div id="preview"></div>
+>>>>>>> Stashed changes
 
 
                 <div class="form-group">
                     <label>Файл игры <span class="required">*</span></label>
 
 
-                    <span class="dragBox" >
+                    <span class="dragBox">
                             <span class="material-symbols-outlined upload-icon">folder_zip</span>
 
                             <p>Перетащите файл сюда или
@@ -320,7 +327,7 @@
                         <span class="material-symbols-outlined">send</span> <span>Отправить игру</span>
                     </button>
                 </div>
-            </div>
+            <!--</div>-->
         </form>
     </div>
 </div>
