@@ -18,13 +18,13 @@
     <div class="game_image">
         <img src="{{ game.image.url }}" alt="{{ game.title }}">
     </div>
-    {% endif %}
 
+    {% else %}
 <!--    !!!!!! Test image (delete after)-->
         <div class="game_image">
         <img src="https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format" alt="{{ game.title }}">
     </div>
-
+    {% endif %}
 
     <div class="game_description">
         {{ game.description|safe }}
