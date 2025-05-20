@@ -84,7 +84,14 @@
                     <td class="rank"> {{ current_user_game.place }}</td>
                     <td class="username"> {{ current_user_game.user.username }}</td>
                     <td><a href="{% url 'game_page' object.uuid current_user_game.slug %}">{{ current_user_game.title }}</a></td>
-                    <td class="rank" style="color: red"> {{ current_user_game.avg_rating }}</td>
+                    <td class="rank" style="color: red">
+                        {% if current_user_game.avg_rating %}
+                        {{ current_user_game.avg_rating }}
+                        {% else %}
+                        -
+                        {% endif %}
+
+                    </td>
                     <td> - </td>
                 </tr>
                 {% endif %}
@@ -97,7 +104,11 @@
                         <a href="{% url 'game_page' object.uuid user_game.slug %}">{{ user_game.title }}</a>
                     </td>
                     <td style="color: red">
+                        {% if user_game.avg_rating %}
                         {{ user_game.avg_rating }}
+                        {% else %}
+                        -
+                        {% endif %}
                     </td>
                     <td>
                         {% if object.status == 'OG' and request.user in object.users.all and request.user != user_game.user %}
@@ -235,6 +246,7 @@
                         id="title"
                         name="title"
                         class="form-input"
+                        value="{{ current_user_game.title }}"
                         placeholder="Название вашей игры"
                         required
                     />
@@ -249,7 +261,7 @@
                             class="form-input"
                             placeholder="Опишите свою игру, ее механику, сюжет и то, что делает ее уникальной.."
                             required
-                    ></textarea>
+                    >{{ current_user_game.description }}</textarea>
                 </div>
 
                 <div class="form-group">
@@ -262,10 +274,14 @@
                             <p class="upload-hint">Форматы: PNG, JPG, JPEG, WEBP, JFIF (Максимально: 5MB)</p>
 
 
-                            <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif">
+                            <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif"
+                            value="{{ current_user_game.image }}">
                         </span>
                     </div>
-                    <div id="preview"></div>
+                    <div id="preview">{% if current_user_game.image %}
+                        <img src="{{ current_user_game.image.url }}" alt="">
+                    {% endif %}
+                    </div>
 
 
                 <div class="form-group">
@@ -280,13 +296,12 @@
                             <p class="upload-hint">Форматы: RAR, ZIP (Максимально: 3GB)</p>
                             <input type="file" name="game_file" class="uploadFile"  onChange="dragNdrop(event, false)" ondragover="drag()" ondrop="drop()" accept=".rar,.zip" required>
                         </span>
-                            <div class="file-info">
+                            <div class="file-info" style="display: none;">
                                 <div class="file-details">
                                     <div class="file-meta">
                                         <span class="material-symbols-outlined file-icon">description</span>
                                         <div>
-                                            <p class="file-name">my-awesome-game.zip</p>
-                                            <p class="file-size">32.4 MB</p>
+                                            <p class="file-name">{{ current_user_game.game_file.name|slice:"12:" }}</p>
                                         </div>
                                     </div>
 

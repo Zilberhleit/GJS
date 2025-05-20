@@ -3,7 +3,7 @@ from uuid import UUID
 
 from django.db.models import Avg, Count, Q
 from django.db.models import Window, F
-from django.db.models.functions import Rank
+from django.db.models.functions import Rank, RowNumber
 from django.http import HttpRequest, HttpResponseNotFound, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -41,7 +41,7 @@ class GameJamDetail(DetailView):
             avg_rating=Avg('user__rated_user__stars', filter=Q(user__rated_user__jam_uuid=self.object)),
         ).annotate(
             place=Window(
-                expression=Rank(),
+                expression=RowNumber(),
                 order_by=F('avg_rating').desc(nulls_last=True)
             )
         ).order_by('-avg_rating')
