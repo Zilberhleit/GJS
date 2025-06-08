@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jams', '0004_remove_gamejams_id_alter_gamejams_uuid'),
+        ('jams', '0002_initial'),
     ]
 
     operations = [

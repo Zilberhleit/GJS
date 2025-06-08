@@ -7,13 +7,23 @@ services:
             python3 manage.py runserver 0.0.0.0:8000"
    volumes:
      - .:/app
-     - sqlite_data:/data
-   environment:
-     - DB_FILE=/data/db.sqlite3
+
    ports:
      - "8000:8000"
    depends_on:
-     - redis
+     - db
+
+
+ db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    container_name: postgres
+    ports:
+      - 5432:5432
+
 
  redis:
    image: redis:alpine
@@ -32,6 +42,7 @@ services:
    depends_on:
      - django
      - redis
+     - db
 
  celery-beat:
    container_name: celery-beat
@@ -43,6 +54,8 @@ services:
    depends_on:
      - django
      - redis
+     - db
+
 
 volumes:
-  sqlite_data:
+  postgres_data:
