@@ -7,3 +7,4 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name="Электронная почта")
     avatar_image = models.ImageField(upload_to="users", blank=True, null=True)
     hat_image = models.ImageField(upload_to="users", blank=True, null=True)
+    subscribers = models.IntegerField(default=0, verbose_name="Подписчики")

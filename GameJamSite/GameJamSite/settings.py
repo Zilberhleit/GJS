@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'GameJamSite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gjs',
-        'USER': 'django_admin',
-        'PASSWORD': 'admin',
+        'NAME': 'gjs_db',
+        'USER': 'gjs_user',
+        'PASSWORD': 'Ef36Krj$2',
         'HOST': 'postgres',
         'PORT': '5432',
     }

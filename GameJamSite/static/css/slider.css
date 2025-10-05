@@ -70,11 +70,12 @@
 .banner .gmj-content {
     position: absolute;
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     bottom: 0;
-    left: 50%;
+    left: 25%;
     transform: translateX(-44%);
     width: 100vw;
     bottom: 80px;

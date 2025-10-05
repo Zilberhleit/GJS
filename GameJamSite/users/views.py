@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView
+from django.middleware.csrf import get_token
 
 from users.forms import LoginUserForm, RegisterUserForm
 from users.models import User
@@ -28,7 +29,14 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect(reverse('profile_detail', kwargs={'username': user.username}))
+                # upload_data = {
+                #     'upload_url': reverse('upload-photo', args=[user.username]),
+                #     'csrf_token': get_token(request)
+                # }
+                return redirect(reverse('profile_detail', 
+                                        kwargs={'username': user.username,
+                                                # 'upload_data':upload_data
+                                                }))
             else:
                 form.add_error(None, 'Неверный адрес электронной почты или пароль.')
     else:
@@ -51,6 +59,9 @@ class Profile(DetailView):
         context = super().get_context_data(**kwargs)
         context['past_jams'] = get_user_jams_history(self.kwargs.get('username'))
         context['user_games'] = get_user_games_history(self.kwargs.get('username'))
+        context['upload_data'] = {
+                    'upload_url': reverse('upload-photo', args=[self.kwargs.get('username')])
+                }
         return context
 
 
@@ -75,7 +86,6 @@ def upload_photo_view(request, username):
 
         else:
             return JsonResponse({'message': 'Предоставлен неверный формат файла / Размер файла превышает 3Мб'})
-
 
 def redactor(request, username):
     """  Представление редактирования страницы пользователя """

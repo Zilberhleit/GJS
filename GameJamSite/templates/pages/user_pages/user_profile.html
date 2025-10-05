@@ -36,8 +36,13 @@
                 image/jfif">
                 <span class="load-photo-status" style="color: white;"></span>
             {% endif %}
+            <div class="subscribe">
+                <button class="subscribe-button">Подписаться +</button>
+                <div>кол-во подписюнов</div>
+            </div>
         </div>
     </div>
+    <!-- <li><a href="#" class="menu-button">Создать джем</a></li> -->
     <br>
 </div>
 
@@ -69,91 +74,19 @@
             </div>
             {% endfor %}
         </div>
-        <!-- тут должен отобразиться список разработанных игр -->
-        <!-- с возможностью скачивания -->
-        <!-- списибо деду за победу (удалить все комментарии!!!!!!) -->
+        
     </div>
 </div>
-
+<!-- тут должен отобразиться список разработанных игр -->
+        <!-- с возможностью скачивания -->
+        <!-- списибо деду за победу (удалить все комментарии!!!!!!) -->
 {% endblock %}
 
 {% block footercontent %}
 
-<script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('.user_games').forEach(card => {
-            card.addEventListener('click', function(event) {
-                console.log("Clicked:", this); // Проверяем, срабатывает ли клик
-                if (event.target === this || event.target.tagName === 'H5') {
-                    this.classList.toggle('open');
-                }
-                console.log("Class list:", this.classList); // Проверяем, меняется ли класс
-            });
-        });
-});
-</script>
+<script src="{% static '/dynamic/profile_dropdown_list.js' %}"></script>
 
-<!-- Скрипт для смены аватарок через ajax -->
-<script>
-    const imageInput = document.getElementById('avatar-input');
-    const hatInput = document.getElementById('hat-input');
-
-    const loadPhotoStatus = document.querySelector('.load-photo-status');
-    const url = "{% url 'upload-photo' request.user.username %}";
-
-    imageInput.addEventListener('change', function(event) {
-        event.preventDefault();
-
-        const formData = new FormData();
-        formData.append('avatar_image', imageInput.files[0]);
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-
-        fetch(url, {
-            method: 'POST',
-            body: formData
-
-        })
-            .then(response => response.json())
-            .then(data => {
-
-                if (data.avatar){
-                    const avatarImg = document.getElementById('avatar-img');
-                    avatarImg.src = data.avatar;
-                }
-
-                loadPhotoStatus.textContent = data['message'];
-
-            })
-            .catch(error => console.error(error));
-    });
-
-    hatInput.addEventListener('change', function(event) {
-        event.preventDefault();
-
-        const formData = new FormData();
-        formData.append('hat_image', hatInput.files[0]);
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-        fetch(url, {
-            method: 'POST',
-            body: formData
-
-        })
-            .then(response => response.json())
-            .then(data => {
-
-
-                if (data.hat){
-                    const hatImg = document.getElementById('hat-img');
-                    hatImg.src = data.hat;
-                }
-
-                loadPhotoStatus.textContent = data['message'];
-
-            })
-            .catch(error => console.error(error));
-    });
-</script>
+{{ upload_data|json_script:"upload-data"}}
+<script src="{% static '/dynamic/profile_photo.js' %}"></script>
 
 {% endblock %}
