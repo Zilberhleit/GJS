@@ -141,6 +141,8 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = BASE_DIR / 'assets'
 
 AUTHENTICATION_BACKENDS = (
+    # new auth
+    #'users.authentication.EmailOrUsernameAuthBackend',
     'users.authentication.EmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )

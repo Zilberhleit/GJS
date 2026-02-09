@@ -6,7 +6,10 @@
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background-position 0.5s ease-in-out;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background-position 0.5s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     background-size: 250%;
     background-position: 0;
@@ -28,7 +31,7 @@
 }
 
 .menu-button::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 26px;
     right: 0;
@@ -45,20 +48,23 @@
     width: 100%;
 }
 
-.subscribe-button {
-    background: linear-gradient(55deg, #3d3aff, #9736ff, #ff3a8c);
+.follow-button {
+    background: linear-gradient(55deg, #ff3a3a, #ff7636, #ff3a8c);
     border: none;
     color: white;
     border-radius: 5px;
-    padding: 10px 20px;
+    padding: 5px 10px;
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background-position 0.5s ease-in-out;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background-position 0.5s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     background-size: 250%;
     background-position: 0;
 }
 
-.subscribe-button:focus {
+.unfollow-button:focus {
     background: linear-gradient(55deg, #ff3a3a, #ff7636, #ff3a8c);
 }

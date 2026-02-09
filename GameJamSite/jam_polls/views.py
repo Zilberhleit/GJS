@@ -29,7 +29,9 @@ class PollList(ListView):
 
         question_queryset = GameJamTheme.objects.filter(gamejam=jam).values('id', 'theme')
         context["poll_list_json"] = list(question_queryset)
-
+        context["user_answers_data"] = {
+            "user_answers_url": reverse('submit', args=[self.kwargs.get('uuid')])
+        }
         return context
 
 

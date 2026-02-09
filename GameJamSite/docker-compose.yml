@@ -1,20 +1,21 @@
 services:
- django:
-   container_name: django
-   build: .
-   command: >
-     sh -c " python3 manage.py migrate &&
-            python3 manage.py runserver 0.0.0.0:8000"
-   volumes:
-     - .:/app
+  django:
+    container_name: django
+    build: .
+    command: >
+      sh -c "
+             python3 manage.py migrate &&
+             python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+      - "C:\\Users\\zilbe\\Desktop\\GJS_dir\\GJS\\docs\\source:/app/docs/source"
+      - "C:\\Users\\zilbe\\Desktop\\GJS_dir\\GJS\\docs\\build:/app/docs/build"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
-   ports:
-     - "8000:8000"
-   depends_on:
-     - db
-
-
- db:
+  db:
     image: postgres:16-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -24,38 +25,36 @@ services:
     ports:
       - 5432:5432
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
 
- redis:
-   image: redis:alpine
-   container_name: redis
-   ports:
-     - "6379:6379"
+  celery:
+    build: .
+    command: celery -A GameJamSite worker -l INFO
+    environment:
+      - HOME=/app
+    volumes:
+      - .:/app
+    user: "1000:1000"
+    depends_on:
+      - django
+      - redis
+      - db
 
- celery:
-   build: .
-   command: celery -A GameJamSite worker -l INFO
-   environment:
-     - HOME=/app
-   volumes:
-     - .:/app
-   user: "1000:1000"
-   depends_on:
-     - django
-     - redis
-     - db
-
- celery-beat:
-   container_name: celery-beat
-   build:
-     context: .
-   command: celery -A GameJamSite beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-   volumes:
-     - .:/app
-   depends_on:
-     - django
-     - redis
-     - db
-
+  celery-beat:
+    container_name: celery-beat
+    build:
+      context: .
+    command: celery -A GameJamSite beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+    depends_on:
+      - django
+      - redis
+      - db
 
 volumes:
   postgres_data:

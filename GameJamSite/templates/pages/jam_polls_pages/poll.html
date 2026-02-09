@@ -20,6 +20,7 @@
     </div>
 </div>
 <div id="circle-container"></div>
+<!--Перенести JS-код в отдельный файл-->
 <script>
     let currentQuestionID = 0;
     const questions = {{ poll_list_json|safe }};
@@ -68,45 +69,12 @@
         });
     }
 </script>
-<script>
-    const container = document.getElementById('circle-container');
-    for (let i = 0; i < 4; i++) {
-        console.log("aaaa" + i);
-        div = document.createElement('div');
-        div.className = 'circle';
-        container.appendChild(div);
-    }
 
-    const circles = document.querySelectorAll('.circle');
+<script src="{% static '/dynamic/poll_circle.js' %}"></script>
+{{ user_answers_data|json_script:"user-answers-data"}}
+{{ poll_list_json|json_script:"poll-list-json"}}
+<script src="% static '/dynamic/submit_poll.js' %"></script>
 
-    container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
-        circles.forEach(circle => {
-            const circleRect = circle.getBoundingClientRect();
-            const circleX = circleRect.left + circleRect.width / 2;
-            const circleY = circleRect.top + circleRect.height / 2;
-
-            const dx = circleX - e.clientX;
-            const dy = circleY - e.clientY;
-
-            // Нормализуем вектор и умножаем на дистанцию
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const moveX = (dx / distance) * 20;
-            const moveY = (dy / distance) * 20;
-
-            circle.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        });
-    });
-
-    container.addEventListener('mouseleave', () => {
-        circles.forEach(circle => {
-            circle.style.transform = 'translate(0, 0)';
-        });
-    });
-</script>
 {% endblock %}
 {% block footercontent %}
 {% endblock %}

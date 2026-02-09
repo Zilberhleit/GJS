@@ -10,42 +10,45 @@ import sys
 
 import django
 
-project = 'GJS!'
-copyright = '2025, Zilberhleyt Mark, Ignatkin Ilya, Pashkin Valeriy, Chetin Grigoriy'
-author = 'Zilberhleyt Mark, Ignatkin Ilya, Pashkin Valeriy, Chetin Grigoriy'
+project = "GJS!"
+copyright = "2025, Zilberhleyt Mark, Ignatkin Ilya, Pashkin Valeriy, Chetin Grigoriy"
+author = "Zilberhleyt Mark, Ignatkin Ilya, Pashkin Valeriy, Chetin Grigoriy"
 
 #  путь к проекту Django
-sys.path.insert(0, os.path.abspath('../../GameJamSite'))
-
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../../GameJamSite")
+)
+# sys.path.insert(0, os.path.abspath("/GameJamSite"))
+sys.path.insert(0, project_root)
 # Настройки для django
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'GameJamSite.settings'
+os.environ["DJANGO_SETTINGS_MODULE"] = "GameJamSite.settings"
 django.setup()
 
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
     # 'sphinxcontrib.django',
-    'sphinx_autodoc_typehints',
+    "sphinx_autodoc_typehints",
 ]
 
 
 # Автодокументирование
 autodoc_default_options = {
-    'members': True,
-    'member-order': 'bysource',
-    'special-members': '__init__',
-    'undoc-members': True,
-    'exclude-members': '__weakref__'
+    "members": True,
+    "member-order": "bysource",
+    "special-members": "__init__",
+    "undoc-members": True,
+    "exclude-members": "__weakref__",
 }
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 exclude_patterns = []
 
-language = 'ru'
+language = "ru"
 
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Тема
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"

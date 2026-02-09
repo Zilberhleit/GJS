@@ -22,6 +22,7 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(forms.Form):
     """  Форма авторизации пользователя   """
     email = forms.EmailField(label='Почта')
+    #username = forms.CharField(max_length=63)
     password = forms.CharField(widget=forms.PasswordInput, label='Пароль')
 
 

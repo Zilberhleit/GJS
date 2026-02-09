@@ -56,7 +56,7 @@ def set_final_theme_when_jam_prepared(sender, instance, **kwargs):
         else:
             instance.theme = None
 
-
+#Проблемы когда тем в базе нет, то возникает ошибка
 @receiver(pre_save, sender=GameJam)
 def set_random_themes_for_jam_when_it_created(sender, instance, **kwargs):
     """ Сигнал выбирающий 3-и случайные темы на голосование при создании геймджема """

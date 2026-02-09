@@ -50,10 +50,6 @@ label {cursor: pointer;}
   outline: 6px solid #696AE0;
 }
 
-.nickname {
-    color: #ff6b6b;
-}
-
 .mail {
     color: rgb(82, 82, 82);
 }
@@ -82,12 +78,37 @@ label {cursor: pointer;}
     overflow: hidden;
 }
 
+.subscribe-div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
 #hat-img {
     position: absolute;
     width: 100%;
     inset:  0 0 0 0;
     height: auto;
     z-index: -1;
+}
+
+.hat-banner {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 59vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    /*height: 65%;
+    z-index: -1;
+    overflow: hidden;
+    aspect-ratio: 640 / 200;*/
+}
+
+.profile-foreground {
+    height: 100%;
 }
 
 .avatar-block button {

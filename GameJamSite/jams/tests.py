@@ -32,6 +32,7 @@ class JamsViewTest(TestCase):
             theme="Space Exploration",
             status='OG'
         )
+        self.jam_case_1.users.set([self.user])
         self.jam_case_2 = GameJam.objects.create(
             uuid=uuid.uuid4(),
             title="Summer Game Jam 2024",
@@ -40,7 +41,6 @@ class JamsViewTest(TestCase):
             theme="Exploration",
             status='PR'
         )
-        self.jam_case_1.users.set([self.user])
         self.jam_case_3 = GameJam.objects.create(
             uuid=uuid.uuid4(),
             title="Autumn Game Jam 2024",
@@ -78,7 +78,8 @@ class JamsViewTest(TestCase):
         """ Функция тестирования страницы джема """
         response = self.client.get(reverse('gamejam_detail', kwargs={'uuid':self.jam_case_1.uuid}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('pages/jams_pages/gamejam_detail.html')
+        # Изменение строки ниже
+        self.assertTemplateUsed(response, 'pages/jams_pages/gamejam_detail.html')
         self.assertContains(response, self.jam_case_1.title)
         self.assertContains(response, self.jam_case_1.theme)
         self.assertContains(response, self.user.username)
@@ -114,15 +115,23 @@ class JamsViewTest(TestCase):
 
     def test_count_stars(self):
         """ Функция тестирования подсчёта средней оценки """
+        # Изменение
+        user1_id = self.user.id 
+        user2_id = self.user2.id
+
         expected_result = [
-            {'user__username': 'testuser', 'user__id': 1, 'avg_rating': 4.0},
-            {'user__username': 'user2', 'user__id': 2, 'avg_rating': 3.0}
+            {'user__username': 'testuser', 'user__id': user1_id, 'avg_rating': 4.0},
+            {'user__username': 'user2', 'user__id': user2_id, 'avg_rating': 3.0}
         ]
 
         result = count_jam_rating(self.jam_case_3.uuid)
 
-        self.assertEqual(result[0], expected_result[0])
-        self.assertEqual(result[1], expected_result[1])
+        result_sorted = sorted(result, key=lambda x: x['user__id'])
+        expected_sorted = sorted(expected_result, key=lambda x: x['user__id'])
+
+        # self.assertEqual(result[0], expected_result[0])
+        # self.assertEqual(result[1], expected_result[1])
+        self.assertEqual(result_sorted, expected_sorted)
 
 
 class TestGameJamModels(TestCase):
