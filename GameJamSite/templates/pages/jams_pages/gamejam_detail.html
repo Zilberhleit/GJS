@@ -1,20 +1,12 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}" />
+<link rel="stylesheet" href="{% static 'css/popup.css' %}" />
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet"
+/>
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}">
-<link rel="stylesheet" href="{% static 'css/popup.css' %}">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-
-{% endblock %}
-
-
-{% block headercontent %}
-
-{% endblock %}
-
-
-{% block content %}
+{% endblock %} {% block headercontent %} {% endblock %} {% block content %}
 <div class="div-header">
     <div class="container-title">
         <h1>{{object.title}}</h1>
@@ -23,44 +15,65 @@
     <span class="del"></span>
     <div class="date">
         <div class="countdown-container">
-
             <div id="countdown">
                 <div class="container-date">
-                    {{object.date_start}}
-                    по
-                    {{object.date_end}}
+                    {{object.date_start}} по {{object.date_end}}
                     <!-- Даты конца и начала -->
                 </div>
                 <ul id="countdown-list">
-                    <li class="countdown-element"><span id="days"></span><p>Дней</p></li>
-                    <li class="countdown-element"><span id="hours"></span><p>Часов</p></li>
-                    <li class="countdown-element"><span id="minutes"></span><p>Минут</p></li>
-                    <li class="countdown-element"><span id="seconds"></span><p>Секунд</p></li>
+                    <li class="countdown-element">
+                        <span id="days"></span>
+                        <p>Дней</p>
+                    </li>
+                    <li class="countdown-element">
+                        <span id="hours"></span>
+                        <p>Часов</p>
+                    </li>
+                    <li class="countdown-element">
+                        <span id="minutes"></span>
+                        <p>Минут</p>
+                    </li>
+                    <li class="countdown-element">
+                        <span id="seconds"></span>
+                        <p>Секунд</p>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+
 <!--Вывод страницы джема-->
 <div class="jam-container">
     <div class="jam-status-container">
-<!--        Статус джема / Кнопка принятия участия / Загрузка игры        -->
-        {% if object.status == 'FN' %}
-                    <h2 class="countdown-status">Джем окончен</h2>
-        {% elif object.status == 'PR' %}
-                    {% if request.user.is_authenticated and request.user not in object.users.all %}
-                        <a href="poll" class="button">Принять участие</a>
-                    {% elif not request.user.is_authenticated  %}
-                        <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
-                    {% else %}
-                        <h2 style="text-align: center">Вы участник джема, дождитесь даты начала</h2>
-                    {% endif %}
-        {% elif object.status == 'OG' %}
-                    {% if request.user in object.users.all %}
-                        <a class="button" href="#popup1">Загрузить игру</a>
-                    {% else %}
-                        <h2>Вы не можете загружать свои работы, так как вы не участник джема</h2>
-                    {% endif %}
+        <!--        Статус джема / Кнопка принятия участия / Загрузка игры        -->
+        {% if object.status == 'PR' %} {% if request.user.is_authenticated and
+        request.user not in object.users.all %}
+        <a href="poll" class="button">Принять участие</a>
+        <a href="join_jam" class="button">Принять участие</a>
+        {% elif not request.user.is_authenticated %}
+        <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
+        {% else %}
+        <h2 style="text-align: center">
+            Вы участник джема, дождитесь даты начала
+        </h2>
+        <a href="leave_jam" class="button">Покинуть джем</a>
+        {% endif %} {% elif object.status == 'OG' %} {% if request.user in
+        object.users.all %}
+        <h2 style="text-align: center">Ждём ваших работ</h2>
+        <a class="button" href="#popup1">Загрузить игру</a>
+        {% else %}
+        <h2>
+            Вы не можете загружать свои работы, так как вы не участник джема
+        </h2>
+        {% endif %} {% elif object.status == 'RT' %} {% if request.user in
+        object.users.all %}
+        <h2 style="text-align: center">Оцените своих соперников</h2>
+
+        {% else %}
+        <h2>Вы не можете ставить оценки, так как вы не участник джема</h2>
+        {% endif %} {% elif object.status == 'FN' %}
+        <h2 class="countdown-status">Джем окончен</h2>
         {% endif %}
     </div>
 
@@ -78,41 +91,46 @@
                 </tr>
             </thead>
             <tbody>
-
                 {% if current_user_game %}
                 <tr style="background-color: #f0f0f0">
-                    <td class="rank"> {{ current_user_game.place }}</td>
-                    <td class="username"> {{ current_user_game.user.username }}</td>
-                    <td><a href="{% url 'game_page' object.uuid current_user_game.slug %}">{{ current_user_game.title }}</a></td>
-                    <td class="rank" style="color: red">
-                        {% if current_user_game.avg_rating %}
-                        {{ current_user_game.avg_rating }}
-                        {% else %}
-                        -
-                        {% endif %}
-
+                    <td class="rank">{{ current_user_game.place }}</td>
+                    <td class="username">
+                        {{ current_user_game.user.username }}
                     </td>
-                    <td> - </td>
+                    <td>
+                        <a
+                            href="{% url 'game_page' object.uuid current_user_game.slug %}"
+                            >{{ current_user_game.title }}</a
+                        >
+                    </td>
+                    <td class="rank" style="color: red">
+                        {% if current_user_game.avg_rating %} {{
+                        current_user_game.avg_rating }} {% else %} - {% endif %}
+                    </td>
+                    <td>-</td>
                 </tr>
-                {% endif %}
-
-                {% for user_game in user_games %}
+                {% endif %} {% for user_game in user_games %}
                 <tr>
                     <td class="rank">{{ user_game.place }}</td>
                     <td class="username">{{ user_game.user.username }}</td>
                     <td>
-                        <a href="{% url 'download_file' object.uuid user_game.slug %}">{{ user_game.title }}</a>
+                        <a
+                            href="{% url 'download_file' object.uuid user_game.slug %}"
+                            >{{ user_game.title }}</a
+                        >
                     </td>
                     <td style="color: red">
-                        {% if user_game.avg_rating %}
-                        {{ user_game.avg_rating }}
-                        {% else %}
-                        -
-                        {% endif %}
+                        {% if user_game.avg_rating %} {{ user_game.avg_rating }}
+                        {% else %} - {% endif %}
                     </td>
                     <td>
-                        {% if object.status == 'OG' and request.user in object.users.all and request.user != user_game.user %}
-                        <form action="{% url 'count_stars' object.uuid user_game.user.id %}"  method="post" class="rating-form">
+                        {% if object.status == 'OG' and request.user in
+                        object.users.all and request.user != user_game.user %}
+                        <form
+                            action="{% url 'count_stars' object.uuid user_game.user.id %}"
+                            method="post"
+                            class="rating-form"
+                        >
                             {% csrf_token %}
                             <select name="stars" id="rating">
                                 <option value="5">★★★★★</option>
@@ -121,7 +139,9 @@
                                 <option value="2">★★</option>
                                 <option value="1">★</option>
                             </select>
-                            <button type="submit" class="btn-rate">Оценить</button>
+                            <button type="submit" class="btn-rate">
+                                Оценить
+                            </button>
                         </form>
                         {% endif %}
                     </td>
@@ -140,8 +160,6 @@
     Победитель: {{object.winner}}
     {% endif %} -->
     <!-- Тема и побеждатель -->
-
-
 
     <!-- {% if object.status == 'FN' %}
     <table>
@@ -171,21 +189,7 @@
     {% endif %} -->
 </div>
 
-
-<script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('.upl-card-container').forEach(card => {
-            card.addEventListener('click', function(event) {
-                console.log("Clicked:", this); // Проверяем, срабатывает ли клик
-                if (event.target === this || event.target.tagName === 'H5') {
-                    this.classList.toggle('open');
-                }
-                console.log("Class list:", this.classList); // Проверяем, меняется ли класс
-            });
-        });
-});
-</script>
-
+<!-- Скрипт, который динамически обновляет таймер -->
 <script>
     var countDownDate = 0;
     {% if object.status == 'PR' %}
@@ -226,139 +230,5 @@
 
     var x = setInterval(updateCountdown, 1000);
 </script>
-<div id="popup1" class="overlay">
-    <div class="popup">
-        <form action="{% url 'upload-game' object.uuid %}" method="post" enctype="multipart/form-data" class="game-upload-form">
-            {% csrf_token %}
-            <input type="hidden" name="jam_uuid" value="{{ object.uuid }}">
 
-            <div class="form-header">
-                <h2>Добавьте вашу игру</h2>
-                <p>Пожалуйста, заполните следующие поля</p>
-                <a class="close" href="#">&times;</a>
-            </div>
-
-            <div class="form-content">
-                <div class="form-group">
-                    <label for="title">Название игры <span class="required">*</span></label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        class="form-input"
-                        value="{{ current_user_game.title }}"
-                        placeholder="Название вашей игры"
-                        required
-                    />
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Описание <span class="required">*</span></label>
-                    <textarea
-                            id="description"
-                            name="description"
-                            rows="4"
-                            class="form-input"
-                            placeholder="Опишите свою игру, ее механику, сюжет и то, что делает ее уникальной.."
-                            required
-                    >{{ current_user_game.description }}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Картинка игры<span ></span></label>
-
-                    <span class="dragBox" >
-                        <span class="material-symbols-outlined upload-icon">image</span>
-                        <p>Перетащите картинку сюда или
-                            <span style="color: #7341ff;">нажмите</span> для загрузки</p>
-                        <p class="upload-hint">Форматы: PNG, JPG, JPEG, WEBP, JFIF (Максимально: 5MB)</p>
-
-
-<<<<<<< Updated upstream
-                            <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif"
-                            value="{{ current_user_game.image }}">
-                        </span>
-                    </div>
-                    <div id="preview">{% if current_user_game.image %}
-                        <img src="{{ current_user_game.image.url }}" alt="">
-                    {% endif %}
-                    </div>
-=======
-                        <input type="file" name="image" class="uploadFile" onChange="dragNdrop(event)" ondragover="drag(event)" ondrop="drop()" accept=".png,.jpg,.jpeg,.webp,.jfif">
-                    </span>
-                </div>
-                <div id="preview"></div>
->>>>>>> Stashed changes
-
-
-                <div class="form-group">
-                    <label>Файл игры <span class="required">*</span></label>
-
-
-                    <span class="dragBox">
-                            <span class="material-symbols-outlined upload-icon">folder_zip</span>
-
-                            <p>Перетащите файл сюда или
-                            <span style="color: #7341ff;">нажмите</span> для загрузки</p>
-                            <p class="upload-hint">Форматы: RAR, ZIP (Максимально: 3GB)</p>
-                            <input type="file" name="game_file" class="uploadFile"  onChange="dragNdrop(event, false)" ondragover="drag()" ondrop="drop()" accept=".rar,.zip" required>
-                        </span>
-                            <div class="file-info" style="display: none;">
-                                <div class="file-details">
-                                    <div class="file-meta">
-                                        <span class="material-symbols-outlined file-icon">description</span>
-                                        <div>
-                                            <p class="file-name">{{ current_user_game.game_file.name|slice:"12:" }}</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                    </div>
-                </div>
-
-                </div>
-
-                <div class="form-actions">
-                    <a class="btn btn-secondary cancel-button" href="#">
-                        <span class="material-symbols-outlined">cancel</span> <span>Отмена</span>
-                    </a>
-                    <button type="submit" class="btn btn-primary submit-button">
-                        <span class="material-symbols-outlined">send</span> <span>Отправить игру</span>
-                    </button>
-                </div>
-            <!--</div>-->
-        </form>
-    </div>
-</div>
-<script>
-
-    function dragNdrop(event, isImg = true) {
-        var fileName = URL.createObjectURL(event.target.files[0]);
-        if (isImg) {
-            var preview = document.getElementById("preview");
-            var previewImg = document.createElement("img");
-            previewImg.setAttribute("src", fileName);
-            preview.innerHTML = "";
-            preview.appendChild(previewImg);
-        }
-        else{
-            var preview = document.getElementsByClassName("file-info");
-            preview[0].style.display = "block";
-            game_file_name_element = document.getElementsByClassName("file-name");
-            game_file_name_element[0].innerHTML = event.target.files[0].name;
-
-            game_file_size_element = document.getElementsByClassName("file-size");
-            game_file_size_element[0].innerHTML = Math.round((event.target.files[0].size / 1024 / 1024)) + " MB";
-
-        }
-    }
-    function drag(event) {
-        event.target.parentNode.className = 'dragBox dragging';
-    }
-    function drop() {
-        event.target.parentNode.className = 'dragBox';
-    }
-</script>
-
-{% endblock %}
+{% include "pages/partials/upload_game_popup.html" %} {% endblock %}

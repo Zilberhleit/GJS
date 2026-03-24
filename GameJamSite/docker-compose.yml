@@ -8,6 +8,7 @@ services:
              python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
+
       - "C:\\Users\\zilbe\\Desktop\\GJS_dir\\GJS\\docs\\source:/app/docs/source"
       - "C:\\Users\\zilbe\\Desktop\\GJS_dir\\GJS\\docs\\build:/app/docs/build"
     ports:

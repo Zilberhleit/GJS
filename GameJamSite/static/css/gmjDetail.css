@@ -1,6 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
 
-
 .div-header {
     margin-top: 30px;
     width: 100%;
@@ -23,9 +22,10 @@
     margin-left: 70px;
 }
 
-.jam-status-container{
-    display: flex;
-    justify-content: center;
+.jam-status-container {
+    /*display: flex;
+    flex-direction: column;
+    justify-content: center;*/
     align-items: center;
     margin-top: 40px;
     margin-bottom: 25px;
@@ -33,7 +33,6 @@
 }
 
 .button {
-
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -90,6 +89,10 @@
     grid-template-rows: 0 0fr;
 }
 
+/* функция должна отображать картинку в окошке не переполняя страницу */
+.image-preview {
+}
+
 .countdown-container {
     display: flex;
     align-items: center;
@@ -98,7 +101,8 @@
 }
 
 /* Обратный отсчет */
-#countdown, .countdown-status{
+#countdown,
+.countdown-status {
     text-align: center;
 }
 
@@ -108,16 +112,16 @@
 }
 
 .countdown-element {
-  display: inline-block;
-  font-size: 1.5em;
-  list-style-type: none;
-  padding: 0.5em;
-  text-transform: uppercase;
+    display: inline-block;
+    font-size: 1.5em;
+    list-style-type: none;
+    padding: 0.5em;
+    text-transform: uppercase;
 }
 
 .countdown-element span {
-  display: block;
-  font-size: 32px;
+    display: block;
+    font-size: 32px;
 }
 
 .countdown-element p {
@@ -134,8 +138,6 @@
 .open {
     grid-template-rows: 1.05em 1fr;
 }
-
-
 
 select {
     -webkit-appearance: none;
@@ -213,8 +215,8 @@ thead tr th:nth-child(4) {
     border-right: 1px solid #fff;
 }
 
-
-tbody tr .username, .rank{
+tbody tr .username,
+.rank {
     color: #000;
 }
 
@@ -225,5 +227,4 @@ tbody tr td .btn {
 .games-table td:nth-child(5),
 .games-table th:nth-child(5) {
     width: 20%;
-
 }

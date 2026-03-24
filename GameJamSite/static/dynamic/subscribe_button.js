@@ -1,3 +1,4 @@
+// Допилить
 const followButton = document.getElementById("subs");
 const unfollowButton = document.getElementById("unsubs");
 const followData = JSON.parse(

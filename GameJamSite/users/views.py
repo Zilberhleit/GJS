@@ -1,3 +1,6 @@
+from allauth.account import app_settings
+from allauth.account.views import SignupView
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -105,6 +108,11 @@ def upload_photo_view(request, username):
                     "message": "Предоставлен неверный формат файла / Размер файла превышает 3Мб"
                 }
             )
+
+
+@login_required
+def about_page(request):
+    return render(request, "pages/about.html")
 
 
 # new View

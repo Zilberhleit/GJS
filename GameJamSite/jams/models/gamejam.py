@@ -1,33 +1,58 @@
 import uuid
+from tabnanny import verbose
 
 from django.conf import settings
 from django.db import models
+from users.models.team import Team
 
 from jams.utils import create_gamejam_change_status_periodic_task
 
 
 class GameJam(models.Model):
-    """ Модель геймджема """
+    """Модель геймджема"""
 
     jam_status = [
         ("FN", "Завершён"),
         ("OG", "Идёт"),
         ("RT", "Оценка"),
-        ("PR", "Подготовка")
+        ("PR", "Подготовка"),
     ]
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=255, verbose_name='Название джема')
-    date_start = models.DateTimeField(verbose_name='Дата начала')
-    date_end = models.DateTimeField(verbose_name='Дата окончания')
-    date_rating = models.DateTimeField(verbose_name='Дата оценивания', null=True, blank=True)
-    theme = models.CharField(max_length=255, blank=True, verbose_name='Тема')
-    image = models.ImageField(upload_to='jams/', blank=True, null=True, verbose_name='Изображение')
-    status = models.CharField(max_length=3, choices=jam_status, default="PR", verbose_name='Статус')
-    winner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="user_winner",
-                               on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Победитель')
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="users",
-                                   blank=True, verbose_name='Участники')
+    title = models.CharField(max_length=255, verbose_name="Название джема")
+    # new
+    description = models.CharField(
+        max_length=1000, default="", blank=True, verbose_name="Описание джема"
+    )
+    date_start = models.DateTimeField(verbose_name="Дата начала")
+    date_end = models.DateTimeField(verbose_name="Дата окончания")
+    date_rating = models.DateTimeField(
+        verbose_name="Дата оценивания", null=True, blank=True
+    )
+    theme = models.CharField(max_length=255, blank=True, verbose_name="Тема")
+    image = models.ImageField(
+        upload_to="jams/", blank=True, null=True, verbose_name="Изображение"
+    )
+    status = models.CharField(
+        max_length=3, choices=jam_status, default="PR", verbose_name="Статус"
+    )
+    winner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="user_winner",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Победитель",
+    )
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="users",
+        blank=True,
+        verbose_name="Участники",
+    )
+    teams = models.ManyToManyField(Team, blank=True, verbose_name="Команды участиники")
+    has_poll = models.BooleanField(default=True, verbose_name="Есть голосование")
+
     class Meta:
         verbose_name = "Геймджем"
         verbose_name_plural = "Геймджемы"
@@ -40,7 +65,8 @@ class GameJam(models.Model):
         if is_new:
             create_gamejam_change_status_periodic_task(self, "OG", self.date_start)
             create_gamejam_change_status_periodic_task(self, "FN", self.date_end)
+            # new
+            create_gamejam_change_status_periodic_task(self, "RT", self.date_rating)
 
     def __str__(self):
         return self.title + " - " + self.theme
-

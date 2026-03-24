@@ -3,6 +3,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/avatar.css' %}">
+<link rel="stylesheet" href="{% static 'css/content.css' %}">
 {% endblock head %}
 
 {% block headButtons %}
@@ -11,104 +12,142 @@
 {% endblock %}
 
 {% block content %}
-<div class="profile">
-
-    <div class="hat-banner">
-        {% if profile_data.hat_image %}
-        <img src="{{ profile_data.hat_image.url }}" alt="Шапка" id="hat-img">
-        {% endif %}
+<div class="profile-container">
+    <div class="profile-sidebar">
+        <div class="sidebar-elem">
+            Джемоварня
+            <div class="sidebar-elem-links">
+                <a href="" class="sidebar-elem-link">Создать джем</a>
+                <a href="" class="sidebar-elem-link">Список джемов</a>
+            </div>
+        </div>
+        <div class="sidebar-elem">
+            Игродельня
+            <div class="sidebar-elem-links">
+                <a href="" class="sidebar-elem-link">Опубликовать игру</a>
+                <a href="" class="sidebar-elem-link">Список игр </a></div>
+        </div>
+        <div class="sidebar-elem">
+            Командирование
+            <div class="sidebar-elem-links"></div>
+        </div>
+        <div class="sidebar-elem">
+            Постирование
+            <div class="sidebar-elem-links"></div>
+        </div>
     </div>
 
-    <div class="profile-foreground"></div>
-    <div id="hat">
+    <div class="profile">
 
-        <div class="avatar-block">
-            <div>
-                <label for="avatar-input" id="avatar">
-                    {% if request.user.is_authenticated and request.user.id == profile_data.id %}
-                        <input id="avatar-input" type="file" name="avatar_image"
-                            accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
-                    {% endif %}
-                    {% if profile_data.avatar_image  %}
-                    <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
-                    {% endif %}
-                </label>
-            </div>
-
-            <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
-            <h4 style="text-align: center">{{ profile_data.email }}</h4>
-
-            {% if request.user.is_authenticated and request.user.id == profile_data.id %}
-                <input type="file" name="hat_photo" id="hat-input" accept="image/png, image/jpeg, image/jpg, image/webp,
-                image/jfif">
-                <span class="load-photo-status" style="color: white;"></span>
+        <div class="hat-banner">
+            {% if profile_data.hat_image %}
+            <img src="{{ profile_data.hat_image.url }}" alt="Шапка" id="hat-img">
             {% endif %}
+        </div>
 
-            <!--Реализовать динамичную кнопку подписки-->
-            <div class="subscribe-div">
+        <div class="profile-foreground">
+            <div></div>
+            <div class="user-content">
+                <div class="content-body">
+                    Контента нет
+                </div>
+            </div>
+        </div>
 
-                {% if request.user.is_authenticated and request.user.id != profile_data.id %}
+        <div id="hat">
 
-                    {% if request.user in profile_data.following.all %}
-                      <button class="follow-button" id="subs" name="follow" value={"{{ request.user.username }}"}>Подписаться</button>
-                    {% else %}
-                      <button class="unfollow-button" id="unsubs" name="unfollow">Отписаться</button>
-                    {% endif %}
+            <div class="avatar-block">
+                <div>
+                    <label for="avatar-input" id="avatar">
+                        {% if request.user.is_authenticated and request.user.id == profile_data.id %}
+                            <input id="avatar-input" type="file" name="avatar_image"
+                                accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
+                        {% endif %}
+                        {% if profile_data.avatar_image  %}
+                        <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
+                        {% endif %}
+                    </label>
+                </div>
 
+                <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
+                <h4 style="text-align: center">{{ profile_data.email }}</h4>
+
+
+                {% if request.user.is_authenticated and request.user.id == profile_data.id %}
+                 <label for="hat-input" id="hat-btn">
+                    Изменить шапку
+                    <input id="hat-input" type="file" name="hat_photo" accept="image/png, image/jpeg, image/jpg, image/webp,
+                    image/jfif">
+                </label>
+                    <span class="load-photo-status" style="color: white;"></span>
                 {% endif %}
 
-                <div class="subs-num">{{ profile_data.subscribers }} подписчиков</div>
-            </div>
+                <!--Реализовать динамичную кнопку подписки-->
+                <div class="subscribe-div">
 
-        </div>
+                    {% if request.user.is_authenticated and request.user.id != profile_data.id %}
 
-    </div>
-    <!-- <li><a href="#" class="menu-button">Создать джем</a></li> -->
-    <br>
-</div>
+                        {% if request.user in profile_data.following.all %}
+                        <button class="follow-button" id="subs" name="follow" value={"{{ request.user.username }}"}>Подписаться</button>
+                        {% else %}
+                        <button class="unfollow-button" id="unsubs" name="unfollow">Отписаться</button>
+                        {% endif %}
 
-<div class="user-st">
+                    {% endif %}
 
-    <div class="user_games">
-        <h5>История участия</h5>
-        <div class="user_games-files">
-            {% for jam in past_jams %}
-            <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
-                <div class="past-jam-card">
-                    <p>{{ jam.title }}</p>
-                    <p>Тема: {{ jam.theme }}</p>
-                    <p>Рейтинг игры: {{ jam.user_rating }}</p>
+                    <div class="subs-num">{{ profile_data.subscribers }} подписчиков</div>
                 </div>
-            </a>
-            {% endfor %}
+
+            </div>
+
         </div>
+        <!-- <li><a href="#" class="menu-button">Создать джем</a></li> -->
+        <br>
     </div>
 
-    <div class="user_games">
-        <h5>Разработанные игры</h5>
-        <div class="user_games-files">
-            {% for game in user_games %}
-            <div>
-                <a href="{%  url 'download_file' game.jam_uuid.uuid game.slug  %}">
-                    {{ game.title }}
+    <div class="user-st">
+
+        <div class="user_games">
+            <h5>История участия</h5>
+            <div class="user_games-files">
+                {% for jam in past_jams %}
+                <a href="{% url 'gamejam_detail' uuid=jam.uuid %}">
+                    <div class="past-jam-card">
+                        <p>{{ jam.title }}</p>
+                        <p>Тема: {{ jam.theme }}</p>
+                        <p>Рейтинг игры: {{ jam.user_rating }}</p>
+                    </div>
                 </a>
-                {{ game.uploaded_time }}
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
+
+        <div class="user_games">
+            <h5>Разработанные игры</h5>
+            <div class="user_games-files">
+                {% for game in user_games %}
+                <div>
+                    <a href="{%  url 'download_file' game.jam_uuid.uuid game.slug  %}">
+                        {{ game.title }}
+                    </a>
+                    {{ game.uploaded_time }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
+    {% endblock %}
+
+    {% block footercontent %}
+
+    <script src="{% static '/dynamic/profile_dropdown_list.js' %}"></script>
+
+    {{ upload_data|json_script:"upload-data"}}
+    <script src="{% static '/dynamic/profile_photo.js' %}"></script>
+
+    {{ follow_data|json_script:"follow-data" }}
+    <script src="{% static '/dynamic/subscribe_button.js' %}"></script>
 
 </div>
-{% endblock %}
-
-{% block footercontent %}
-
-<script src="{% static '/dynamic/profile_dropdown_list.js' %}"></script>
-
-{{ upload_data|json_script:"upload-data"}}
-<script src="{% static '/dynamic/profile_photo.js' %}"></script>
-
-{{ follow_data|json_script:"follow-data" }}
-<script src="{% static '/dynamic/subscribe_button.js' %}"></script>
-
 {% endblock %}
