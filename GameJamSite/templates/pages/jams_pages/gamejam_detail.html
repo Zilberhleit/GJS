@@ -43,37 +43,50 @@
     </div>
 </div>
 
+<div class="redaction">
+    {% if object.status == 'PR' %}
+        {% if object.author == request.user %}
+            <a href="" class="redact-button">Редактировать</a>
+        {% endif %}
+    {% endif %}
+</div>
+
 <!--Вывод страницы джема-->
 <div class="jam-container">
     <div class="jam-status-container">
         <!--        Статус джема / Кнопка принятия участия / Загрузка игры        -->
-        {% if object.status == 'PR' %} {% if request.user.is_authenticated and
-        request.user not in object.users.all %}
-        <a href="poll" class="button">Принять участие</a>
-        <a href="join_jam" class="button">Принять участие</a>
+        {% if object.status == 'PR' %}
+        {% if request.user.is_authenticated and request.user not in object.users.all %}
+            {% if object.has_poll %}
+                <a href="poll" class="button">Принять участие</a>
+            {% else %}
+                <a href="join_jam" class="button">Принять участие</a>
+            {% endif %}
         {% elif not request.user.is_authenticated %}
-        <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
+            <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
         {% else %}
-        <h2 style="text-align: center">
-            Вы участник джема, дождитесь даты начала
-        </h2>
-        <a href="leave_jam" class="button">Покинуть джем</a>
-        {% endif %} {% elif object.status == 'OG' %} {% if request.user in
-        object.users.all %}
-        <h2 style="text-align: center">Ждём ваших работ</h2>
-        <a class="button" href="#popup1">Загрузить игру</a>
+            <h2 style="text-align: center">
+                Вы участник джема, дождитесь даты начала
+            </h2>
+            <a href="leave_jam" class="button">Покинуть джем</a>
+        {% endif %}
+        {% elif object.status == 'OG' %}
+            {% if request.user in object.users.all %}
+            <h2 style="text-align: center">Ждём ваших работ</h2>
+            <a class="button" href="#popup1">Загрузить игру</a>
         {% else %}
-        <h2>
-            Вы не можете загружать свои работы, так как вы не участник джема
-        </h2>
-        {% endif %} {% elif object.status == 'RT' %} {% if request.user in
-        object.users.all %}
-        <h2 style="text-align: center">Оцените своих соперников</h2>
-
+            <h2>
+                Вы не можете загружать свои работы, так как вы не участник джема
+            </h2>
+        {% endif %}
+        {% elif object.status == 'RT' %}
+        {% if request.user in object.users.all %}
+            <h2 style="text-align: center">Оцените своих соперников</h2>
         {% else %}
-        <h2>Вы не можете ставить оценки, так как вы не участник джема</h2>
-        {% endif %} {% elif object.status == 'FN' %}
-        <h2 class="countdown-status">Джем окончен</h2>
+            <h2>Вы не можете ставить оценки, так как вы не участник джема</h2>
+        {% endif %}
+        {% elif object.status == 'FN' %}
+            <h2 class="countdown-status">Джем окончен</h2>
         {% endif %}
     </div>
 
@@ -87,7 +100,7 @@
                     <th>Автор</th>
                     <th>Игра</th>
                     <th>Рейтинг</th>
-                    <th>Оценить</th>
+                    <!--<th>Оценить</th>-->
                 </tr>
             </thead>
             <tbody>
@@ -104,10 +117,11 @@
                         >
                     </td>
                     <td class="rank" style="color: red">
-                        {% if current_user_game.avg_rating %} {{
-                        current_user_game.avg_rating }} {% else %} - {% endif %}
+                        {% if current_user_game.avg_rating %}
+                            {{ current_user_game.avg_rating }}
+                        {% else %} - {% endif %}
                     </td>
-                    <td>-</td>
+                    <!--<td>-</td>-->
                 </tr>
                 {% endif %} {% for user_game in user_games %}
                 <tr>
@@ -115,7 +129,7 @@
                     <td class="username">{{ user_game.user.username }}</td>
                     <td>
                         <a
-                            href="{% url 'download_file' object.uuid user_game.slug %}"
+                            href="{% url 'game_page' object.uuid user_game.slug %}"
                             >{{ user_game.title }}</a
                         >
                     </td>
@@ -123,9 +137,8 @@
                         {% if user_game.avg_rating %} {{ user_game.avg_rating }}
                         {% else %} - {% endif %}
                     </td>
-                    <td>
-                        {% if object.status == 'OG' and request.user in
-                        object.users.all and request.user != user_game.user %}
+                    <!--<td>
+                        {% if object.status == 'OG' and request.user in object.users.all and request.user != user_game.user %}
                         <form
                             action="{% url 'count_stars' object.uuid user_game.user.id %}"
                             method="post"
@@ -144,7 +157,7 @@
                             </button>
                         </form>
                         {% endif %}
-                    </td>
+                    </td>-->
                 </tr>
                 {% endfor %}
             </tbody>

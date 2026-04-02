@@ -1,0 +1,352 @@
+{% extends 'base.html' %} {% load static %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}" />
+<link rel="stylesheet" href="{% static 'css/popup.css' %}" />
+<link rel="stylesheet" href="{% static 'css/gmjCreate.css' %}" />
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet"
+/>{%endblock%} {% block headercontent %} {%endblock%} {% block content %}
+<div class="gamejam-create-grid">
+    <div class="gamejam-create-form">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div>
+                <h1>Создание геймджема</h1>
+            </div>
+
+            <div class="form-content">
+                <div class="form-input-group">
+                    <label for="title">
+                        <p>Название геймджема <span>*</span></p></label
+                    >
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="form-input"
+                        placeholder="Название вашего джема"
+                        required
+                    />
+                </div>
+
+                <div class="form-input-group">
+                    <label for="theme">
+                        <p>Тема геймджема <span>*</span></p></label
+                    >
+                    <input
+                        type="text"
+                        id="theme"
+                        name="theme"
+                        class="form-input"
+                        placeholder="Тема вашего джема"
+                        required
+                    />
+                </div>
+
+                <div class="form-input-group">
+                    <label for="description"
+                        ><p>Описание и правила гейджема</p></label
+                    >
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        class="form-input"
+                        placeholder="Опишите ваш геймджем, какие у него правила (если правил нет, геймджем работает по правилам сайта)"
+                    ></textarea>
+                </div>
+
+                <div class="datetime-field">
+                    <label for="date_start">
+                        <p>Дата и время начала <span>*</span></p></label
+                    >
+                    <input
+                        type="datetime-local"
+                        id="date_start"
+                        name="date_start"
+                        class="form-input"
+                        required
+                    />
+                </div>
+
+                <div class="datetime-field">
+                    <label for="date_end">
+                        <p>Дата и время конца <span>*</span></p></label
+                    >
+                    <input
+                        type="datetime-local"
+                        id="date_end"
+                        name="date_end"
+                        class="form-input"
+                        required
+                    />
+                </div>
+
+                <div class="datetime-field">
+                    <label for="date_rating">
+                        <p>Дата и время оценивания <span>*</span></p></label
+                    >
+                    <input
+                        type="datetime-local"
+                        id="date_rating"
+                        name="date_rating"
+                        class="form-input"
+                        required
+                    />
+                </div>
+
+                <div class="form-input-group">
+                    <label for="rating">
+                        <p>Оценки <span>*</span></p></label
+                    >
+                    <div id="fieldContainer">
+                        <div id="field1" class="ratingContainer">
+                            <input
+                                type="text"
+                                id="criteria"
+                                name="field1"
+                                class="form-input"
+                                placeholder="Ваша оценка"
+                                value="Общая оценка"
+                                required
+                            />
+                            <button
+                                type="button"
+                                id="deleteCriteria1"
+                                class="btn btn-danger submit-button"
+                                onclick="DeleteField(1)"
+                            >
+                                Удалить оценку
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button
+                type="button"
+                id="addCriteria"
+                class="btn btn-primary submit-button"
+                onclick="AddField()"
+            >Добавить оценку</button>
+
+            <div id="formError" class="error-field"></div>
+
+            <button
+                id="createBtn"
+                type="submit"
+                class="btn btn-primary submit-button"
+            >
+                Создать
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let fieldCount = 1;
+    const MAX_FIELDS = 5;
+
+    function AddField() {
+      if (fieldCount >= MAX_FIELDS) {
+        showError("formError", "Максимальное количество оценок: 5");
+        return;
+      }
+
+      fieldCount++;
+      const container = document.getElementById("fieldContainer");
+      const newDiv = document.createElement("div");
+      const deleteButton = document.createElement("button");
+      const newInput = document.createElement("input");
+
+      newDiv.id = "field" + fieldCount;
+      newDiv.className = "ratingContainer";
+
+      deleteButton.id = "deleteCriteria" + fieldCount;
+      deleteButton.type = "button";
+      deleteButton.textContent = "Удалить оценку";
+      deleteButton.className = "btn btn-danger submit-button";
+      deleteButton.onclick = function() {
+        DeleteField(fieldCount);
+      }
+
+      newInput.type = 'text';
+      newInput.name = 'field' + fieldCount;
+      newInput.placeholder = "Ваша оценка";
+      newInput.value = "Общая оценка";
+      newInput.required = true;
+      newInput.className = "form-input";
+
+      newDiv.appendChild(newInput);
+      newDiv.appendChild(deleteButton);
+      container.appendChild(newDiv);
+      clearErrors("formError");
+    }
+
+    function DeleteField(fieldIndex) {
+      if (fieldCount <= 1) {
+        showError("formError", "Должна быть минимум одна оценка");
+        return;
+      }
+
+      const fieldToRemove = document.getElementById("field" + fieldIndex);
+
+      if (fieldToRemove) {
+        fieldToRemove.remove();
+        fieldCount--;
+      }
+
+      clearErrors("formError");
+    }
+</script>
+
+<script>
+    const title = document.getElementById("title");
+    const theme = document.getElementById("theme");
+
+    const dateStartInput = document.getElementById("date_start");
+    const dateEndInput = document.getElementById("date_end");
+    const dateRatingInput = document.getElementById("date_rating");
+
+    const createBtn = document.getElementById("createBtn");
+
+    function validateForm() {
+        const isTitleValid = validateTitle();
+        const isThemeValid = validateTheme();
+        const isDatesValid = validateDateOrder();
+
+        if (isTitleValid && isThemeValid && isDatesValid) {
+            createBtn.disabled = false;
+        } else {
+            createBtn.disabled = true;
+        }
+    }
+
+    function validateTitle() {
+        if (!title.value) return false;
+        const value = title.value.trim();
+
+        if (value.length < 3) {
+            showError("formError", "Название должно быть не менее 3 символов");
+            return false;
+        }
+
+        clearErrors("formError");
+        return true;
+    }
+
+    function validateTheme() {
+        if (!theme.value) return false;
+        const value = theme.value.trim();
+
+        if (value.length < 3) {
+            showError("formError", "Тема очень коротка: не менее 3 символов");
+            return false;
+        }
+
+        clearErrors("formError");
+        return true;
+    }
+
+    function checkDateFuture(dateString) {
+        const date = new Date(dateString);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date > today;
+    }
+
+    function validateDateOrder() {
+        console.log("validateDateOrders");
+
+        let errorMessage = "";
+
+        if (!dateStartInput.value || !dateEndInput.value) {
+            return false;
+        }
+
+        if (
+            !checkDateFuture(dateStartInput.value) ||
+            !checkDateFuture(dateEndInput.value)
+        ) {
+            return false;
+        }
+
+        const startValue = new Date(dateStartInput.value);
+        const endValue = new Date(dateEndInput.value);
+
+        if (startValue && endValue && endValue <= startValue) {
+            console.log("validateDateOrders проблема с началом и концом");
+            showError("formError", "Дата конца должна быть позже даты начала");
+            return false;
+        }
+
+        if (dateRatingInput.value) {
+            if (!checkDateFuture(dateRatingInput.value)) {
+                return false;
+            }
+            const ratingValue = new Date(dateRatingInput.value);
+
+            if (ratingValue <= startValue) {
+                showError(
+                    "formError",
+                    "Дата оценки должна быть позже даты начала",
+                );
+                return false;
+            }
+
+            if (endValue <= ratingValue) {
+                showError(
+                    "formError",
+                    "Дата оценки должна быть раньше даты конца",
+                );
+                return false;
+            }
+        }
+
+        clearErrors("formError");
+        return true;
+    }
+
+    function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.classList.add("visible");
+            console.log("showError ошибка");
+        }
+    }
+
+    function clearErrors(elementId) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.textContent = "";
+            errorElement.classList.remove("visible");
+            console.log("showError ошибка");
+        }
+    }
+
+    dateStartInput.addEventListener("change", function () {
+        validateDateOrder();
+        validateForm();
+    });
+    dateEndInput.addEventListener("change", function () {
+        validateDateOrder();
+        validateForm();
+    });
+    dateRatingInput.addEventListener("change", function () {
+        validateDateOrder();
+        validateForm();
+    });
+    title.addEventListener("input", function () {
+        validateTitle();
+        validateForm();
+    });
+    theme.addEventListener("input", function () {
+        validateTheme();
+        validateForm();
+    });
+
+    validateForm();
+</script>
+{% endblock %}

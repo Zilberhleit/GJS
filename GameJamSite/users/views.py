@@ -1,3 +1,5 @@
+from tempfile import template
+
 from allauth.account import app_settings
 from allauth.account.views import SignupView
 from django.contrib import messages
@@ -6,12 +8,20 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from django.views.generic import CreateView, DetailView
+from jams.models.gamejam import GameJam
 
 from users.forms import LoginUserForm, RegisterUserForm
 from users.models import Follower, User
 
-from .services import get_user_games_history, get_user_jams_history, upload_photo
+from .services import (
+    get_user_games_history,
+    get_user_jams_history,
+    is_valid_gamejam_create,
+    upload_photo,
+)
 
 
 class RegisterUser(CreateView):
@@ -131,6 +141,53 @@ def unfollow(request, username):
     followed_user = get_object_or_404(User, username=username)
     Follower.objects.filter(follower=request.user, followed=followed_user).delete()
     return redirect("profile_detail", username=followed_user.username)
+
+
+@login_required
+def create_jam(request):
+    """Представление создание джема"""
+    if request.method == "POST":
+        title = request.POST.get("title", "")
+        theme = request.POST.get("theme", "")
+        description = request.POST.get("description", "")
+        date_start_str = request.POST.get("date_start")
+        date_end_str = request.POST.get("date_end")
+        date_rating_str = request.POST.get("date_rating")
+
+        date_start = parse_datetime(date_start_str)
+        date_end = parse_datetime(date_end_str)
+        date_rating = parse_datetime(date_rating_str)
+
+        if date_start:
+            date_start = timezone.make_aware(date_start)
+        if date_end:
+            date_end = timezone.make_aware(date_end)
+        if date_rating:
+            date_rating = timezone.make_aware(date_rating)
+
+        is_valid = is_valid_gamejam_create(
+            title, theme, date_start, date_end, date_rating
+        )
+
+        if not is_valid:
+            return render(request, template_name="pages/user_pages/create_jam.html")
+        else:
+            jam = GameJam.objects.create(
+                author=request.user,
+                title=title.strip(),
+                theme=theme.strip(),
+                description=description.strip() if description else "",
+                date_start=date_start,
+                date_end=date_end,
+                date_rating=date_rating,
+            )
+            return redirect("gamejam_detail", uuid=jam.uuid)
+    return render(request, template_name="pages/user_pages/create_jam.html")
+
+
+@login_required
+def create_team(request):
+    return render(request, template_name="pages/user_pages/create_team.html")
 
 
 def redactor(request, username):

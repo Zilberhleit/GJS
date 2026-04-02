@@ -228,3 +228,11 @@ tbody tr td .btn {
 .games-table th:nth-child(5) {
     width: 20%;
 }
+
+.redact-button {
+    padding: 10px;
+    margin-left: 4em;
+    border-radius: 4px;
+    background-color: #9736ff;
+    color: white;
+}

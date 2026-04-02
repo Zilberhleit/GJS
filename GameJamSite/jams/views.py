@@ -40,6 +40,24 @@ class GameJamsLists(ListView):
         return context
 
 
+class MyGameJams(ListView):
+    """Список геймджемов пользователя"""
+
+    template_name = "pages/jams_pages/jams.html"
+
+    def get_queryset(self):
+        return GameJam.objects.filter(author=self.request.user).order_by(
+            "-status", "-date_start"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = GameJamsFilter(
+            self.request.GET, queryset=self.get_queryset()
+        )
+        return context
+
+
 class GameJamDetail(DetailView):
     """Представление просмотра деталей конкретного геймджема"""
 

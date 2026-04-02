@@ -16,6 +16,8 @@ urlpatterns = [
     path("profile/", include("users.urls")),
     path("accounts/", include("allauth.urls")),
     path("about/", users_view.about_page, name="about"),
+    path("create_jam", users_view.create_jam, name="create_jam"),
+    path("create_team", users_view.create_team, name="create_team"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.handler404
