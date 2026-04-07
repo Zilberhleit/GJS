@@ -103,7 +103,7 @@
                         <div id="field1" class="ratingContainer">
                             <input
                                 type="text"
-                                id="criteria"
+                                id="criteria1"
                                 name="field1"
                                 class="form-input"
                                 placeholder="Ваша оценка"
@@ -120,7 +120,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -129,7 +128,9 @@
                 id="addCriteria"
                 class="btn btn-primary submit-button"
                 onclick="AddField()"
-            >Добавить оценку</button>
+            >
+                Добавить оценку
+            </button>
 
             <div id="formError" class="error-field"></div>
 
@@ -144,62 +145,8 @@
     </div>
 </div>
 
-<script>
-    let fieldCount = 1;
-    const MAX_FIELDS = 5;
-
-    function AddField() {
-      if (fieldCount >= MAX_FIELDS) {
-        showError("formError", "Максимальное количество оценок: 5");
-        return;
-      }
-
-      fieldCount++;
-      const container = document.getElementById("fieldContainer");
-      const newDiv = document.createElement("div");
-      const deleteButton = document.createElement("button");
-      const newInput = document.createElement("input");
-
-      newDiv.id = "field" + fieldCount;
-      newDiv.className = "ratingContainer";
-
-      deleteButton.id = "deleteCriteria" + fieldCount;
-      deleteButton.type = "button";
-      deleteButton.textContent = "Удалить оценку";
-      deleteButton.className = "btn btn-danger submit-button";
-      deleteButton.onclick = function() {
-        DeleteField(fieldCount);
-      }
-
-      newInput.type = 'text';
-      newInput.name = 'field' + fieldCount;
-      newInput.placeholder = "Ваша оценка";
-      newInput.value = "Общая оценка";
-      newInput.required = true;
-      newInput.className = "form-input";
-
-      newDiv.appendChild(newInput);
-      newDiv.appendChild(deleteButton);
-      container.appendChild(newDiv);
-      clearErrors("formError");
-    }
-
-    function DeleteField(fieldIndex) {
-      if (fieldCount <= 1) {
-        showError("formError", "Должна быть минимум одна оценка");
-        return;
-      }
-
-      const fieldToRemove = document.getElementById("field" + fieldIndex);
-
-      if (fieldToRemove) {
-        fieldToRemove.remove();
-        fieldCount--;
-      }
-
-      clearErrors("formError");
-    }
-</script>
+<script src="{% static '/dynamic/create_rating_field.js' %}"></script>
+<!--<script src="{% static '/dynamic/create_jam_validation.js' %}"></script>-->
 
 <script>
     const title = document.getElementById("title");
@@ -208,6 +155,7 @@
     const dateStartInput = document.getElementById("date_start");
     const dateEndInput = document.getElementById("date_end");
     const dateRatingInput = document.getElementById("date_rating");
+    const container = document.getElementById("fieldContainer");
 
     const createBtn = document.getElementById("createBtn");
 
@@ -215,8 +163,9 @@
         const isTitleValid = validateTitle();
         const isThemeValid = validateTheme();
         const isDatesValid = validateDateOrder();
-
-        if (isTitleValid && isThemeValid && isDatesValid) {
+        const isRatingsValid = validateAllRatingFields();
+        console.log(isTitleValid, isThemeValid, isDatesValid, isRatingsValid);
+        if (isTitleValid && isThemeValid && isDatesValid && isRatingsValid) {
             createBtn.disabled = false;
         } else {
             createBtn.disabled = true;
@@ -249,6 +198,31 @@
         return true;
     }
 
+    function validateAllRatingFields() {
+        const length = container.children.length;
+
+        for (let i = 1; i <= length; i++) {
+            if (!validateRatingField(i)) {
+                showError(
+                    "formError",
+                    "Оценка пустая, напишите ваш критерий оценки",
+                );
+                return false;
+            }
+        }
+
+        clearErrors("formError");
+        return true;
+    }
+
+    function validateRatingField(fieldId) {
+        const ratingContainer = document.getElementById("field" + fieldId);
+        const field = ratingContainer.querySelector('input[type="text"');
+
+        if (!field.value) return false;
+        return true;
+    }
+
     function checkDateFuture(dateString) {
         const date = new Date(dateString);
         const today = new Date();
@@ -257,8 +231,6 @@
     }
 
     function validateDateOrder() {
-        console.log("validateDateOrders");
-
         let errorMessage = "";
 
         if (!dateStartInput.value || !dateEndInput.value) {
@@ -302,7 +274,7 @@
                 );
                 return false;
             }
-        }
+        } else return false;
 
         clearErrors("formError");
         return true;
@@ -313,7 +285,6 @@
         if (errorElement) {
             errorElement.textContent = message;
             errorElement.classList.add("visible");
-            console.log("showError ошибка");
         }
     }
 
@@ -322,7 +293,6 @@
         if (errorElement) {
             errorElement.textContent = "";
             errorElement.classList.remove("visible");
-            console.log("showError ошибка");
         }
     }
 
@@ -344,6 +314,10 @@
     });
     theme.addEventListener("input", function () {
         validateTheme();
+        validateForm();
+    });
+    container.addEventListener("input", function () {
+        validateAllRatingFields();
         validateForm();
     });
 

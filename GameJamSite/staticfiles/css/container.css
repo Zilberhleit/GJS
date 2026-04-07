@@ -1,0 +1,50 @@
+/* Классы для jams.html */
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    border-radius: 10px;
+    min-width: 0;
+    background-color: #e6e4ee;
+    background-clip: border-box;
+    transition: all 0.25s ease-in-out;
+    box-shadow: 12px 12px 12px rgba(0, 0, 0, 1.5);
+}
+
+.card:hover{
+    transform: scale(1.01);
+    
+}
+
+.card-button{
+    align-self: center;
+}
+
+.card-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-button-container {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.card-title {
+    font-size: 25px;
+    color: #ff6b6b;
+}
+
+.card-title:hover {
+    color: #ff6b6b;
+}
+
+.card-text {
+    font-size: 20px;
+    color: rgb(82, 82, 82);
+}
+
+.row {
+    padding: 15px;
+}

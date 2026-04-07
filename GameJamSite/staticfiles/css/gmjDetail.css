@@ -1,0 +1,238 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:100,400);
+
+.div-header {
+    margin-top: 30px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.div-header .del {
+    display: block;
+    border: 1px solid #fff;
+    width: 1px;
+    height: 160px;
+}
+
+/* Классы для gamejam_detail */
+.container-title {
+    color: var(--head-text);
+    background-color: var(--head-foot);
+    margin-left: 70px;
+}
+
+.jam-status-container {
+    /*display: flex;
+    flex-direction: column;
+    justify-content: center;*/
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.button {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 25px;
+    color: #fff;
+}
+
+.row {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    display: flex;
+    margin: 0 2% 0 0;
+}
+
+.div-header h1 {
+    font-size: 52px;
+    margin-bottom: 0;
+}
+
+.container-title p {
+    color: #ff6b6b;
+    font-size: 36px;
+}
+
+.jam-container .container-date {
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+}
+
+.date {
+    display: flex;
+    flex-direction: column;
+}
+
+.upl-container {
+    font-size: 20px;
+    margin: 20px 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
+}
+
+.upl-card-container {
+    position: relative;
+    padding: 0.9em 0.9em 0.7em 0.9em;
+    cursor: pointer;
+    background-color: #2a2f3d;
+    border-radius: 10px;
+    transition: 150ms ease;
+    display: grid;
+    grid-template-rows: 0 0fr;
+}
+
+/* функция должна отображать картинку в окошке не переполняя страницу */
+.image-preview {
+}
+
+.countdown-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+/* Обратный отсчет */
+#countdown,
+.countdown-status {
+    text-align: center;
+}
+
+#countdown {
+    display: flex;
+    flex-direction: column;
+}
+
+.countdown-element {
+    display: inline-block;
+    font-size: 1.5em;
+    list-style-type: none;
+    padding: 0.5em;
+    text-transform: uppercase;
+}
+
+.countdown-element span {
+    display: block;
+    font-size: 32px;
+}
+
+.countdown-element p {
+    font-size: 28px;
+}
+
+#countdown ul {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding-left: 10px;
+}
+
+.open {
+    grid-template-rows: 1.05em 1fr;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 140px;
+    cursor: pointer;
+    outline: none;
+    border-radius: 5px;
+    text-indent: 10px;
+    background-color: rgba(47, 47, 47, 0.05);
+    border: 1px solid rgba(53, 53, 53, 0.1);
+    color: #000;
+}
+
+.btn-rate {
+    background-color: rgba(47, 47, 47, 0.05);
+    border: 1px solid rgba(53, 53, 53, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    color: #000;
+}
+
+option {
+    color: black;
+}
+
+.upl-card-container h5 {
+    margin: 0 20px;
+}
+
+.upl-card-container a {
+    display: inline-block;
+    margin-top: 1.5em;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #dcdcdc;
+}
+
+thead tr {
+    background-color: #ff6b6b;
+}
+
+thead tr th {
+    padding: 5px;
+}
+
+thead tr th:nth-child(2),
+thead tr th:nth-child(3) {
+    border-left: 1px solid #fff;
+}
+
+thead tr th:nth-child(3) {
+    border-right: 1px solid #fff;
+}
+
+tbody tr {
+    background-color: #fff;
+}
+
+td {
+    padding: 12px;
+}
+
+td:nth-child(4) {
+    width: 5%;
+}
+
+thead tr th:nth-child(4) {
+    border-right: 1px solid #fff;
+}
+
+tbody tr .username,
+.rank {
+    color: #000;
+}
+
+tbody tr td .btn {
+    padding: 0;
+}
+
+.games-table td:nth-child(5),
+.games-table th:nth-child(5) {
+    width: 20%;
+}
+
+.redact-button {
+    padding: 10px;
+    margin-left: 4em;
+    border-radius: 4px;
+    background-color: #9736ff;
+    color: white;
+}

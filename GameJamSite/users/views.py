@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.views.generic import CreateView, DetailView
 from jams.models.gamejam import GameJam
+from jams.models.rating_user_jam import RatingCriterion
 
 from users.forms import LoginUserForm, RegisterUserForm
 from users.models import Follower, User
@@ -19,6 +20,7 @@ from users.models import Follower, User
 from .services import (
     get_user_games_history,
     get_user_jams_history,
+    is_valid_criterion,
     is_valid_gamejam_create,
     upload_photo,
 )
@@ -181,13 +183,32 @@ def create_jam(request):
                 date_end=date_end,
                 date_rating=date_rating,
             )
+            create_critreria(request, jam)
             return redirect("gamejam_detail", uuid=jam.uuid)
     return render(request, template_name="pages/user_pages/create_jam.html")
+
+
+def create_critreria(request, jam):
+    for key, value in request.POST.items():
+        if key.startswith("field"):
+            if is_valid_criterion(value):
+                try:
+                    RatingCriterion.objects.create(
+                        name=value.strip(),
+                        jam=jam,
+                    )
+                except Exception as e:
+                    print(f"Error in saving at {key}: {e}")
 
 
 @login_required
 def create_team(request):
     return render(request, template_name="pages/user_pages/create_team.html")
+
+
+@login_required
+def notifications(request):
+    return render(request, template_name="pages/user_pages/notification.html")
 
 
 def redactor(request, username):

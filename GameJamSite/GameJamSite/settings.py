@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "widget_tweaks",
     "slippers",
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -80,7 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "GameJamSite.wsgi.application"
-
+ASGI_APPLICATION = "GameJamSite.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -137,11 +138,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
-
-STATIC_ROOT = BASE_DIR / "assets"
 
 AUTHENTICATION_BACKENDS = (
     # new auth
@@ -158,6 +158,15 @@ CELERY_BROKER_URL = f"redis://redis:6379/1"
 CELERY_RESULT_BACKEND = f"redis://redis:6379/1"
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 # Django AllAuth
 

@@ -18,9 +18,12 @@ urlpatterns = [
     path("about/", users_view.about_page, name="about"),
     path("create_jam", users_view.create_jam, name="create_jam"),
     path("create_team", users_view.create_team, name="create_team"),
+    path("notifications/", users_view.notifications, name="notifications"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.handler404
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_URL)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

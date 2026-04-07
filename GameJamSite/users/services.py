@@ -120,3 +120,11 @@ def is_valid_gamejam_create(title, theme, dateStart, dateEnd, dateRating) -> boo
         return False
 
     return True
+
+
+def is_valid_criterion(criterion_value) -> bool:
+    if not criterion_value:
+        return False
+    if len(criterion_value.strip()) <= 0:
+        return False
+    return True

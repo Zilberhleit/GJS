@@ -1,0 +1,42 @@
+.gamejam-create-grid {
+    display: grid;
+    grid-template-columns: 0.3fr auto 0.3fr;
+}
+
+.gamejam-create-form {
+    grid-column: 2 / 3;
+    padding: 60px;
+}
+
+.gamejam-create-form h1 {
+    padding-left: 14px;
+}
+
+.form-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-input-group input {
+    width: 75%;
+}
+
+.form-input-group textarea {
+    width: 100%;
+}
+
+.datetime-field {
+    width: 50%;
+}
+
+.error-field {
+    padding: 14px;
+    gap: 16px;
+}
+
+.ratingContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}

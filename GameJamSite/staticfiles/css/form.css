@@ -1,0 +1,128 @@
+/* Классы формы регитсрации и авторизации, а также вопросник */
+.reg-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    display: flex;
+    gap: 25px;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+    border-radius: 15px;
+    width: 25vw;
+    height: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.reg-form p {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+
+.reg-form h1{
+    text-align: center;
+    margin: 10px 0 0 0;
+}
+
+.reg-form p label {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    white-space: nowrap;
+    font-size: 20px;
+    transition: top 0.3s, left 0.3s, font-size 0.3s;
+}
+
+.reg-form p .label-up {
+    top: -16px;
+    left: 10px;
+    font-size: 12px;
+}
+
+input {
+    border: none;
+    outline: none;
+}
+
+input {
+    width: 100%;
+    padding: 0;
+    background-color: transparent;
+    border-bottom: 1px solid white;
+    color: #fff;
+}
+
+.text-form {
+    display: flex;
+    justify-content: space-between;
+    padding: 5% 1% 1% 1%;
+    font-size: 15px;
+}
+
+.reg-text, .reg-text:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.poll-button,
+.btn-form {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 5px;
+    color: #fff;
+}
+
+.poll-button {
+    width: 30%;
+}
+
+.btn-form {
+    width: 100%;
+}
+
+.question {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+}
+
+#circle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: auto;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    transition: transform 0.6s ease;
+    pointer-events: auto;
+}
+.circle:nth-child(1) { top: 25%; right: 25%; width: 200px; height: 200px;
+    background-image: linear-gradient(86deg, #ff3d3a, #9736ff);
+}
+.circle:nth-child(2) { top: 20%; right: 55%; width: 250px; height: 250px;
+    background-image: linear-gradient(150deg, #ff3d3a, #9736ff);
+}
+.circle:nth-child(3) { top: 55%; right: 35%; width: 150px; height: 150px;
+    background-image: linear-gradient(10deg, #ff3d3a, #9736ff);
+}
+.circle:nth-child(4) { top: 60%; right: 50%; width: 200px; height: 200px;
+    background-image: linear-gradient(320deg, #ff3d3a, #9736ff);
+}
+
+label{
+    color: white;
+}
