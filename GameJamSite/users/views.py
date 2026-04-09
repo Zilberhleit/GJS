@@ -1,3 +1,4 @@
+from enum import member
 from tempfile import template
 
 from allauth.account import app_settings
@@ -15,11 +16,14 @@ from jams.models.gamejam import GameJam
 from jams.models.rating_user_jam import RatingCriterion
 
 from users.forms import LoginUserForm, RegisterUserForm
-from users.models import Follower, User
+from users.models import Follower, Team, User
+from users.models.team import TeamMembership
 
 from .services import (
+    get_user_created_teams,
     get_user_games_history,
     get_user_jams_history,
+    is_valid_create_team,
     is_valid_criterion,
     is_valid_gamejam_create,
     upload_photo,
@@ -81,6 +85,10 @@ class Profile(DetailView):
             "upload_url": reverse("upload-photo", args=[self.kwargs.get("username")])
         }
         # new context
+        context["created_teams"] = get_user_created_teams(self.kwargs.get("username"))
+        context["first_created_team"] = get_user_created_teams(
+            self.kwargs.get("username")
+        ).first()
         context["follow_data"] = {
             "follow_url": reverse("follow", args=[self.kwargs.get("username")]),
             "unfollow_url": reverse("unfollow", args=[self.kwargs.get("username")]),
@@ -189,6 +197,7 @@ def create_jam(request):
 
 
 def create_critreria(request, jam):
+    """Создание критериев оценки"""
     for key, value in request.POST.items():
         if key.startswith("field"):
             if is_valid_criterion(value):
@@ -203,7 +212,39 @@ def create_critreria(request, jam):
 
 @login_required
 def create_team(request):
+    """Представление создания команды"""
+    if request.method == "POST":
+        title = request.POST.get("title", "").strip()
+        description = request.POST.get("description", "").strip()
+        leader = request.user
+
+        is_valid = is_valid_create_team(title)
+
+        if is_valid:
+            team = Team.objects.create(
+                name=title, description=description, created_by=leader
+            )
+
+            TeamMembership.objects.create(team=team, user=leader, role="leader")
+            return redirect("profile_detail", username=request.user.username)
     return render(request, template_name="pages/user_pages/create_team.html")
+
+
+def team_detail(request, id):
+    team = get_object_or_404(Team, id=id)
+    is_leader = False
+    if request.user.is_authenticated:
+        membership = team.teammembership_set.filter(user=request.user).first()
+        is_leader = membership and membership.role == "leader"
+
+    return render(
+        request,
+        template_name="pages/user_pages/team_detail.html",
+        context={
+            "team": team,
+            "is_leader": is_leader,
+        },
+    )
 
 
 @login_required

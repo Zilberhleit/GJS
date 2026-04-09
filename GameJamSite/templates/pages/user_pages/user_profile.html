@@ -25,11 +25,17 @@
             Игродельня
             <div class="sidebar-elem-links">
                 <a href="" class="sidebar-elem-link">Опубликовать игру</a>
-                <a href="" class="sidebar-elem-link">Список игр </a></div>
+                <a href="" class="sidebar-elem-link">Список игр </a>
+            </div>
         </div>
         <div class="sidebar-elem">
             Командирование
-            <div class="sidebar-elem-links"></div>
+            <div class="sidebar-elem-links">
+                <a href="{% url 'create_team' %}" class="sidebar-elem-link">Создать команду</a>
+                {% if first_created_team %}
+                <a href="{% url 'team_detail' first_created_team.id %}" class="sidebar-elem-link">{{ first_created_team.name }}</a>
+                {% endif %}
+            </div>
         </div>
         <div class="sidebar-elem">
             Постирование
@@ -127,7 +133,7 @@
             <div class="user_games-files">
                 {% for game in user_games %}
                 <div>
-                    <a href="{%  url 'download_file' game.jam_uuid.uuid game.slug  %}">
+                    <a href="{%  url 'game_page' game.jam_uuid.uuid game.slug  %}">
                         {{ game.title }}
                     </a>
                     {{ game.uploaded_time }}

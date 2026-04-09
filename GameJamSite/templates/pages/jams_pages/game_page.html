@@ -34,9 +34,33 @@
     <div class="game_description">{{ game.description|safe }}</div>
 
     {% if game.jam_uuid is not none %}
-    <div class="rating_form">
-        <form></form>
-    </div>
+        {% if jam.status == 'OG' and request.user in jam.users.all and request.user != game.user %}
+        <div class="rating-form">
+            <form
+                action="{% url 'count_stars' jam.uuid game.user.id %}"
+                method="post"
+            >
+                {% csrf_token %}
+
+                    {% for crit in criteria %}
+                    <div class="rating-field">
+                        <div><h4>{{crit.name}}</h4></div>
+                        <div>
+                            <select name="stars_{{crit.id}}" id="rating_{{crit.id}}">
+                            <option value="5">★★★★★</option>
+                            <option value="4">★★★★</option>
+                            <option value="3">★★★</option>
+                            <option value="2">★★</option>
+                            <option value="1">★</option>
+                        </select>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                <button type="submit" class="btn btn-primary submit-button">Оценить</button>
+            </form>
+        </div>
+        {% endif %}
     {% endif %}
     <a
         href="{% url 'download_file' uuid=game.jam_uuid.uuid slug=game.slug %}"

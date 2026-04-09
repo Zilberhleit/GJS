@@ -18,6 +18,7 @@ urlpatterns = [
     path("about/", users_view.about_page, name="about"),
     path("create_jam", users_view.create_jam, name="create_jam"),
     path("create_team", users_view.create_team, name="create_team"),
+    path("team/<int:id>", users_view.team_detail, name="team_detail"),
     path("notifications/", users_view.notifications, name="notifications"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

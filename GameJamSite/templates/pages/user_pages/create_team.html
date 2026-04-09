@@ -60,20 +60,13 @@
 
 <script>
     const title = document.getElementById("title");
-    const theme = document.getElementById("theme");
-
-    const dateStartInput = document.getElementById("date_start");
-    const dateEndInput = document.getElementById("date_end");
-    const dateRatingInput = document.getElementById("date_rating");
 
     const createBtn = document.getElementById("createBtn");
 
     function validateForm() {
         const isTitleValid = validateTitle();
-        const isThemeValid = validateTheme();
-        const isDatesValid = validateDateOrder();
 
-        if (isTitleValid && isThemeValid && isDatesValid) {
+        if (isTitleValid) {
             createBtn.disabled = false;
         } else {
             createBtn.disabled = true;
@@ -98,7 +91,6 @@
         if (errorElement) {
             errorElement.textContent = message;
             errorElement.classList.add("visible");
-            console.log("showError ошибка");
         }
     }
 
@@ -107,16 +99,11 @@
         if (errorElement) {
             errorElement.textContent = "";
             errorElement.classList.remove("visible");
-            console.log("showError ошибка");
         }
     }
 
     title.addEventListener("input", function () {
         validateTitle();
-        validateForm();
-    });
-    theme.addEventListener("input", function () {
-        validateTheme();
         validateForm();
     });
 

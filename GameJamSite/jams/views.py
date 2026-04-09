@@ -5,6 +5,8 @@ from ast import Continue
 from types import NoneType
 from uuid import UUID
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Avg, Count, F, Q, Window
 from django.db.models.functions import Rank, RowNumber
 from django.http import (
@@ -21,6 +23,7 @@ from django.views.generic import DetailView, ListView
 from users.models import User
 
 from jams.models import Game, GameJam, RatingUserJam
+from jams.models.rating_user_jam import RatingCriterion
 
 from .filters import GameJamsFilter
 from .services import get_file_mime_type, is_valid_game_file, is_valid_image_file
@@ -40,7 +43,7 @@ class GameJamsLists(ListView):
         return context
 
 
-class MyGameJams(ListView):
+class MyGameJams(LoginRequiredMixin, ListView):
     """Список геймджемов пользователя"""
 
     template_name = "pages/jams_pages/jams.html"
@@ -182,13 +185,22 @@ def game_jam_download(request, uuid: UUID, slug):
 
 def rate_game(request, uuid: UUID, id: int):
     """Представление для рейтинга игры"""
-    if request.method == "POST" and "stars" in request.POST:
-        RatingUserJam.objects.update_or_create(
-            jam_uuid=get_object_or_404(GameJam, uuid=uuid),
-            user=get_object_or_404(User, id=id),
-            user_who_rate=get_object_or_404(User, id=request.user.id),
-            defaults={"stars": request.POST["stars"]},
-        )
+
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            if key.startswith("stars_"):
+                criterion_id = key.replace("stars_", "")
+                criteria = get_object_or_404(RatingCriterion, id=criterion_id)
+                stars = int(value)
+
+                RatingUserJam.objects.update_or_create(
+                    title=criteria.name,
+                    criteria=criteria,
+                    jam_uuid=get_object_or_404(GameJam, uuid=uuid),
+                    user=get_object_or_404(User, id=id),
+                    user_who_rate=get_object_or_404(User, id=request.user.id),
+                    defaults={"stars": stars},
+                )
         return redirect("gamejam_detail", uuid=uuid)
     raise Http404
 
@@ -217,8 +229,21 @@ def home_page(request):
     return render(request, "pages/index.html")
 
 
-def game_page(request, uuid, slug):
+def jam_game_page(request, uuid: UUID, slug):
+    """Представление игры с геймджемом"""
     game = Game.objects.get(jam_uuid=uuid, slug=slug)
+    jam = get_object_or_404(GameJam, uuid=uuid)
+    criteria = RatingCriterion.objects.filter(jam=uuid)
+    return render(
+        request,
+        "pages/jams_pages/game_page.html",
+        {"game": game, "criteria": criteria, "jam": jam},
+    )
+
+
+def game_page(request, slug):
+    """Представление игры без геймджема"""
+    game = get_object_or_404(Game, jam_uuid__isnull=True, slug=slug)
     return render(request, "pages/jams_pages/game_page.html", {"game": game})
 
 

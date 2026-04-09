@@ -9,6 +9,8 @@ from django.utils.datastructures import MultiValueDict
 from jams.models import GameJam
 from jams.models.game import Game
 
+from users.models import Team
+
 
 def get_user_jams_history(username: str) -> QuerySet:
     """Получение истории джемов
@@ -42,6 +44,10 @@ def get_user_jams_history(username: str) -> QuerySet:
 
 def get_user_games_history(username: str) -> QuerySet:
     return Game.objects.filter(user__username=username)
+
+
+def get_user_created_teams(username: str) -> QuerySet:
+    return Team.objects.filter(created_by__username=username)
 
 
 def upload_photo(
@@ -127,4 +133,13 @@ def is_valid_criterion(criterion_value) -> bool:
         return False
     if len(criterion_value.strip()) <= 0:
         return False
+    return True
+
+
+def is_valid_create_team(name) -> bool:
+    if not name:
+        return False
+    if len(name) < 3:
+        return False
+
     return True

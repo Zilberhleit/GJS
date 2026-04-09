@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+<div class="team-container">
+    <h1>{{ team.name }}</h1>
+    <p class="description">{{ team.description|default:"" }}</p>
+    <h2>Участники: {{ team.members.count }}</h2>
+
+    <ul class="members-list">
+        {% for membership in team.teammembership_set.all %}
+            <li class="member">
+                <span class="username">
+                    <a href="">{{ membership.user.username }}</a>
+                </span>
+                <span class="role">{{ membership.get_role_display }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% if is_leader %}
+    <div class="leader-panel">
+        <a href="">Пригласить</a>
+    </div>
+{% endif %}
+{% endblock %}
