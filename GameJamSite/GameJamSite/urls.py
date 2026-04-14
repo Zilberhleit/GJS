@@ -19,7 +19,15 @@ urlpatterns = [
     path("create_jam", users_view.create_jam, name="create_jam"),
     path("create_team", users_view.create_team, name="create_team"),
     path("team/<int:id>", users_view.team_detail, name="team_detail"),
+    path("team/<int:id>/invite/", users_view.invite_to_team, name="invite_to_team"),
     path("notifications/", users_view.notifications, name="notifications"),
+    path("api/search-users/", users_view.search_users, name="search_users"),
+    path("api/notifications/", users_view.get_notifications, name="api_notifications"),
+    path(
+        "api/notifications/<int:notification_id>/read/",
+        users_view.notification_read,
+        name="api_notification_read",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.handler404

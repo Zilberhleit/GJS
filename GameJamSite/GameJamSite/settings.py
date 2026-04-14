@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "slippers",
     "channels",
+    "django_prose_editor",
+    "django_vite",
 ]
 
 MIDDLEWARE = [
@@ -142,6 +144,23 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": False,
+        "dev_server_port": 5173,
+        "manifest_path": BASE_DIR
+        / "staticfiles"
+        / "jams"
+        / "js"
+        / ".vite"
+        / "manifest.json",
+    }
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 
 AUTHENTICATION_BACKENDS = (
     # new auth

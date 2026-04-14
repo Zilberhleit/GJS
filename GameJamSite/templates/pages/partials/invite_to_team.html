@@ -1,0 +1,93 @@
+<!--<div id="invite-popup-placeholder"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.initInvitePopup = function (teamId) {
+            if (typeof window.openInvitePopup === "function") {
+                window.openInvitePopup(teamId);
+            } else {
+                console.error("React не загружен. Ждём...");
+                // Ждём загрузки React
+                window.addEventListener("react-loaded", function () {
+                    window.openInvitePopup(teamId);
+                });
+            }
+        };
+    });
+</script>-->
+
+<div id="popup-invite" class="overlay">
+    <div class="popup">
+        <form
+            action="{% url 'invite_to_team' team.id %}"
+            method="post"
+            class="game-upload-form"
+        >
+            {% csrf_token %}
+            <div class="form-content">
+                <div class="form-group">
+                    <label for="username">Никнейм пользователя</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-input"
+                        placeholder="Введите никнейм"
+                        required
+                        autocomplete="off"
+                    />
+                    <div
+                        id="username-suggestions"
+                        class="suggestions-dropdown"
+                    ></div>
+                </div>
+                <div class="form-actions">
+                    <a class="btn btn-secondary cancel-button" href="#">
+                        <span>Отмена</span>
+                    </a>
+                    <button type="submit" class="btn btn-primary submit-button">
+                        <span>Отправить приглашение</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const usernameInput = document.getElementById("username");
+    const suggestions = document.getElementById("username-suggestions");
+
+    usernameInput.addEventListener("input", async function () {
+        const query = this.value;
+        if (query.length < 2) {
+            suggestions.style.display = "none";
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                "/api/search-users/?q=" + encodeURIComponent(query),
+            );
+            const users = await response.json();
+
+            if (users.length > 0) {
+                suggestions.innerHTML = users
+                    .map(
+                        (user) =>
+                            `<div class="suggestion-item" onclick="selectUser('${user.username}')">${user.username}</div>`,
+                    )
+                    .join("");
+                suggestions.style.display = "block";
+            } else {
+                suggestions.style.display = "none";
+            }
+        } catch (error) {
+            console.error("Ошибка поиска: ", error);
+        }
+    });
+
+    function selectUser(username) {
+        usernameInput.value = username;
+        suggestions.style.display = "none";
+    }
+</script>

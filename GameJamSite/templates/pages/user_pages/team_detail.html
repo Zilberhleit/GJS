@@ -1,30 +1,46 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block head %}
-{% endblock head %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'css/popup.css' %}" />
+<link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}" />
+<link rel="stylesheet" href="{% static 'css/teamDetail.css' %}" />
+{% endblock head %} {% load django_vite %} {% block content %}
 <div class="team-container">
-    <h1>{{ team.name }}</h1>
-    <p class="description">{{ team.description|default:"" }}</p>
-    <h2>Участники: {{ team.members.count }}</h2>
+    <div class="team-title">
+        <h1>{{ team.name }}</h1>
+        <p class="description">{{ team.description|default:"" }}</p>
+    </div>
 
-    <ul class="members-list">
-        {% for membership in team.teammembership_set.all %}
+    <h3>Участники: {{ team.members.count }}</h3>
+    <div class="team-members">
+        <ul class="members-list">
             <li class="member">
-                <span class="username">
-                    <a href="">{{ membership.user.username }}</a>
+                <span class="username">Участник</span>
+                <span class="role">Роль</span>
+            </li>
+            <br />
+            {% for membership in team.teammembership_set.all %}
+            <li class="member">
+                <span class="member-elem">
+                    <a
+                        href="{% url 'profile_detail' membership.user.username %}"
+                        >{{ membership.user.username }}</a
+                    >
                 </span>
                 <span class="role">{{ membership.get_role_display }}</span>
             </li>
-        {% endfor %}
-    </ul>
-</div>
-
-{% if is_leader %}
-    <div class="leader-panel">
-        <a href="">Пригласить</a>
+            {% endfor %}
+        </ul>
     </div>
-{% endif %}
-{% endblock %}
+
+    {% if is_leader %}
+    <div class="leader-panel">
+        <a id="openInvitePopup" class="button" href="#popup-invite"
+            >Пригласить</a
+        >
+        <!--<button onclick="window.initInvitePopup({{ team.id }})" class="button">
+            Пригласить
+            </button>-->
+        <div id="react-root"></div>
+        <script src="{% static 'jams/js/assets/main-CsgazwAU.js' %}"></script>
+    </div>
+</div>
+{% endif %} {% include "pages/partials/invite_to_team.html" %} {% endblock %}

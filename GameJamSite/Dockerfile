@@ -5,7 +5,11 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN apt-get update && apt-get install -y libpq-dev \
     gcc \
-    postgresql-client
+    postgresql-client \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -14,5 +18,8 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+RUN if [ -f package.json ]; then npm ci --only=production || npm install; fi
+COPY jams/package*.json /app/jams/
+RUN cd /app/jams && npm install
 
+COPY . .

@@ -17,30 +17,45 @@
         <div class="sidebar-elem">
             Джемоварня
             <div class="sidebar-elem-links">
+                {% if  request.user.id == profile_data.id %}
                 <a href="{% url 'create_jam' %}" class="sidebar-elem-link">Создать джем</a>
+                {% endif %}
                 <a href="{% url 'my_jams' %}" class="sidebar-elem-link">Список джемов</a>
             </div>
         </div>
         <div class="sidebar-elem">
             Игродельня
             <div class="sidebar-elem-links">
+                {% if  request.user.id == profile_data.id %}
                 <a href="" class="sidebar-elem-link">Опубликовать игру</a>
+                {% endif %}
                 <a href="" class="sidebar-elem-link">Список игр </a>
             </div>
         </div>
         <div class="sidebar-elem">
             Командирование
             <div class="sidebar-elem-links">
+                {% if not first_created_team %}
+                {% if  request.user.id == profile_data.id %}
                 <a href="{% url 'create_team' %}" class="sidebar-elem-link">Создать команду</a>
-                {% if first_created_team %}
+                {% endif %}
+                {% elif first_created_team %}
                 <a href="{% url 'team_detail' first_created_team.id %}" class="sidebar-elem-link">{{ first_created_team.name }}</a>
+                {% endif %}
+
+                {% if  request.user.id == profile_data.id %}
+                <a href="{% url 'notifications' %}" class="sidebar-elem-link">Уведомления</a>
                 {% endif %}
             </div>
         </div>
+        {% if request.user.id == profile_data.id %}
         <div class="sidebar-elem">
             Постирование
-            <div class="sidebar-elem-links"></div>
+            <div class="sidebar-elem-links">
+                 <a href="" class="sidebar-elem-link">Написать пост</a>
+            </div>
         </div>
+        {% endif %}
     </div>
 
     <div class="profile">

@@ -16,8 +16,9 @@ from jams.models.gamejam import GameJam
 from jams.models.rating_user_jam import RatingCriterion
 
 from users.forms import LoginUserForm, RegisterUserForm
-from users.models import Follower, Team, User
+from users.models import Follower, Notification, Team, TeamInvitation, User
 from users.models.team import TeamMembership
+from users.utils import send_realtime_notification
 
 from .services import (
     get_user_created_teams,
@@ -214,6 +215,9 @@ def create_critreria(request, jam):
 def create_team(request):
     """Представление создания команды"""
     if request.method == "POST":
+        if Team.objects.filter(created_by=request.user).exists():
+            return redirect("profile_detail", username=request.user.username)
+
         title = request.POST.get("title", "").strip()
         description = request.POST.get("description", "").strip()
         leader = request.user
@@ -250,6 +254,101 @@ def team_detail(request, id):
 @login_required
 def notifications(request):
     return render(request, template_name="pages/user_pages/notification.html")
+
+
+@login_required
+def invite_to_team(request, id):
+    team = get_object_or_404(Team, id=id)
+
+    is_leader = TeamMembership.objects.filter(
+        team=team, user=request.user, role="leader"
+    ).exists()
+
+    if not is_leader:
+        messages.error(request, "Только лидер может приглашать")
+        return redirect("team_detail", id=team.id)
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        invited_user = get_object_or_404(User, username=username)
+
+        if invited_user == request.user:
+            messages.error(request, "Нельзя пригласить себя")
+            return redirect("tteam_detail", id=team.id)
+
+        if team.members.filter(id=invited_user.id).exists():
+            messages.error(request, "Пользователь уже в команде")
+            return redirect("tteam_detail", id=team.id)
+
+        message = f"Пользователь {request.user} приглашвет вас в команду {team.name}"
+
+        invitation = TeamInvitation.objects.create(
+            team=team, invitee=invited_user, inviter=request.user, status="pending"
+        )
+
+        notification = Notification.objects.create(
+            recipient=invited_user,
+            sender=request.user,
+            notification_type="team_invite",
+            team=team,
+            message=message,
+        )
+
+        send_realtime_notification(
+            user_id=invited_user.id,
+            message=message,
+            notification_id=notification.id,
+            notification_type="info",
+        )
+        return redirect("team_detail", id=team.id)
+    return render(request, "users/invite_to_team.html", {"team": team})
+
+
+@login_required
+def get_notifications(request):
+    notifications = Notification.objects.filter(recipient=request.user).order_by(
+        "-created_at"
+    )[:50]
+
+    data = [
+        {
+            "id": n.id,
+            "message": n.message,
+            "created_at": n.created_at.isoformat(),
+            "type": n.notification_type,
+        }
+        for n in notifications
+    ]
+
+    return JsonResponse(
+        {
+            "notifications": data,
+            "unread_count": sum(1 for n in notifications if not n.is_read),
+        }
+    )
+
+
+@login_required
+def notification_read(request, notification_id):
+    notification = get_object_or_404(
+        Notification, id=notification_id, recipient=request.user
+    )
+    notification.is_read = True
+    notification.save()
+    return JsonResponse({"status": "ok"})
+
+
+def search_users(request):
+    query = request.GET.get("q", "")
+    if len(query) < 2:
+        return JsonResponse([], safe=False)
+
+    users = User.objects.filter(username__icontains=query).exclude(id=request.user.id)[
+        :10
+    ]
+
+    data = [{"username": user.username} for user in users]
+    return JsonResponse(data, safe=False)
 
 
 def redactor(request, username):

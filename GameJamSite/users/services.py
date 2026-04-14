@@ -90,6 +90,22 @@ def is_valid_photo(photo: InMemoryUploadedFile) -> bool:
     )
 
 
+def is_valid_video(video: InMemoryUploadedFile) -> bool:
+    return (
+        video is not None
+        and (video.content_type == "video/mp4")
+        and video.size <= 150 * 1024 * 1024
+    )
+
+
+def is_valid_zip(zip_file: InMemoryUploadedFile) -> bool:
+    return (
+        zip_file is not None
+        and (zip_file.content_type == "application/zip")
+        and zip_file.size <= 150 * 1024 * 1024
+    )
+
+
 def is_valid_gamejam_create(title, theme, dateStart, dateEnd, dateRating) -> bool:
     """Проверка создания геймджема
 

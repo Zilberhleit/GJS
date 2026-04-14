@@ -251,5 +251,9 @@ def games_page(request):
     return render(request, "pages/jams_pages/games.html")
 
 
+def react_app(request):
+    return render(request, "react_app.html")
+
+
 def handler404(request: HttpRequest, exception) -> HttpResponseNotFound:
     return HttpResponseNotFound(render(request, "pages/errors/404.html"))

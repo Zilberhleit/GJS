@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path("", views.GameJamsLists.as_view(), name="jams_list"),
+    path("app/", views.react_app, name="react_app"),
     path("my_jams/", MyGameJams.as_view(), name="my_jams"),
     path("<uuid:uuid>/", views.GameJamDetail.as_view(), name="gamejam_detail"),
     path("<uuid:uuid>/upload/", views.game_jam_upload, name="upload-game"),
