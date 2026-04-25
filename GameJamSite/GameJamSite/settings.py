@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "channels",
     "django_prose_editor",
     "django_vite",
+    "django_clamd",
 ]
 
 MIDDLEWARE = [
@@ -139,7 +140,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_ROOT = BASE_DIR / "media"
@@ -149,14 +152,11 @@ DJANGO_VITE = {
     "default": {
         "dev_mode": False,
         "dev_server_port": 5173,
-        "manifest_path": BASE_DIR
-        / "staticfiles"
-        / "jams"
-        / "js"
-        / ".vite"
-        / "manifest.json",
+        "manifest_path": BASE_DIR / "staticfiles" / "jams" / "js" / "manifest.json",
+        "static_url_prefix": "jams/js",
     }
 }
+# / ".vite"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -170,6 +170,14 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
+# Clamd
+
+CLAMD_ENABLED = True
+
+CLAMD_USE_TCP = True
+CLAMD_TCP_ADDR = "clamav"
+CLAMD_TCP_PORT = 3310
+CLAMD_FAIL_BY_DEFAULT = True
 
 # Celery & Celery Beat
 

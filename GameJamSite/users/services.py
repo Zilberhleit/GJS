@@ -9,7 +9,7 @@ from django.utils.datastructures import MultiValueDict
 from jams.models import GameJam
 from jams.models.game import Game
 
-from users.models import Team
+from users.models import Follower, Team, User
 
 
 def get_user_jams_history(username: str) -> QuerySet:
@@ -48,6 +48,10 @@ def get_user_games_history(username: str) -> QuerySet:
 
 def get_user_created_teams(username: str) -> QuerySet:
     return Team.objects.filter(created_by__username=username)
+
+
+def get_user_followers(username: str) -> QuerySet:
+    return User.objects.filter(following_relations__following__username=username)
 
 
 def upload_photo(

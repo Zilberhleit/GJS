@@ -2,6 +2,7 @@ import os
 
 from django.db import models
 from django.utils.text import slugify
+from django_clamd.validators import validate_file_infection
 from users.models import User
 
 from jams.models import GameJam
@@ -27,7 +28,11 @@ class Game(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
 
-    game_file = models.FileField(upload_to="zip_uploads/", verbose_name="Файл игры")
+    game_file = models.FileField(
+        upload_to="zip_uploads/",
+        validators=[validate_file_infection],
+        verbose_name="Файл игры",
+    )
     uploaded_time = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата загрузки"
     )

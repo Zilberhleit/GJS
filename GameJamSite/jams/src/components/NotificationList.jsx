@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../../static/css/notifications.css";
+import { getCookie, getCsrfToken, isAuthenticated } from "../utils/cookies";
+import "../styles/notification.css";
 
 function NotificationList() {
   const [notifications, setNotification] = useState([]);
   const [unreadCount, setUnreadCount] = useState([]);
+  const [loading, setLoading] = useState({});
 
   useEffect(() => {
     fetch("/api/notifications/")
@@ -29,18 +31,19 @@ function NotificationList() {
         console.log("WebSocket connected:", data.message);
         return;
       }
+      const notification = {
+        id: data.notification_id,
+        message: data.message,
+        is_read: data.is_read,
+        created_at: new Date().toISOString(),
+        type: data.notification_type,
+      };
 
-      setNotification((prev) => [
-        {
-          id: data.notification_id,
-          message: data.message,
-          is_read: false,
-          created_at: new Date().toISOString(),
-          type: data.notification_type,
-        },
-        ...prev,
-      ]);
+      if (data.notification_type == "team_invite" && data.team_id) {
+        notification.team_id = data.team_id;
+      }
 
+      setNotification((prev) => [notification, ...prev]);
       setUnreadCount((prev) => prev + 1);
     };
 
@@ -48,12 +51,72 @@ function NotificationList() {
   }, []);
 
   const markAsRead = (id) => {
-    fetch(`/api/notifications/${id}/read/`, { method: "POST" }).then(() => {
-      setNotification((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, is_read: true } : n)),
-      );
-      setUnreadCount((prev) => Math.max(0, prev - 1));
-    });
+    fetch(`/api/notifications/${id}/read/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCsrfToken(),
+      },
+    })
+      .then(() => {
+        setNotification((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, is_read: true } : n)),
+        );
+        setUnreadCount((prev) => Math.max(0, prev - 1));
+      })
+      .catch((error) => console.log("mark read: ", error));
+  };
+
+  const acceptInvitation = (notificationId, teamId) => {
+    setLoading((prev) => ({ ...prev, [notificationId]: true }));
+
+    const csrftoken = getCsrfToken();
+
+    fetch(`/api/notifications/${teamId}/accept/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "ok") {
+          markAsRead(notificationId);
+          location.reload();
+        } else {
+          console.error(data.error || "Ошибка при принятии приглашения");
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        setLoading((prev) => ({ ...prev, [notificationId]: false }));
+      });
+  };
+
+  const rejectInvitation = (notificationId, teamId) => {
+    setLoading((prev) => ({ ...prev, [notificationId]: true }));
+    const csrftoken = getCsrfToken();
+
+    fetch(`/api/notifications/${teamId}/reject/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "ok") {
+          markAsRead(notificationId);
+          location.reload();
+        } else {
+          console.error(data.error || "Ошибка при принятии приглашения");
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        setLoading((prev) => ({ ...prev, [notificationId]: false }));
+      });
   };
 
   return (
@@ -65,13 +128,42 @@ function NotificationList() {
         return (
           <div
             key={notif.id}
-            className={`notification ${notif.is_read ? "read" : "unread"}`}
+            className={`notification-${notif.is_read ? "read" : "unread"}`}
           >
-            <p>{notif.message}</p>
-            <small>{new Date(notif.created_at).toLocaleString()}</small>
-            {!notif.is_read && (
-              <button onClick={() => markAsRead(notif.id)}>Прочитано</button>
-            )}
+            <div className="message-container">
+              <p>{notif.message}</p>
+
+              {!notif.is_read && (
+                <button
+                  className="read-btn"
+                  onClick={() => markAsRead(notif.id)}
+                >
+                  Прочитано
+                </button>
+              )}
+
+              {notif.type == "team_invite" && !notif.is_read && (
+                <div className="invite-actions">
+                  <button
+                    className="accept-btn"
+                    onClick={() => acceptInvitation(notif.id, notif.team_id)}
+                    disabled={loading[notif.id]}
+                  >
+                    {loading[notif.id] ? "Загрузка..." : "Принять"}
+                  </button>
+                  <button
+                    className="reject-btn"
+                    onClick={() => rejectInvitation(notif.id, notif.team_id)}
+                    disabled={loading[notif.id]}
+                  >
+                    Отклонить
+                  </button>
+                </div>
+              )}
+            </div>
+            <small className="date-text">
+              {new Date(notif.created_at).toLocaleString()}
+            </small>
           </div>
         );
       })}

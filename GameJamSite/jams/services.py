@@ -1,9 +1,21 @@
 import mimetypes
 import os
 
+import magic
+from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import UploadedFile
+from django_clamd.validators import validate_file_infection
 
 from jams.models import Game
+
+
+def is_virus_free(game_file: UploadedFile) -> bool:
+    """Проверка на вирусы через ClamAV"""
+    try:
+        validate_file_infection(game_file)
+        return True
+    except ValidationError:
+        return False
 
 
 def is_valid_game_file(game_file: UploadedFile) -> bool:
@@ -14,7 +26,26 @@ def is_valid_game_file(game_file: UploadedFile) -> bool:
     :return: True, если файл имеет расширение .rar или .zip, иначе False
     """
     game_extensions = (".zip", ".rar")
-    return any(game_file.name.endswith(ext) for ext in game_extensions)
+    if not any(game_file.name.lower().endswith(ext) for ext in game_extensions):
+        return False
+
+    mime = magic.from_buffer(game_file.read(1024), mime=True)
+    game_file.seek(0)
+
+    allowed_mimes = [
+        "application/zip",
+        "application/x-zip-compressed",
+        "application/x-rar-compressed",
+        "application/vnd.rar",
+    ]
+
+    try:
+        if not is_virus_free(game_file):
+            return False
+    except Exception as e:
+        print(f"ClamAV проверка недоступна: {e}")
+
+    return mime in allowed_mimes
 
 
 def is_valid_image_file(image_file: UploadedFile) -> bool:

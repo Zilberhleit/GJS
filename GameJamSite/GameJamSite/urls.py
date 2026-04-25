@@ -28,6 +28,16 @@ urlpatterns = [
         users_view.notification_read,
         name="api_notification_read",
     ),
+    path(
+        "api/notifications/<int:team_id>/accept/",
+        users_view.accept_invite,
+        name="accept_invite",
+    ),
+    path(
+        "api/notifications/<int:team_id>/reject/",
+        users_view.reject_invite,
+        name="reject_invite",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.handler404

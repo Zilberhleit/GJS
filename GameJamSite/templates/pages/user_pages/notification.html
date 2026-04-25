@@ -1,7 +1,16 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% load django_vite %}
+
+{% block head %}
+{% vite_asset 'src/main.jsx' %}
+{% endblock %}
+
+{% block content %}
 <div id="notifications"></div>
 <div id="react-notifications-root"></div>
-<script src="{% static 'jams/js/assets/main-nvr1viFj.js' %}"></script>
+<!--
+<script src="{% static 'jams/js/assets/main-CmQbCmDE.js' %}"></script>-->
 <script>
     const notifContainer = document.getElementById("notifications");
     const socket = new WebSocket(

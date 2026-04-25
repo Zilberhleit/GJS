@@ -1,32 +1,28 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'css/avatar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/content.css' %}" />
+{% endblock head %} {% block headButtons %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'css/avatar.css' %}">
-<link rel="stylesheet" href="{% static 'css/content.css' %}">
-{% endblock head %}
-
-{% block headButtons %}
-<!--<li><a href="{ url 'redactor' request.user.username %}" class="menu-button">Дизайн</a></li>-->
-<!--<li><a href="" class="menu-button">Написать пост</a></li>-->
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="profile-container">
     <div class="profile-sidebar">
         <div class="sidebar-elem">
             Джемоварня
             <div class="sidebar-elem-links">
-                {% if  request.user.id == profile_data.id %}
-                <a href="{% url 'create_jam' %}" class="sidebar-elem-link">Создать джем</a>
+                {% if request.user.id == profile_data.id %}
+                <a href="{% url 'create_jam' %}" class="sidebar-elem-link"
+                    >Создать джем</a
+                >
                 {% endif %}
-                <a href="{% url 'my_jams' %}" class="sidebar-elem-link">Список джемов</a>
+                <a href="{% url 'my_jams' %}" class="sidebar-elem-link"
+                    >Список джемов</a
+                >
             </div>
         </div>
         <div class="sidebar-elem">
             Игродельня
             <div class="sidebar-elem-links">
-                {% if  request.user.id == profile_data.id %}
+                {% if request.user.id == profile_data.id %}
                 <a href="" class="sidebar-elem-link">Опубликовать игру</a>
                 {% endif %}
                 <a href="" class="sidebar-elem-link">Список игр </a>
@@ -36,15 +32,23 @@
             Командирование
             <div class="sidebar-elem-links">
                 {% if not first_created_team %}
-                {% if  request.user.id == profile_data.id %}
-                <a href="{% url 'create_team' %}" class="sidebar-elem-link">Создать команду</a>
-                {% endif %}
+                    {% if request.user.id == profile_data.id %}
+                    <a href="{% url 'create_team' %}" class="sidebar-elem-link"
+                        >Создать команду</a
+                    >
+                    {% endif %}
                 {% elif first_created_team %}
-                <a href="{% url 'team_detail' first_created_team.id %}" class="sidebar-elem-link">{{ first_created_team.name }}</a>
+                    <a
+                        href="{% url 'team_detail' first_created_team.id %}"
+                        class="sidebar-elem-link"
+                        >{{ first_created_team.name }}</a
+                    >
                 {% endif %}
 
-                {% if  request.user.id == profile_data.id %}
-                <a href="{% url 'notifications' %}" class="sidebar-elem-link">Уведомления</a>
+                {% if request.user.id == profile_data.id %}
+                <a href="{% url 'notifications' %}" class="sidebar-elem-link"
+                    >Уведомления</a
+                >
                 {% endif %}
             </div>
         </div>
@@ -52,82 +56,103 @@
         <div class="sidebar-elem">
             Постирование
             <div class="sidebar-elem-links">
-                 <a href="" class="sidebar-elem-link">Написать пост</a>
+                <a href="" class="sidebar-elem-link">Написать пост</a>
             </div>
         </div>
         {% endif %}
     </div>
 
     <div class="profile">
-
         <div class="hat-banner">
             {% if profile_data.hat_image %}
-            <img src="{{ profile_data.hat_image.url }}" alt="Шапка" id="hat-img">
+            <img
+                src="{{ profile_data.hat_image.url }}"
+                alt="Шапка"
+                id="hat-img"
+            />
             {% endif %}
         </div>
 
         <div class="profile-foreground">
             <div></div>
             <div class="user-content">
-                <div class="content-body">
-                    Контента нет
-                </div>
+                <div class="content-body">Контента нет</div>
             </div>
         </div>
 
         <div id="hat">
-
             <div class="avatar-block">
                 <div>
                     <label for="avatar-input" id="avatar">
                         {% if request.user.is_authenticated and request.user.id == profile_data.id %}
-                            <input id="avatar-input" type="file" name="avatar_image"
-                                accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"/>
-                        {% endif %}
-                        {% if profile_data.avatar_image  %}
-                        <img src="{{ profile_data.avatar_image.url }}" alt="Аватар" id="avatar-img">
+                        <input
+                            id="avatar-input"
+                            type="file"
+                            name="avatar_image"
+                            accept="image/png, image/jpeg, image/jpg, image/webp, image/jfif"
+                        />
+                        {% endif %} {% if profile_data.avatar_image %}
+                        <img
+                            src="{{ profile_data.avatar_image.url }}"
+                            alt="Аватар"
+                            id="avatar-img"
+                        />
                         {% endif %}
                     </label>
                 </div>
 
-                <h2 class="display-5" style="text-align: center">{{ profile_data.username }}</h2>
+                <h2 class="display-5" style="text-align: center">
+                    {{ profile_data.username }}
+                </h2>
                 <h4 style="text-align: center">{{ profile_data.email }}</h4>
 
-
                 {% if request.user.is_authenticated and request.user.id == profile_data.id %}
-                 <label for="hat-input" id="hat-btn">
+                <label for="hat-input" id="hat-btn">
                     Изменить шапку
-                    <input id="hat-input" type="file" name="hat_photo" accept="image/png, image/jpeg, image/jpg, image/webp,
-                    image/jfif">
+                    <input
+                        id="hat-input"
+                        type="file"
+                        name="hat_photo"
+                        accept="image/png, image/jpeg, image/jpg, image/webp,
+                    image/jfif"
+                    />
                 </label>
-                    <span class="load-photo-status" style="color: white;"></span>
+                <span class="load-photo-status" style="color: white"></span>
                 {% endif %}
 
-                <!--Реализовать динамичную кнопку подписки-->
                 <div class="subscribe-div">
-
                     {% if request.user.is_authenticated and request.user.id != profile_data.id %}
-
-                        {% if request.user in profile_data.following.all %}
-                        <button class="follow-button" id="subs" name="follow" value={"{{ request.user.username }}"}>Подписаться</button>
+                        {% if request.user in subscribers %}
+                        <button
+                            class="unfollow-button"
+                            id="unsubs"
+                            name="unfollow"
+                            value="{{ request.user.username }}"
+                        >
+                            Отписаться
+                        </button>
                         {% else %}
-                        <button class="unfollow-button" id="unsubs" name="unfollow">Отписаться</button>
+                        <button
+                            class="follow-button"
+                            id="subs"
+                            name="follow"
+                            value="{{ request.user.username }}"
+                        >
+                            Подписаться
+                        </button>
                         {% endif %}
-
                     {% endif %}
 
-                    <div class="subs-num">{{ profile_data.subscribers }} подписчиков</div>
+                    <div class="subs-num">
+                        {{ subscribers_count }} подписчиков
+                    </div>
                 </div>
-
             </div>
-
         </div>
-        <!-- <li><a href="#" class="menu-button">Создать джем</a></li> -->
-        <br>
+        <br />
     </div>
 
     <div class="user-st">
-
         <div class="user_games">
             <h5>История участия</h5>
             <div class="user_games-files">
@@ -148,7 +173,9 @@
             <div class="user_games-files">
                 {% for game in user_games %}
                 <div>
-                    <a href="{%  url 'game_page' game.jam_uuid.uuid game.slug  %}">
+                    <a
+                        href="{%  url 'game_page' game.jam_uuid.uuid game.slug  %}"
+                    >
                         {{ game.title }}
                     </a>
                     {{ game.uploaded_time }}
@@ -156,11 +183,8 @@
                 {% endfor %}
             </div>
         </div>
-
     </div>
-    {% endblock %}
-
-    {% block footercontent %}
+    {% endblock %} {% block footercontent %}
 
     <script src="{% static '/dynamic/profile_dropdown_list.js' %}"></script>
 
@@ -169,6 +193,5 @@
 
     {{ follow_data|json_script:"follow-data" }}
     <script src="{% static '/dynamic/subscribe_button.js' %}"></script>
-
 </div>
 {% endblock %}

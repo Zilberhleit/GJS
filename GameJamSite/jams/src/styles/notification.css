@@ -1,0 +1,40 @@
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    padding: 60px;
+    gap: 15px;
+}
+
+.invite-actions {
+    display: flex;
+    flex-direction: space-between;
+}
+
+.date-text {
+    font-size: 13px;
+}
+
+.accept-btn {
+    background: #9736ff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-size: 250%;
+    background-position: 0;
+}
+
+.reject-btn {
+    background: #ff3d3a;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-size: 250%;
+    background-position: 0;
+}
+
+.read-btn {
+}

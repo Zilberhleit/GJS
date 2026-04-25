@@ -22,6 +22,7 @@ from users.utils import send_realtime_notification
 
 from .services import (
     get_user_created_teams,
+    get_user_followers,
     get_user_games_history,
     get_user_jams_history,
     is_valid_create_team,
@@ -90,6 +91,10 @@ class Profile(DetailView):
         context["first_created_team"] = get_user_created_teams(
             self.kwargs.get("username")
         ).first()
+        context["subscribers"] = get_user_followers(self.kwargs.get("username"))
+        context["subscribers_count"] = get_user_followers(
+            self.kwargs.get("username")
+        ).count()
         context["follow_data"] = {
             "follow_url": reverse("follow", args=[self.kwargs.get("username")]),
             "unfollow_url": reverse("unfollow", args=[self.kwargs.get("username")]),
@@ -136,22 +141,42 @@ def about_page(request):
     return render(request, "pages/about.html")
 
 
-# new View
-# Объединить follow и unfollow в одну функцию
 @login_required
 def follow(request, username):
     """Представление подписки на пользователя"""
-    followed_user = get_object_or_404(User, username=username)
-    Follower.objects.get_or_create(follower=request.user, followed=followed_user)
-    return redirect("profile_detail", username=followed_user.username)
+    try:
+        following_user = get_object_or_404(User, username=username)
+
+        if request.user == following_user:
+            return JsonResponse(
+                {"status": "error", "message": "Нельзя подписаться на себя"}
+            )
+
+        Follower.objects.get_or_create(follower=request.user, following=following_user)
+        return JsonResponse(
+            {"status": "ok", "message": f"Вы подписались на {following_user.username}"}
+        )
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})
 
 
 @login_required
 def unfollow(request, username):
     """Представление отписки на пользователя"""
-    followed_user = get_object_or_404(User, username=username)
-    Follower.objects.filter(follower=request.user, followed=followed_user).delete()
-    return redirect("profile_detail", username=followed_user.username)
+    try:
+        following_user = get_object_or_404(User, username=username)
+        deleted, _ = Follower.objects.filter(
+            follower=request.user, following=following_user
+        ).delete()
+
+        if deleted == 0:
+            JsonResponse({"status": "error", "message": "Вы не были подписаны"})
+
+        return JsonResponse(
+            {"status": "ok", "message": f"Вы отписались на {following_user.username}"}
+        )
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})
 
 
 @login_required
@@ -274,13 +299,13 @@ def invite_to_team(request, id):
 
         if invited_user == request.user:
             messages.error(request, "Нельзя пригласить себя")
-            return redirect("tteam_detail", id=team.id)
+            return redirect("team_detail", id=team.id)
 
         if team.members.filter(id=invited_user.id).exists():
             messages.error(request, "Пользователь уже в команде")
-            return redirect("tteam_detail", id=team.id)
+            return redirect("team_detail", id=team.id)
 
-        message = f"Пользователь {request.user} приглашвет вас в команду {team.name}"
+        message = f"Пользователь {request.user} приглашает вас в команду {team.name}"
 
         invitation = TeamInvitation.objects.create(
             team=team, invitee=invited_user, inviter=request.user, status="pending"
@@ -305,21 +330,85 @@ def invite_to_team(request, id):
 
 
 @login_required
+def accept_invite(request, team_id):
+    team = get_object_or_404(Team, id=team_id)
+    invitation = get_object_or_404(
+        TeamInvitation, team=team, invitee=request.user, status="pending"
+    )
+    invitation.status = "accepted"
+    invitation.save()
+
+    TeamMembership.objects.get_or_create(
+        team=team, user=request.user, defaults={"role": "member"}
+    )
+
+    message = f"Пользователь {request.user.username} теперь в вашей команде"
+
+    notification = Notification.objects.create(
+        recipient=invitation.inviter,
+        sender=request.user,
+        notification_type="team_accept",
+        team=team,
+        message=message,
+    )
+
+    send_realtime_notification(
+        user_id=invitation.inviter.id,
+        message=message,
+        notification_id=notification.id,
+        notification_type="info",
+    )
+
+    return JsonResponse({"status": "ok"})
+
+
+@login_required
+def reject_invite(request, team_id):
+    team = get_object_or_404(Team, id=team_id)
+    invitation = get_object_or_404(
+        TeamInvitation, team=team, invitee=request.user, status="pending"
+    )
+    invitation.status = "reject"
+    invitation.save()
+
+    message = f"Пользователь {request.user.username} теперь в вашей команде"
+
+    notification = Notification.objects.create(
+        recipient=invitation.inviter,
+        sender=request.user,
+        notification_type="team_accept",
+        team=team,
+        message=message,
+    )
+
+    send_realtime_notification(
+        user_id=invitation.inviter.id,
+        message=message,
+        notification_id=notification.id,
+        notification_type="info",
+    )
+
+    return JsonResponse({"status": "ok"})
+
+
+@login_required
 def get_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by(
         "-created_at"
     )[:50]
-
-    data = [
-        {
+    data = []
+    for n in notifications:
+        item = {
             "id": n.id,
             "message": n.message,
             "created_at": n.created_at.isoformat(),
             "type": n.notification_type,
+            "is_read": n.is_read,
         }
-        for n in notifications
-    ]
+        if n.notification_type == "team_invite":
+            item["team_id"] = n.team.id
 
+        data.append(item)
     return JsonResponse(
         {
             "notifications": data,

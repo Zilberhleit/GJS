@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/static/",
+  base: "/static/jams/js/",
   build: {
     outDir: "../staticfiles/jams/js",
     emptyOutDir: true,
@@ -13,6 +13,7 @@ export default defineConfig({
       output: {
         entryFileNames: "assets/[name]-[hash].js",
         chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash].[ext]",
       },
     },
   },

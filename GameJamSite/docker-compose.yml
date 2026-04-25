@@ -58,5 +58,32 @@ services:
       - redis
       - db
 
+  clamav:
+    image: clamav/clamav:latest
+    container_name: clamav
+    restart: always
+    ports:
+      - "3310:3310"
+    environment:
+      - CLAMAV_NO_FRESHCLAMD=false
+    volumes:
+      - clamav_db:/var/lib/clamav
+      #- ./clamav.conf:/etc/clamav/clamd.conf:ro
+    command: >
+      sh -c "
+        echo 'TCPSocket 3310' >> /etc/clamav/clamd.conf &&
+        echo 'TCPAddr 0.0.0.0' >> /etc/clamav/clamd.conf &&
+        freshclam --foreground --quiet &
+        sleep 10 &&
+        exec clamd --foreground
+      "
+    healthcheck:
+      test: ["CMD", "clamdscan", "--ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+
 volumes:
   postgres_data:
+  clamav_db:

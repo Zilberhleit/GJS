@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && mv ../staticfiles/jams/js/.vite/manifest.json ../staticfiles/jams/js/manifest.json && rm -rf ../staticfiles/jams/js/.vite",
     "preview": "vite preview"
   }
 }
