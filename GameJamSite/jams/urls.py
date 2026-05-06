@@ -21,5 +21,15 @@ urlpatterns = [
     path("<uuid:uuid>/poll/submit/", poll_view.submit_poll, name="submit"),
     path("<uuid:uuid>/join_jam/", views.join_gamejam, name="join_gamejam"),
     path("<uuid:uuid>/leave_jam/", views.leave_gamejam, name="leave_gamejam"),
-    path("<uuid:uuid>/games/<slug:slug>/", views.jam_game_page, name="game_page"),
+    path(
+        "<uuid:uuid>/join_jam_team/<int:team_id>",
+        views.join_jam_team,
+        name="join_jam_team",
+    ),
+    path(
+        "<uuid:uuid>/leave_jam_team/<int:team_id>",
+        views.leave_jam_team,
+        name="leave_jam_team",
+    ),
+    path("<uuid:uuid>/games/<slug:slug>/", views.jam_game_page, name="jam_game_page"),
 ]

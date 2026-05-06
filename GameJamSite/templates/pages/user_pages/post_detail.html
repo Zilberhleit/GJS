@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/avatar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/content.css' %}" />
+<link rel="stylesheet" href="{% static 'css/popup.css' %}" />
+<link rel="stylesheet" href="{% static 'css/comment.css' %}" />
+{% endblock %}
+
+{% block content %}
+{% load markdown_widget %}
+<div class="post-detail-content">
+    <div class="post-body">
+        <div class="post-form">
+            <div class="post-meta">
+                <div class="post-header">
+                    <a class="a-content" href="{% url 'profile_detail' post.author.username %}">
+                        <div class="post-author">
+                            <div class="post-avatar">
+                                <img
+                                    src="{{ post.author.avatar_image.url }}"
+                                    alt="Аватар"
+                                    id="avatar-img"
+                                />
+                            </div>
+                            <div class="author-meta">
+                                <p>{{ post.author }}</p>
+                                <span>{{ post.created_at }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    {% if post.author == request.user %}
+                    <div class="post-settings-{{ post.id }}">
+                        <button class="settings-button" id="settingsBtn-{{ post.id }}">
+                            <img
+                                src="{% static 'img/icons8-settings-50.png' %}"
+                            />
+                        </button>
+                        <div class="drop-menu" id="drop-menu-{{ post.id }}">
+                            <a href="{% url 'edit_post' post_id=post.id %}">Редактировать</a>
+                            <a href="#popup-delete-{{post.id}}">Удалить</a>
+                            <a href=""></a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="post-title">
+                    <h3>{{ post.title }}</h3>
+                </div>
+            </div>
+            <div class="post-content">
+
+                {{ post.content|markdown }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "pages/partials/delete_post_popup.html" %}
+{% include "pages/partials/comment_list.html" %}
+
+<script src="{% static '/dynamic/settings_button.js' %}"></script>
+{% endblock %}

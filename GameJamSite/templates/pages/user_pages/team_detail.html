@@ -1,8 +1,13 @@
-{% extends 'base.html' %} {% load static %} {% block head %}
+{% extends 'base.html' %} {% load static %}
+{% load django_vite %}
+{% block head %}
+{% vite_asset 'src/main.jsx' %}
 <link rel="stylesheet" href="{% static 'css/popup.css' %}" />
 <link rel="stylesheet" href="{% static 'css/gmjDetail.css' %}" />
 <link rel="stylesheet" href="{% static 'css/teamDetail.css' %}" />
-{% endblock head %} {% load django_vite %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/content.css' %}" />
+{% endblock head %}
+{% block content %}
 <div class="team-container">
     <div class="team-title">
         <h1>{{ team.name }}</h1>
@@ -39,8 +44,62 @@
         <!--<button onclick="window.initInvitePopup({{ team.id }})" class="button">
             Пригласить
             </button>-->
+        <a class="button" href="{% url 'create_team_post' team_id=team.id %}" class="sidebar-elem-link">Написать пост</a>
         <div id="react-root"></div>
-        <script src="{% static 'jams/js/assets/main-CsgazwAU.js' %}"></script>
+
+    </div>
+</div>
+<div class="team-content">
+    <div class="team-content-body">
+        {% if posts is None %}
+            Контента нет
+        {% else %}
+        {% load markdown_widget %}
+            {% for post in posts %}
+            <div class="post-form">
+                <div class="post-meta">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="post-avatar">
+                                <img
+                                    src="{{ post.author.avatar_image.url }}"
+                                    alt="Аватар"
+                                    id="avatar-img"
+                                />
+                            </div>
+                            <div class="author-meta">
+                                <p>{{ post.team }}</p>
+                                <span>{{ post.created_at }}</span>
+                            </div>
+                        </div>
+                        {% if post.author == request.user %}
+                        <div class="post-settings-{{ post.id }}">
+                            <button class="settings-button" id="settingsBtn-{{ post.id }}">
+                                <img
+                                    src="{% static 'img/icons8-settings-50.png' %}"
+                                />
+                            </button>
+                            <div class="drop-menu" id="drop-menu-{{ post.id }}">
+                                <a href="{% url 'edit_post' post_id=post.id %}">Редактировать</a>
+                                <a href="#popup-delete-{{post.id}}">Удалить</a>
+                                <a href=""></a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="post-title">
+                        <h3>{{ post.title }}</h3>
+                    </div>
+                </div>
+                <a class="a-content" href="{% url 'post_detail' post.id %}">
+                    <div class="post-content">
+                        {{ post.content|truncatewords:50|markdown }}
+                    </div>
+                </a>
+            </div>
+            {% include "pages/partials/delete_post_popup.html" %}
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endif %} {% include "pages/partials/invite_to_team.html" %} {% endblock %}

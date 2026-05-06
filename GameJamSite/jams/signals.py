@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from jam_polls.models import GameJamTheme, Theme
 
 from jams.models import GameJam
-from jams.views import count_jam_rating
+from jams.views import count_jam_rating, count_ratings
 
 
 @receiver(post_init, sender=GameJam)
@@ -32,6 +32,17 @@ def calculate_winner_when_jam_finished(sender, instance, **kwargs):
             if winner_user.exists():
                 instance.winner = winner_user[0]
                 instance.save()
+
+
+@receiver(pre_save, sender=GameJam)
+def calculate_winner_by_criterion(sender, instance, **kwargs):
+    if instance.previous_status != "FN" and instance.status == "FN":
+        instance.previous_status = "FN"
+
+        winner = count_ratings(instance.uuid)
+        if winner:
+            instance.winner = winner
+            instance.save()
 
 
 @receiver(pre_save, sender=GameJam)

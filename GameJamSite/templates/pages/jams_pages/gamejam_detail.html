@@ -55,12 +55,25 @@
 <div class="jam-container">
     <div class="jam-status-container">
         <!--        Статус джема / Кнопка принятия участия / Загрузка игры        -->
+        {% if object.description %}
+            {{ object.description }}
+        {% endif %}
         {% if object.status == 'PR' %}
         {% if request.user.is_authenticated and request.user not in object.users.all %}
             {% if object.has_poll %}
                 <a href="poll" class="button">Принять участие</a>
             {% else %}
                 <a href="join_jam" class="button">Принять участие</a>
+                {% if current_user_team and current_user_team not in object.teams.all %}
+                    <a href="{% url 'join_jam_team' object.uuid current_user_team.id %}" class="button">Записать команду</a>
+                {% endif %}
+
+                {% if current_user_team in object.teams.all %}
+                    <h2 style="text-align: center">
+                        Ваша команда джема, дождитесь даты начала
+                    </h2>
+                    <a href="{% url 'leave_jam_team' object.uuid current_user_team.id %}" class="button">Выписать команду</a>
+                {% endif %}
             {% endif %}
         {% elif not request.user.is_authenticated %}
             <h2 style="text-align: center">Вы не вошли в свой аккаунт</h2>
@@ -69,9 +82,15 @@
                 Вы участник джема, дождитесь даты начала
             </h2>
             <a href="leave_jam" class="button">Покинуть джем</a>
+            {% if current_user_team in object.teams.all %}
+                <h2 style="text-align: center">
+                    Ваша команда джема, дождитесь даты начала
+                </h2>
+                <a href="{% url 'leave_jam_team' object.uuid current_user_team.id %}" class="button">Выписать команду</a>
+            {% endif %}
         {% endif %}
         {% elif object.status == 'OG' %}
-            {% if request.user in object.users.all %}
+            {% if request.user in object.users.all or current_user_team in object.teams.all %}
             <h2 style="text-align: center">Ждём ваших работ</h2>
             <a class="button" href="#popup1">Загрузить игру</a>
         {% else %}
@@ -112,7 +131,7 @@
                     </td>
                     <td>
                         <a
-                            href="{% url 'game_page' object.uuid current_user_game.slug %}"
+                            href="{% url 'jam_game_page' object.uuid current_user_game.slug %}"
                             >{{ current_user_game.title }}</a
                         >
                     </td>
@@ -126,10 +145,15 @@
                 {% endif %} {% for user_game in user_games %}
                 <tr>
                     <td class="rank">{{ user_game.place }}</td>
-                    <td class="username">{{ user_game.user.username }}</td>
+                    <td class="username">
+                        {{ user_game.user.username }}
+                        {% if current_user_team and current_user_team in object.teams.all %}
+                            ({{current_user_team}})
+                        {% endif %}
+                    </td>
                     <td>
                         <a
-                            href="{% url 'game_page' object.uuid user_game.slug %}"
+                            href="{% url 'jam_game_page' object.uuid user_game.slug %}"
                             >{{ user_game.title }}</a
                         >
                     </td>

@@ -121,6 +121,7 @@ function validateDateOrder() {
 }
 
 function showError(elementId, message) {
+  console.log("showError works");
   const errorElement = document.getElementById(elementId);
   if (errorElement) {
     errorElement.textContent = message;

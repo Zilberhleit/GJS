@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django_markdown_widget import MarkdownEditorAdminMixin
 
 from users.models import Team
 from users.models.follower import Follower
@@ -11,6 +12,10 @@ from users.models.teaminvitation import TeamInvitation
 
 class UserAdmin(admin.ModelAdmin):
     pass
+
+
+class PostAdmin(MarkdownEditorAdminMixin, admin.ModelAdmin):
+    list_display = ["title", "created_at"]
 
 
 admin.site.register(get_user_model(), UserAdmin)

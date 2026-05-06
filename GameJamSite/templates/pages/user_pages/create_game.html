@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/game_create.css' %}" />
+{% endblock %} {% block content %}
+<form method="post" enctype="multipart/form-data" class="game-upload-form">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    {% if is_edit %}
+        <div class="create-game-buttons">
+            <button class="btn btn-primary submit-button" type="submit">Сохранить изменения</button>
+            <a href="{% url 'post_detail' game.user.username %}">Отмена</a>
+        </div>
+    {% else %}
+        <div class="create-game-buttons">
+            <button class="btn btn-primary submit-button" type="submit">Создать</button>
+        </div>
+    {% endif %}
+</form>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+
+{% endblock %}

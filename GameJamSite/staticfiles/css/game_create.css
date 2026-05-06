@@ -1,0 +1,18 @@
+.game-upload-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    gap: 15px;
+}
+
+.descr-textarea {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}

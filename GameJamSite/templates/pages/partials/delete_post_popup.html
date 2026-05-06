@@ -1,0 +1,36 @@
+<div id="popup-delete-{{post.id}}" class="overlay">
+    <div class="popup">
+        <form
+            action="{% url 'delete_post' post.id %}"
+            method="post"
+            class="game-upload-form"
+        >
+            {% csrf_token %}
+            <div class="form-content">
+                <h1 style="color: black">Вы точно хотите удалить ваш пост?</h1>
+                <div class="form-actions">
+                    <a class="btn btn-secondary cancel-button" href="#">
+                        <span>Отмена</span>
+                    </a>
+                    <button
+                        type="submit"
+                        class="btn btn-primary submit-button"
+                        onclick="confirmDelete({{post.id}})"
+                    >
+                        <span>Удалить</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function confirmDelete(postId) {
+        document.getElementById("delete-post-id").value = postId;
+        document.getElementById("popup-invite").style.display = "flex";
+    }
+
+    function closeDeletePopup() {
+        document.getElementById("popup-invite").style.display = "none";
+    }
+</script>

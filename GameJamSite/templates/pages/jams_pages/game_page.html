@@ -61,12 +61,45 @@
             </form>
         </div>
         {% endif %}
+        {% if ratings %}
+            <div class="user-ratings">
+                <div class="ratings-head">
+                    <h3>Ваши оценки</h3>
+                </div>
+                {% for rate in ratings %}
+                    <div>
+                        <h4>{{rate.criteria.name}}: {{rate.stars}}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if final_ratings %}
+            <div class="user-ratings">
+                <div class="ratings-head">
+                    <h3>Итоговые оценки</h3>
+                </div>
+                {% for rate in final_ratings %}
+                    <div>
+                        <h4>{{rate.criterion_name}}: {{rate.avg_score}}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
-    <a
-        href="{% url 'download_file' uuid=game.jam_uuid.uuid slug=game.slug %}"
-        class="download-btn"
-    >
-        Скачать
-    </a>
+    {% if game.jam_uuid.uuid %}
+        <a
+            href="{% url 'download_file' uuid=game.jam_uuid.uuid slug=game.slug %}"
+            class="download-btn"
+        >
+            Скачать
+        </a>
+    {% else %}
+        <a
+            href="{% url 'download_game' slug=game.slug %}"
+            class="download-btn"
+        >
+            Скачать
+        </a>
+    {% endif %}
 </div>
 {% endblock %}

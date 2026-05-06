@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from django.contrib import admin
 
-from jams.models import Game, GameJam, RatingUserJam
+from jams.models import Comment, Game, GameJam, RatingUserJam
 from jams.models.rating_user_jam import RatingCriterion
 from jams.utils import rand_date
 
@@ -48,3 +48,4 @@ admin.site.register(GameJam, GameJamAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(RatingUserJam)
 admin.site.register(RatingCriterion)
+admin.site.register(Comment)

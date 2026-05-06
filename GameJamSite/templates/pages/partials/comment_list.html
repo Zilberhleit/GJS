@@ -1,0 +1,50 @@
+<div class="comment-section">
+    {% if request.user.is_authenticated %}
+    <div class="add-comment-section">
+        <form action="{% url 'add_comment_to_post' post.id %}" method="post" class="form-comment">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+            <div class="button-form">
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+    <div class="comment-list">
+        {% for comment in comments %}
+        <div class="comment" id="comment-{{comment.id}}">
+            <div class="comment-meta">
+                <a href="{% url 'profile_detail' comment.author.username %}" class="a-content">
+                    <div class="comment-header">
+                        <div class="comment-avatar">
+                            <img
+                                src="{{ comment.author.avatar_image.url }}"
+                                alt="Аватар"
+                                id="avatar-img"
+                            />
+                        </div>
+                        <div class="author-meta">
+                            <p>{{ comment.author }}</p>
+                            <span>{{ comment.created_at }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% if post.author == request.user %}
+                <div class="comment-settings-{{ comment.id }}">
+                    <button class="settings-button" id="settingsBtn-{{ comment.id }}">
+                        ...
+                    </button>
+                    <div class="drop-menu-comment" id="drop-menu-{{ comment.id }}">
+                        <a href="#popup-comment-delete-{{comment.id}}">Удалить</a>
+                        <a href=""></a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="comment-body">{{ comment.body|linebreaks }}</div>
+            {% include "pages/partials/delete_comment_popup.html" %}
+        </div>
+        {% endfor %}
+    </div>
+</div>

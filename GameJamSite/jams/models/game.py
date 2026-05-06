@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django_clamd.validators import validate_file_infection
 from users.models import User
 
-from jams.models import GameJam
+# from jams.models import GameJam
 
 
 class Game(models.Model):
@@ -19,7 +19,7 @@ class Game(models.Model):
     )
 
     jam_uuid = models.ForeignKey(
-        GameJam,
+        "GameJam",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -38,15 +38,24 @@ class Game(models.Model):
     )
 
     def __str__(self):
-        return (
-            self.title
-            + " - "
-            + self.jam_uuid.title
-            + " - "
-            + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S")
-            + " - added by "
-            + self.user.username
-        )
+        if self.jam_uuid:
+            return (
+                self.title
+                + " - "
+                + self.jam_uuid.title
+                + " - "
+                + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S")
+                + " - added by "
+                + self.user.username
+            )
+        else:
+            return (
+                self.title
+                + " - "
+                + self.uploaded_time.strftime("%d.%m.%Y %H:%M:%S")
+                + " - added by "
+                + self.user.username
+            )
 
     def save(self, *args, **kwargs):
         if not self.title and self.game_file:

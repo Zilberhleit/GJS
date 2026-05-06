@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% load static %} {% block head %}
+<link
+    rel="stylesheet"
+    href="{% static 'django_markdown_widget/css/editor.css' %}"
+/>
+{% endblock %} {% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% load markdown_widget %}
+    {{ form.as_p }}
+
+    {% if is_edit %}
+        <button class="btn btn-primary submit-button" type="submit">Сохранить изменения</button>
+        <a href="{% url 'post_detail' post_id=post.id %}">Отмена</a>
+    {% else %}
+        <button class="btn btn-primary submit-button" type="submit">Создать</button>
+    {% endif %}
+</form>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script src="{% static 'django_markdown_widget/js/editor.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+        if (typeof showdown !== "undefined") {
+            console.log("showdown найден");
+        } else {
+            console.log("showdown не найден");
+        }
+    });
+</script>
+{% endblock %}

@@ -10,4 +10,147 @@
     border: 2px solid rgba(255, 255, 255, 0.35);
     padding: 10px;
     gap: 24px;
+    overflow: visible;
+}
+
+.team-content-body {
+    display: grid;
+    position: relative;
+    width: 60%;
+    height: 100%;
+    background-color: #3b3e4a;
+    border-radius: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    padding: 10px;
+    gap: 24px;
+    align-items: center;
+    overflow: visible;
+}
+
+.team-content {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    overflow: visible;
+}
+
+.post-form {
+    display: grid;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(80, 32, 40, 0.1);
+    border-radius: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    padding: 10px;
+    gap: 15px;
+}
+
+.post-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.post-meta span {
+    font-size: 14px;
+}
+
+.post-content {
+    padding: 5px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.post-content img,
+video {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    display: flex;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-avatar {
+    display: flex;
+    width: 55px;
+    height: 55px;
+    background-color: #fff;
+    justify-content: center;
+    /*align-items: center;*/
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-author {
+    display: flex;
+    gap: 10px;
+}
+
+.post-settings {
+    position: relative;
+}
+
+.settings-button {
+    background-color: rgba(255, 255, 255, 0);
+    cursor: pointer;
+}
+
+.drop-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    right: 0;
+}
+
+.drop-menu a {
+    color: white;
+    text-decoration: none;
+    background-color: #3b3e4a;
+    display: block;
+    padding: 4px;
+}
+
+.drop-menu a:hover {
+    background-color: #310e4a;
+}
+
+.post-detail-content {
+    /*display: grid;*/
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    /*height: 100%;*/
+    padding: 20px;
+    gap: 24px;
+    overflow: visible;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-body {
+    width: 100%;
+    padding: 20px;
+    background-color: #3b3e4a;
+    border-radius: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.a-content {
+    text-decoration: none;
+    color: white;
 }

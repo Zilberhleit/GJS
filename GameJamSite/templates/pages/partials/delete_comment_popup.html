@@ -1,0 +1,42 @@
+<div id="popup-comment-delete-{{comment.id}}" class="overlay">
+    <div class="popup">
+        <form
+            action="{% url 'delete_comment' comment.id %}"
+            method="post"
+            class="game-upload-form"
+        >
+            {% csrf_token %}
+            <div class="form-content">
+                <h1 style="color: black">
+                    Вы точно хотите удалить ваш комментарий?
+                </h1>
+                <div class="form-actions">
+                    <a class="btn btn-secondary cancel-button" href="#">
+                        <span>Отмена</span>
+                    </a>
+                    <button
+                        type="submit"
+                        class="btn btn-primary submit-button"
+                        onclick="confirmDelete({{comment.id}})"
+                    >
+                        <span>Удалить</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function confirmDelete(commentId) {
+        document.getElementById("delete-comment-id").value = commentId;
+        document.getElementById(
+            `popup-comment-delete-${comment.id}`,
+        ).style.display = "flex";
+    }
+
+    function closeDeletePopup(commentId) {
+        document.getElementById(
+            `popup-comment-delete-${comment.id}`,
+        ).style.display = "none";
+    }
+</script>

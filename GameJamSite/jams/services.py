@@ -1,20 +1,29 @@
 import mimetypes
 import os
+import tempfile
 
 import magic
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import UploadedFile
 from django_clamd.validators import validate_file_infection
 
-from jams.models import Game
+from jams.models import Game, RatingUserJam
+
+
+def get_user_ratings(rated_user, rater, uuid):
+    return RatingUserJam.objects.filter(
+        jam_uuid=uuid, user=rated_user, user_who_rate=rater
+    )
 
 
 def is_virus_free(game_file: UploadedFile) -> bool:
     """Проверка на вирусы через ClamAV"""
     try:
         validate_file_infection(game_file)
+        print("is_virus_free validate success")
         return True
     except ValidationError:
+        print("is_virus_free validate failed")
         return False
 
 
@@ -25,11 +34,29 @@ def is_valid_game_file(game_file: UploadedFile) -> bool:
 
     :return: True, если файл имеет расширение .rar или .zip, иначе False
     """
+
+    try:
+        if not is_virus_free(game_file):
+            print("is_valid_game_file not virus free")
+            return False
+    except Exception as e:
+        print(f"ClamAV проверка недоступна: {e}")
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".zip") as tmp:
+        for chunk in game_file.chunks():
+            tmp.write(chunk)
+        tmp_path = tmp.name
+
     game_extensions = (".zip", ".rar")
     if not any(game_file.name.lower().endswith(ext) for ext in game_extensions):
+        print("not right ext")
         return False
 
-    mime = magic.from_buffer(game_file.read(1024), mime=True)
+    try:
+        mime = magic.from_file(tmp_path, mime=True)
+    finally:
+        os.unlink(tmp_path)
+
     game_file.seek(0)
 
     allowed_mimes = [
@@ -39,13 +66,12 @@ def is_valid_game_file(game_file: UploadedFile) -> bool:
         "application/vnd.rar",
     ]
 
-    try:
-        if not is_virus_free(game_file):
-            return False
-    except Exception as e:
-        print(f"ClamAV проверка недоступна: {e}")
-
-    return mime in allowed_mimes
+    if mime in allowed_mimes:
+        return True
+    else:
+        print(mime)
+        print("mimes is invalid")
+        return False
 
 
 def is_valid_image_file(image_file: UploadedFile) -> bool:

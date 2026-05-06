@@ -1,0 +1,974 @@
+/* =========================================================
+   Django Markdown Editor — GitHub-style CSS
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   CSS Custom Properties — Light theme defaults
+   --------------------------------------------------------- */
+.md-editor,
+.md-editor--light {
+  --md-bg: #ffffff;
+  --md-border: #d0d7de;
+  --md-text: #1f2328;
+  --md-text-muted: #656d76;
+  --md-toolbar-bg: #f6f8fa;
+  --md-toolbar-hover: #e8ebef;
+  --md-accent: #f78166;
+  --md-textarea-bg: #ffffff;
+  --md-preview-bg: #ffffff;
+  --md-code-bg: #f6f8fa;
+  --md-height: 300px;
+}
+
+/* ---------------------------------------------------------
+   Dark theme — explicit
+   --------------------------------------------------------- */
+.md-editor--dark {
+  --md-bg: #0d1117;
+  --md-border: #30363d;
+  --md-text: #c9d1d9;
+  --md-text-muted: #8b949e;
+  --md-toolbar-bg: #161b22;
+  --md-toolbar-hover: #1c2128;
+  --md-accent: #f78166;
+  --md-textarea-bg: #0d1117;
+  --md-preview-bg: #0d1117;
+  --md-code-bg: #161b22;
+}
+
+/* ---------------------------------------------------------
+   Dark theme — auto (follows OS preference)
+   Only applies when no explicit theme class is set
+   --------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) {
+    --md-bg: #0d1117;
+    --md-border: #30363d;
+    --md-text: #c9d1d9;
+    --md-text-muted: #8b949e;
+    --md-toolbar-bg: #161b22;
+    --md-toolbar-hover: #1c2128;
+    --md-accent: #f78166;
+    --md-textarea-bg: #0d1117;
+    --md-preview-bg: #0d1117;
+    --md-code-bg: #161b22;
+  }
+}
+
+/* ---------------------------------------------------------
+   Base font
+   --------------------------------------------------------- */
+.md-editor,
+.md-editor * {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    Helvetica, Arial, sans-serif;
+  color: var(--md-text);
+}
+
+/* ---------------------------------------------------------
+   Container
+   --------------------------------------------------------- */
+.md-editor {
+  border: 1px solid var(--md-border);
+  border-radius: 6px;
+  background-color: var(--md-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Round top corners on first child, bottom on last */
+.md-editor-tabs {
+  border-radius: 6px 6px 0 0;
+}
+
+.md-editor-footer {
+  border-radius: 0 0 6px 6px;
+}
+
+/* ---------------------------------------------------------
+   Tabs
+   --------------------------------------------------------- */
+.md-editor-tabs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  border-bottom: 1px solid var(--md-border);
+  background-color: var(--md-toolbar-bg);
+  padding: 0 8px;
+  gap: 0;
+}
+
+.md-editor-tab {
+  padding: 8px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--md-text-muted);
+  line-height: 1;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  margin-bottom: -1px;
+  align-self: center;
+}
+
+.md-editor-tab:hover {
+  color: var(--md-text);
+}
+
+.md-editor-tab--active {
+  font-weight: 600;
+  color: var(--md-text);
+  border-bottom: 2px solid var(--md-accent);
+}
+
+.md-editor-tabs-spacer {
+  flex: 1;
+}
+
+/* Tabs bar right-side controls */
+.md-editor-tabs {
+  align-items: center;
+}
+
+/* Autosave toggle switch */
+.md-editor-autosave-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: 6px;
+  padding: 0 10px;
+  margin: 0;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--md-text-muted);
+  user-select: none;
+}
+
+.md-editor-autosave-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.md-editor-autosave-switch {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 14px;
+  background-color: var(--md-border);
+  border-radius: 7px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.md-editor-autosave-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.md-editor-autosave-checkbox:checked + .md-editor-autosave-switch {
+  background-color: var(--md-accent);
+}
+
+.md-editor-autosave-checkbox:checked + .md-editor-autosave-switch::after {
+  transform: translateX(10px);
+}
+
+.md-editor-autosave-label {
+  line-height: 1;
+}
+
+/* Fullscreen button in tabs bar */
+.md-editor-fullscreen-btn {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--md-text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.md-editor-fullscreen-btn:hover {
+  background-color: var(--md-toolbar-hover);
+  color: var(--md-text);
+}
+
+.md-editor-fullscreen-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Autosave status in footer */
+.md-editor-footer-autosave-status {
+  font-style: italic;
+  color: var(--md-text-muted);
+  font-size: 11px;
+}
+
+/* ---------------------------------------------------------
+   Toolbar
+   --------------------------------------------------------- */
+.md-editor-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--md-border);
+  background-color: var(--md-toolbar-bg);
+  flex-wrap: wrap;
+  overflow: visible;
+  position: relative;
+  z-index: 5;
+}
+
+.md-editor-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--md-text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.md-editor-toolbar-btn:hover {
+  background-color: var(--md-toolbar-hover);
+  color: var(--md-text);
+}
+
+/* Toolbar tooltips */
+.md-editor-toolbar-btn {
+  position: relative;
+}
+
+.md-editor-toolbar-btn::after {
+  content: attr(aria-label);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--md-text);
+  color: var(--md-bg);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+
+.md-editor-toolbar-btn::before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: var(--md-text);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+
+.md-editor-toolbar-btn:hover::after,
+.md-editor-toolbar-btn:hover::before {
+  opacity: 1;
+}
+
+.md-editor-toolbar-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  pointer-events: none;
+}
+
+.md-editor-toolbar-separator {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background-color: var(--md-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.md-editor-toolbar-spacer {
+  flex: 1;
+}
+
+/* ---------------------------------------------------------
+   Editor body — wraps write + preview panels
+   --------------------------------------------------------- */
+.md-editor-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------
+   Panels
+   --------------------------------------------------------- */
+.md-editor-panel--active {
+  display: block;
+}
+
+.md-editor-panel--hidden {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   Split (side-by-side) mode
+   --------------------------------------------------------- */
+.md-editor--split .md-editor-body {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.md-editor--split .md-editor-write,
+.md-editor--split .md-editor-preview {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: calc(50% - 4.5px);
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.md-editor-divider {
+  display: none;
+}
+
+.md-editor--split .md-editor-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9px;
+  cursor: col-resize;
+  background-color: var(--md-toolbar-bg);
+  border-left: 1px solid var(--md-border);
+  border-right: 1px solid var(--md-border);
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+  user-select: none;
+}
+
+.md-editor--split .md-editor-divider::after {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 28px;
+  border-left: 1px solid var(--md-text-muted);
+  border-right: 1px solid var(--md-text-muted);
+  opacity: 0.5;
+}
+
+.md-editor--split .md-editor-divider:hover,
+.md-editor--split .md-editor-divider.md-editor-divider--dragging {
+  background-color: var(--md-toolbar-hover);
+}
+
+.md-editor--split .md-editor-divider:hover::after,
+.md-editor--split .md-editor-divider.md-editor-divider--dragging::after {
+  border-color: var(--md-accent);
+  opacity: 1;
+}
+
+.md-editor--split .md-editor-textarea {
+  flex: 1;
+  min-height: var(--md-height);
+  resize: none;
+}
+
+/* ---------------------------------------------------------
+   Textarea
+   --------------------------------------------------------- */
+.md-editor-textarea {
+  display: block;
+  width: 100%;
+  min-height: var(--md-height);
+  padding: 12px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background-color: var(--md-textarea-bg);
+  color: var(--md-text);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  tab-size: 4;
+}
+
+.md-editor-textarea::placeholder {
+  color: var(--md-text-muted);
+}
+
+/* ---------------------------------------------------------
+   Preview panel
+   --------------------------------------------------------- */
+.md-editor-preview {
+  min-height: var(--md-height);
+  padding: 16px 20px;
+  background-color: var(--md-preview-bg);
+}
+
+/* ---------------------------------------------------------
+   Preview content — GitHub Markdown styles
+   --------------------------------------------------------- */
+.md-editor-preview-content {
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  color: var(--md-text);
+}
+
+.md-editor-preview-content > *:first-child {
+  margin-top: 0;
+}
+
+.md-editor-preview-content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Headings */
+.md-editor-preview-content h1,
+.md-editor-preview-content h2,
+.md-editor-preview-content h3,
+.md-editor-preview-content h4,
+.md-editor-preview-content h5,
+.md-editor-preview-content h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--md-text);
+}
+
+.md-editor-preview-content h1 {
+  font-size: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--md-border);
+}
+
+.md-editor-preview-content h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--md-border);
+}
+
+.md-editor-preview-content h3 {
+  font-size: 1.25em;
+}
+
+.md-editor-preview-content h4 {
+  font-size: 1em;
+}
+
+.md-editor-preview-content h5 {
+  font-size: 0.875em;
+}
+
+.md-editor-preview-content h6 {
+  font-size: 0.85em;
+  color: var(--md-text-muted);
+}
+
+/* Paragraphs */
+.md-editor-preview-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+/* Inline code */
+.md-editor-preview-content code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: var(--md-code-bg);
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  color: var(--md-text);
+}
+
+/* Code blocks */
+.md-editor-preview-content pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: var(--md-code-bg);
+  border-radius: 6px;
+  word-wrap: normal;
+}
+
+.md-editor-preview-content pre code {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border-radius: 0;
+  white-space: pre;
+  word-break: normal;
+  font-size: 100%;
+}
+
+/* Blockquotes */
+.md-editor-preview-content blockquote {
+  margin: 0 0 16px 0;
+  padding: 0 1em;
+  color: var(--md-text-muted);
+  border-left: 4px solid var(--md-border);
+}
+
+.md-editor-preview-content blockquote > :first-child {
+  margin-top: 0;
+}
+
+.md-editor-preview-content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Lists */
+.md-editor-preview-content ul,
+.md-editor-preview-content ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+}
+
+.md-editor-preview-content ul ul,
+.md-editor-preview-content ul ol,
+.md-editor-preview-content ol ol,
+.md-editor-preview-content ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.md-editor-preview-content li {
+  margin-top: 0.25em;
+}
+
+.md-editor-preview-content li + li {
+  margin-top: 0.25em;
+}
+
+/* Task list / checkboxes */
+.md-editor-preview-content ul.contains-task-list,
+.md-editor-preview-content ol.contains-task-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.md-editor-preview-content li.task-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  list-style: none;
+}
+
+.md-editor-preview-content li.task-list-item input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+/* Toast notifications */
+.md-editor-toast {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.md-editor-toast--error {
+  background-color: #d1242f;
+  color: #fff;
+}
+
+.md-editor-toast--success {
+  background-color: #1a7f37;
+  color: #fff;
+}
+
+.md-editor-toast--fade {
+  opacity: 0;
+}
+
+/* Video */
+.md-editor-preview-content video {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+/* Embeds / iframes */
+.md-editor-preview-content iframe {
+  max-width: 100%;
+  border: 1px solid var(--md-border);
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+/* Highlight / mark */
+.md-editor-preview-content mark {
+  background-color: #fff8c5;
+  padding: 0.1em 0.2em;
+  border-radius: 3px;
+  color: inherit;
+}
+
+.md-editor--dark .md-editor-preview-content mark {
+  background-color: rgba(187, 128, 9, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content mark {
+    background-color: rgba(187, 128, 9, 0.3);
+  }
+}
+
+/* Tables */
+.md-editor-preview-content table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  margin-bottom: 16px;
+}
+
+.md-editor-preview-content table th,
+.md-editor-preview-content table td {
+  padding: 6px 13px;
+  border: 1px solid var(--md-border);
+}
+
+.md-editor-preview-content table th {
+  font-weight: 600;
+  background-color: var(--md-toolbar-bg);
+}
+
+.md-editor-preview-content table tr:nth-child(2n) td {
+  background-color: var(--md-toolbar-bg);
+}
+
+/* Images */
+.md-editor-preview-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-sizing: content-box;
+}
+
+/* Links */
+.md-editor-preview-content a {
+  color: #0969da;
+  text-decoration: none;
+}
+
+.md-editor-preview-content a:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .md-editor-preview-content a {
+    color: #58a6ff;
+  }
+}
+
+/* Horizontal rule */
+.md-editor-preview-content hr {
+  height: 4px;
+  padding: 0;
+  margin: 24px 0;
+  background-color: var(--md-border);
+  border: 0;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------
+   Footer
+   --------------------------------------------------------- */
+.md-editor-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border-top: 1px solid var(--md-border);
+  background-color: var(--md-toolbar-bg);
+  font-size: 12px;
+  color: var(--md-text-muted);
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.md-editor-footer-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.md-editor-footer-upload {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.md-editor-footer-upload:hover {
+  color: var(--md-text);
+}
+
+/* ---------------------------------------------------------
+   Fullscreen mode
+   --------------------------------------------------------- */
+.md-editor--fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  border-radius: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.md-editor--fullscreen .md-editor-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.md-editor--fullscreen .md-editor-write,
+.md-editor--fullscreen .md-editor-preview {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.md-editor--fullscreen .md-editor-write .md-editor-textarea {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  resize: none;
+}
+
+/* Fullscreen + Split combined */
+.md-editor--fullscreen.md-editor--split .md-editor-body {
+  flex-direction: row;
+  height: 100%;
+}
+
+.md-editor--fullscreen.md-editor--split .md-editor-write,
+.md-editor--fullscreen.md-editor--split .md-editor-preview {
+  flex: none;
+  width: calc(50% - 4.5px);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.md-editor--fullscreen.md-editor--split .md-editor-write .md-editor-textarea {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------
+   Drag-over state
+   --------------------------------------------------------- */
+.md-editor--dragover {
+  outline: 2px dashed var(--md-accent);
+  outline-offset: -2px;
+}
+
+/* ---------------------------------------------------------
+   Syntax Highlighting — GitHub Light
+   --------------------------------------------------------- */
+.md-editor-preview-content pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+  background: transparent;
+}
+
+.md-editor-preview-content .hljs { color: #24292e }
+.md-editor-preview-content .hljs-doctag,
+.md-editor-preview-content .hljs-keyword,
+.md-editor-preview-content .hljs-meta .hljs-keyword,
+.md-editor-preview-content .hljs-template-tag,
+.md-editor-preview-content .hljs-template-variable,
+.md-editor-preview-content .hljs-type,
+.md-editor-preview-content .hljs-variable.language_ { color: #d73a49 }
+.md-editor-preview-content .hljs-title,
+.md-editor-preview-content .hljs-title.class_,
+.md-editor-preview-content .hljs-title.class_.inherited__,
+.md-editor-preview-content .hljs-title.function_ { color: #6f42c1 }
+.md-editor-preview-content .hljs-attr,
+.md-editor-preview-content .hljs-attribute,
+.md-editor-preview-content .hljs-literal,
+.md-editor-preview-content .hljs-meta,
+.md-editor-preview-content .hljs-number,
+.md-editor-preview-content .hljs-operator,
+.md-editor-preview-content .hljs-selector-attr,
+.md-editor-preview-content .hljs-selector-class,
+.md-editor-preview-content .hljs-selector-id,
+.md-editor-preview-content .hljs-variable { color: #005cc5 }
+.md-editor-preview-content .hljs-meta .hljs-string,
+.md-editor-preview-content .hljs-regexp,
+.md-editor-preview-content .hljs-string { color: #032f62 }
+.md-editor-preview-content .hljs-built_in,
+.md-editor-preview-content .hljs-symbol { color: #e36209 }
+.md-editor-preview-content .hljs-code,
+.md-editor-preview-content .hljs-comment,
+.md-editor-preview-content .hljs-formula { color: #6a737d }
+.md-editor-preview-content .hljs-name,
+.md-editor-preview-content .hljs-quote,
+.md-editor-preview-content .hljs-selector-pseudo,
+.md-editor-preview-content .hljs-selector-tag { color: #22863a }
+.md-editor-preview-content .hljs-subst { color: #24292e }
+.md-editor-preview-content .hljs-section { color: #005cc5; font-weight: 700 }
+.md-editor-preview-content .hljs-bullet { color: #735c0f }
+.md-editor-preview-content .hljs-emphasis { color: #24292e; font-style: italic }
+.md-editor-preview-content .hljs-strong { color: #24292e; font-weight: 700 }
+.md-editor-preview-content .hljs-addition { color: #22863a; background-color: #f0fff4 }
+.md-editor-preview-content .hljs-deletion { color: #b31d28; background-color: #ffeef0 }
+
+/* ---------------------------------------------------------
+   Syntax Highlighting — GitHub Dark
+   --------------------------------------------------------- */
+.md-editor--dark .md-editor-preview-content .hljs { color: #c9d1d9 }
+.md-editor--dark .md-editor-preview-content .hljs-doctag,
+.md-editor--dark .md-editor-preview-content .hljs-keyword,
+.md-editor--dark .md-editor-preview-content .hljs-meta .hljs-keyword,
+.md-editor--dark .md-editor-preview-content .hljs-template-tag,
+.md-editor--dark .md-editor-preview-content .hljs-template-variable,
+.md-editor--dark .md-editor-preview-content .hljs-type,
+.md-editor--dark .md-editor-preview-content .hljs-variable.language_ { color: #ff7b72 }
+.md-editor--dark .md-editor-preview-content .hljs-title,
+.md-editor--dark .md-editor-preview-content .hljs-title.class_,
+.md-editor--dark .md-editor-preview-content .hljs-title.class_.inherited__,
+.md-editor--dark .md-editor-preview-content .hljs-title.function_ { color: #d2a8ff }
+.md-editor--dark .md-editor-preview-content .hljs-attr,
+.md-editor--dark .md-editor-preview-content .hljs-attribute,
+.md-editor--dark .md-editor-preview-content .hljs-literal,
+.md-editor--dark .md-editor-preview-content .hljs-meta,
+.md-editor--dark .md-editor-preview-content .hljs-number,
+.md-editor--dark .md-editor-preview-content .hljs-operator,
+.md-editor--dark .md-editor-preview-content .hljs-selector-attr,
+.md-editor--dark .md-editor-preview-content .hljs-selector-class,
+.md-editor--dark .md-editor-preview-content .hljs-selector-id,
+.md-editor--dark .md-editor-preview-content .hljs-variable { color: #79c0ff }
+.md-editor--dark .md-editor-preview-content .hljs-meta .hljs-string,
+.md-editor--dark .md-editor-preview-content .hljs-regexp,
+.md-editor--dark .md-editor-preview-content .hljs-string { color: #a5d6ff }
+.md-editor--dark .md-editor-preview-content .hljs-built_in,
+.md-editor--dark .md-editor-preview-content .hljs-symbol { color: #ffa657 }
+.md-editor--dark .md-editor-preview-content .hljs-code,
+.md-editor--dark .md-editor-preview-content .hljs-comment,
+.md-editor--dark .md-editor-preview-content .hljs-formula { color: #8b949e }
+.md-editor--dark .md-editor-preview-content .hljs-name,
+.md-editor--dark .md-editor-preview-content .hljs-quote,
+.md-editor--dark .md-editor-preview-content .hljs-selector-pseudo,
+.md-editor--dark .md-editor-preview-content .hljs-selector-tag { color: #7ee787 }
+.md-editor--dark .md-editor-preview-content .hljs-subst { color: #c9d1d9 }
+.md-editor--dark .md-editor-preview-content .hljs-section { color: #1f6feb; font-weight: 700 }
+.md-editor--dark .md-editor-preview-content .hljs-bullet { color: #f2cc60 }
+.md-editor--dark .md-editor-preview-content .hljs-emphasis { color: #c9d1d9; font-style: italic }
+.md-editor--dark .md-editor-preview-content .hljs-strong { color: #c9d1d9; font-weight: 700 }
+.md-editor--dark .md-editor-preview-content .hljs-addition { color: #aff5b4; background-color: #033a16 }
+.md-editor--dark .md-editor-preview-content .hljs-deletion { color: #ffdcd7; background-color: #67060c }
+
+/* Dark auto (follows OS) */
+@media (prefers-color-scheme: dark) {
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs { color: #c9d1d9 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-doctag,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-keyword,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-meta .hljs-keyword,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-template-tag,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-template-variable,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-type,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-variable.language_ { color: #ff7b72 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-title,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-title.class_,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-title.class_.inherited__,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-title.function_ { color: #d2a8ff }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-attr,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-attribute,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-literal,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-meta,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-number,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-operator,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-selector-attr,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-selector-class,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-selector-id,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-variable { color: #79c0ff }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-meta .hljs-string,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-regexp,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-string { color: #a5d6ff }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-built_in,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-symbol { color: #ffa657 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-code,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-comment,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-formula { color: #8b949e }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-name,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-quote,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-selector-pseudo,
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-selector-tag { color: #7ee787 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-subst { color: #c9d1d9 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-section { color: #1f6feb; font-weight: 700 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-bullet { color: #f2cc60 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-emphasis { color: #c9d1d9; font-style: italic }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-strong { color: #c9d1d9; font-weight: 700 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-addition { color: #aff5b4; background-color: #033a16 }
+  .md-editor:not(.md-editor--light):not(.md-editor--dark) .md-editor-preview-content .hljs-deletion { color: #ffdcd7; background-color: #67060c }
+}

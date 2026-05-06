@@ -1,6 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block head %}
 <link rel="stylesheet" href="{% static 'css/avatar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/content.css' %}" />
+<link rel="stylesheet" href="{% static 'css/popup.css' %}" />
 {% endblock head %} {% block headButtons %}
 
 {% endblock %} {% block content %}
@@ -23,9 +24,9 @@
             Игродельня
             <div class="sidebar-elem-links">
                 {% if request.user.id == profile_data.id %}
-                <a href="" class="sidebar-elem-link">Опубликовать игру</a>
+                <a href="{% url 'create_game' %}" class="sidebar-elem-link">Опубликовать игру</a>
                 {% endif %}
-                <a href="" class="sidebar-elem-link">Список игр </a>
+                <a href="{% url 'my_games' %}" class="sidebar-elem-link">Список игр </a>
             </div>
         </div>
         <div class="sidebar-elem">
@@ -56,7 +57,7 @@
         <div class="sidebar-elem">
             Постирование
             <div class="sidebar-elem-links">
-                <a href="" class="sidebar-elem-link">Написать пост</a>
+                <a href="{% url 'create_post' %}" class="sidebar-elem-link">Написать пост</a>
             </div>
         </div>
         {% endif %}
@@ -76,7 +77,63 @@
         <div class="profile-foreground">
             <div></div>
             <div class="user-content">
-                <div class="content-body">Контента нет</div>
+                <div class="content-body">
+                    {% if posts is None %}
+                        Контента нет
+                    {% else %}
+                    {% load markdown_widget %}
+                        {% for post in posts %}
+
+                        <div class="post-form">
+                            <div class="post-meta">
+                                <div class="post-header">
+                                    <div class="post-author">
+                                        <div class="post-avatar">
+                                            <img
+                                                src="{{ post.author.avatar_image.url }}"
+                                                alt="Аватар"
+                                                id="avatar-img"
+                                            />
+                                        </div>
+                                        <div class="author-meta">
+                                            <p>{{ post.author }}
+                                                {% if post.team %}
+                                                    Команда: <a class="a-content" href="{% url 'team_detail' post.team.id %}">{{ post.team }}</a>
+                                                {% endif %}
+                                            </p>
+                                            <span>{{ post.created_at }}</span>
+                                        </div>
+                                    </div>
+                                    {% if post.author == request.user %}
+                                    <div class="post-settings-{{ post.id }}">
+                                        <button class="settings-button" id="settingsBtn-{{ post.id }}">
+                                            <img
+                                                src="{% static 'img/icons8-settings-50.png' %}"
+                                            />
+                                        </button>
+                                        <div class="drop-menu" id="drop-menu-{{ post.id }}">
+                                            <a href="{% url 'edit_post' post_id=post.id %}">Редактировать</a>
+                                            <a href="#popup-delete-{{post.id}}">Удалить</a>
+                                            <a href=""></a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="post-title">
+                                    <h3>{{ post.title }}</h3>
+                                </div>
+                            </div>
+                            <a class="a-content" href="{% url 'post_detail' post.id %}">
+                                <div class="post-content">
+                                    {{ post.content|truncatewords:50|markdown }}
+                                </div>
+                            </a>
+                        </div>
+
+                        {% include "pages/partials/delete_post_popup.html" %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
 
@@ -173,12 +230,14 @@
             <div class="user_games-files">
                 {% for game in user_games %}
                 <div>
+                    {% if game.jam_uuid %}
                     <a
-                        href="{%  url 'game_page' game.jam_uuid.uuid game.slug  %}"
+                        href="{%  url 'jam_game_page' game.jam_uuid.uuid game.slug  %}"
                     >
                         {{ game.title }}
                     </a>
                     {{ game.uploaded_time }}
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
@@ -188,10 +247,13 @@
 
     <script src="{% static '/dynamic/profile_dropdown_list.js' %}"></script>
 
+    <script src="{% static '/dynamic/settings_button.js' %}"></script>
+
     {{ upload_data|json_script:"upload-data"}}
     <script src="{% static '/dynamic/profile_photo.js' %}"></script>
 
     {{ follow_data|json_script:"follow-data" }}
     <script src="{% static '/dynamic/subscribe_button.js' %}"></script>
 </div>
+
 {% endblock %}

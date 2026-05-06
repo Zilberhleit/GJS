@@ -21,12 +21,19 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import DetailView, ListView
 from users.models import User
+from users.models.team import Team
+from users.services import get_user_created_teams
 
 from jams.models import Game, GameJam, RatingUserJam
 from jams.models.rating_user_jam import RatingCriterion
 
 from .filters import GameJamsFilter
-from .services import get_file_mime_type, is_valid_game_file, is_valid_image_file
+from .services import (
+    get_file_mime_type,
+    get_user_ratings,
+    is_valid_game_file,
+    is_valid_image_file,
+)
 
 
 class GameJamsLists(ListView):
@@ -40,6 +47,30 @@ class GameJamsLists(ListView):
         context["filter"] = GameJamsFilter(
             self.request.GET, queryset=self.get_queryset()
         )
+        return context
+
+
+class GamesLists(ListView):
+    template_name = "pages/jams_pages/games.html"
+    context_object_name = "games"
+    queryset = Game.objects.order_by("-uploaded_time")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class MyGames(LoginRequiredMixin, ListView):
+    """Список игр пользователя"""
+
+    template_name = "pages/jams_pages/games.html"
+    context_object_name = "games"
+
+    def get_queryset(self):
+        return Game.objects.filter(user=self.request.user).order_by("-uploaded_time")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         return context
 
 
@@ -99,6 +130,12 @@ class GameJamDetail(DetailView):
             if current_user_game:
                 context["current_user_game"] = current_user_game
 
+            current_user_team = get_user_created_teams(
+                self.request.user.username
+            ).first()
+            if current_user_team:
+                context["current_user_team"] = current_user_team
+                print("users created team", context["current_user_team"])
         return context
 
 
@@ -113,6 +150,38 @@ def count_jam_rating(uuid: UUID):
         .values("user__username", "user__id")
         .annotate(avg_rating=Avg("stars"))
     )
+
+
+def count_ratings(uuid: UUID):
+    jam = GameJam.objects.get(uuid=uuid)
+    criterion = RatingCriterion.objects.filter(jam=jam)
+    user_scores = {}
+
+    for crit in criterion:
+        criterion_rating = (
+            RatingUserJam.objects.filter(jam_uuid=jam, criteria=crit)
+            .values("user")
+            .annotate(avg_score=Avg("stars"))
+        )
+
+        for rating in criterion_rating:
+            user_id = rating["user"]
+            avg_score = rating["avg_score"] or 0
+
+            if user_id not in user_scores:
+                user_scores[user_id] = []
+
+            user_scores[user_id].append(avg_score)
+
+    final_scores = {}
+    for user_id, scores in user_scores.items():
+        final_scores[user_id] = sum(scores) / len(scores) if scores else 0
+
+    if not final_scores:
+        return None
+
+    winner_id = max(final_scores, key=final_scores.get)
+    return User.objects.get(id=winner_id)
 
 
 def game_jam_upload(request, uuid: UUID):
@@ -136,8 +205,7 @@ def game_jam_upload(request, uuid: UUID):
             ):
                 jam = get_object_or_404(GameJam, uuid=uuid)
                 prev_game = Game.objects.filter(jam_uuid__uuid=uuid, user=request.user)
-                # Заметка: надо посмотреть как правильно заменять файлы,
-                # ибо это может вести к переполнению одинаковыми файлами
+
                 if prev_game.exists():
                     updated_game = prev_game.first()
                     updated_game.title = title
@@ -156,7 +224,15 @@ def game_jam_upload(request, uuid: UUID):
                     )
 
                 return redirect(reverse("gamejam_detail", kwargs={"uuid": uuid}))
-
+            else:
+                print("file is not valid")
+                print(image_file is None or is_valid_image_file(image_file))
+        else:
+            print(
+                "game_file",
+                "game_file" in request.FILES
+                and all(field in request.POST for field in fields_to_check),
+            )
         raise Http404
 
 
@@ -180,6 +256,24 @@ def game_jam_download(request, uuid: UUID, slug):
     #     response["Content-Disposition"] = (
     #         f'attachment; filename="{os.path.basename(filename)}"'
     #     )
+    return response
+
+
+def game_download(request, slug):
+    """Представление для скачивания игры"""
+    file_instance = get_object_or_404(Game, slug=slug)
+    path = file_instance.game_file.path
+    filename = file_instance.game_file.name
+
+    content_type = get_file_mime_type(path, filename)
+
+    response = FileResponse(open(path, "rb"), content_type=content_type)
+    filename_encoded = urllib.parse.quote(filename)
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="{os.path.basename(filename_encoded)}"'
+    )
+    response["Content-Length"] = os.path.getsize(path)
     return response
 
 
@@ -224,6 +318,23 @@ def leave_gamejam(request, uuid: UUID):
     return redirect("gamejam_detail", uuid=uuid)
 
 
+def join_jam_team(request, uuid, team_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    team = Team.objects.get(id=team_id)
+    gamejam = GameJam.objects.get(uuid=uuid)
+    gamejam.teams.add(team)
+    return redirect("gamejam_detail", uuid=uuid)
+
+
+def leave_jam_team(request, uuid, team_id):
+    team = Team.objects.get(id=team_id)
+    gamejam = GameJam.objects.get(uuid=uuid)
+    gamejam.teams.remove(team)
+    return redirect("gamejam_detail", uuid=uuid)
+
+
 def home_page(request):
     """Представление для главной страницы"""
     return render(request, "pages/index.html")
@@ -234,16 +345,46 @@ def jam_game_page(request, uuid: UUID, slug):
     game = Game.objects.get(jam_uuid=uuid, slug=slug)
     jam = get_object_or_404(GameJam, uuid=uuid)
     criteria = RatingCriterion.objects.filter(jam=uuid)
+
+    ratings = None
+    final_ratings = []
+
+    if game.user != request.user:
+        ratings = get_user_ratings(game.user, request.user, uuid)
+
+    context = {"game": game, "criteria": criteria, "jam": jam}
+    if ratings:
+        context["ratings"] = ratings
+
+    if jam.status == "FN":
+        for crit in criteria:
+            print("crit", crit)
+            rating_data = RatingUserJam.objects.filter(
+                jam_uuid=jam, criteria=crit, user=game.user
+            ).aggregate(avg_score=Avg("stars"), votes_count=Count("id"))
+
+            final_ratings.append(
+                {
+                    "criterion_id": crit.id,
+                    "criterion_name": crit.name,
+                    "avg_score": rating_data["avg_score"] or 0,
+                    "votes_count": rating_data["votes_count"] or 0,
+                }
+            )
+        print("final_ratings", final_ratings)
+        context["final_ratings"] = final_ratings
+
     return render(
         request,
         "pages/jams_pages/game_page.html",
-        {"game": game, "criteria": criteria, "jam": jam},
+        context=context,
     )
 
 
 def game_page(request, slug):
     """Представление игры без геймджема"""
-    game = get_object_or_404(Game, jam_uuid__isnull=True, slug=slug)
+    game = get_object_or_404(Game, slug=slug)
+    print("game_page", game)
     return render(request, "pages/jams_pages/game_page.html", {"game": game})
 
 

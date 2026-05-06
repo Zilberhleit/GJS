@@ -6,17 +6,18 @@ from allauth.account.views import SignupView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.views.generic import CreateView, DetailView
+from jams.models.comment import Comment
 from jams.models.gamejam import GameJam
 from jams.models.rating_user_jam import RatingCriterion
 
-from users.forms import LoginUserForm, RegisterUserForm
-from users.models import Follower, Notification, Team, TeamInvitation, User
+from users.forms import CommentForm, GameForm, LoginUserForm, PostForm, RegisterUserForm
+from users.models import Follower, Notification, Post, Team, TeamInvitation, User
 from users.models.team import TeamMembership
 from users.utils import send_realtime_notification
 
@@ -25,6 +26,7 @@ from .services import (
     get_user_followers,
     get_user_games_history,
     get_user_jams_history,
+    get_user_posts,
     is_valid_create_team,
     is_valid_criterion,
     is_valid_gamejam_create,
@@ -86,7 +88,6 @@ class Profile(DetailView):
         context["upload_data"] = {
             "upload_url": reverse("upload-photo", args=[self.kwargs.get("username")])
         }
-        # new context
         context["created_teams"] = get_user_created_teams(self.kwargs.get("username"))
         context["first_created_team"] = get_user_created_teams(
             self.kwargs.get("username")
@@ -99,6 +100,7 @@ class Profile(DetailView):
             "follow_url": reverse("follow", args=[self.kwargs.get("username")]),
             "unfollow_url": reverse("unfollow", args=[self.kwargs.get("username")]),
         }
+        context["posts"] = get_user_posts(self.kwargs.get("username"))
         return context
 
 
@@ -261,6 +263,7 @@ def create_team(request):
 
 def team_detail(request, id):
     team = get_object_or_404(Team, id=id)
+    team_posts = Post.objects.filter(team=team)
     is_leader = False
     if request.user.is_authenticated:
         membership = team.teammembership_set.filter(user=request.user).first()
@@ -272,6 +275,7 @@ def team_detail(request, id):
         context={
             "team": team,
             "is_leader": is_leader,
+            "posts": team_posts,
         },
     )
 
@@ -445,6 +449,111 @@ def redactor(request, username):
     return render(request, template_name="pages/user_pages/redaction_page.html")
 
 
-def write_post():
+@login_required
+def create_post(request):
     """Представление создания поста"""
-    pass
+    form = PostForm()
+    if request.method == "POST":
+        form = PostForm(request.POST, request._files)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect("profile_detail", username=request.user.username)
+    else:
+        form = PostForm()
+    return render(
+        request,
+        template_name="pages/user_pages/create_post.html",
+        context={"form": form},
+    )
+
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if post.author != request.user:
+        messages.error(request, "Нельзя удалить не свой пост")
+        return HttpResponseForbidden("У вас нет прав на удаление этого поста")
+
+    username = post.author.username
+
+    post.delete()
+
+    return redirect("profile_detail", username=username)
+
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = post.post.all()
+    form = CommentForm()
+    return render(
+        request,
+        template_name="pages/user_pages/post_detail.html",
+        context={"post": post, "comments": comments, "form": form},
+    )
+
+
+def posts_page(request):
+    posts = list(Post.objects.all())
+    return render(
+        request, template_name="pages/user_pages/posts.html", context={"posts": posts}
+    )
+
+
+@login_required
+def add_comment_to_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post_id = post
+            comment.save()
+            return redirect("post_detail", post_id=post.id)
+    else:
+        form = CommentForm()
+
+    return render(
+        request,
+        template_name="pages/partials/comment_list.html",
+        context={"post": post, "form": form},
+    )
+
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if comment.author != request.user:
+        messages.error(request, "Нельзя удалить чужой комментарий")
+        return HttpResponseForbidden("У вас нет прав на удаление этого комментария")
+
+    post = comment.post_id
+    comment.delete()
+    return redirect("post_detail", post_id=post.id)
+
+
+@login_required
+def create_game(request):
+    if request.method == "POST":
+        form = GameForm(request.POST, request._files)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.user = request.user
+            game.save()
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = GameForm()
+
+    return render(
+        request,
+        template_name="pages/user_pages/create_game.html",
+        context={"form": form},
+    )

@@ -9,7 +9,7 @@ from django.utils.datastructures import MultiValueDict
 from jams.models import GameJam
 from jams.models.game import Game
 
-from users.models import Follower, Team, User
+from users.models import Follower, Post, Team, User
 
 
 def get_user_jams_history(username: str) -> QuerySet:
@@ -52,6 +52,10 @@ def get_user_created_teams(username: str) -> QuerySet:
 
 def get_user_followers(username: str) -> QuerySet:
     return User.objects.filter(following_relations__following__username=username)
+
+
+def get_user_posts(username: str) -> QuerySet:
+    return Post.objects.filter(author__username=username).order_by("-created_at")
 
 
 def upload_photo(
